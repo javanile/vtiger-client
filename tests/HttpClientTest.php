@@ -2,12 +2,12 @@
 
 namespace Javanile\HttpClient\Tests;
 
+use Javanile\HttpClient\HttpClient;
 use Javanile\Producer;
 use PHPUnit\Framework\TestCase;
-use Javanile\HttpClient\HttpClient;
 
 Producer::addPsr4([
-    'Javanile\HttpClient\\' => __DIR__.'/../src',
+    'Javanile\HttpClient\\'        => __DIR__.'/../src',
     'Javanile\HttpClient\\Tests\\' => __DIR__,
 ]);
 
@@ -18,7 +18,7 @@ final class HttpClientTest extends TestCase
         $object = new HttpClient();
         $this->assertInstanceOf('Javanile\HttpClient\HttpClient', $object);
 
-        $output = "Hello World!";
+        $output = 'Hello World!';
         $this->assertRegexp('/World/i', $output);
     }
 }
