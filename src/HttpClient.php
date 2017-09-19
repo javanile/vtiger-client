@@ -15,40 +15,125 @@ namespace Javanile\HttpClient;
 
 class HttpClient
 {
+
     // Request vars
-    public $host;
-    public $port;
-    public $path;
-    public $method;
-    public $postdata = '';
-    public $cookies = [];
-    public $referer;
-    public $accept = 'text/xml,application/xml,application/xhtml+xml,text/html,text/plain,image/png,image/jpeg,image/gif,*/*';
-    public $accept_encoding = 'gzip';
-    public $accept_language = 'en-us';
-    public $user_agent = 'Incutio HttpClient v0.9';
+    /**
+     *
+     */
+    private $host;
+    /**
+     *
+     */
+    private $port;
+    /**
+     *
+     */
+    private $path;
+    /**
+     *
+     */
+    private $method;
+    /**
+     *
+     */
+    private $postdata = '';
+    /**
+     *
+     */
+    private $cookies = [];
+    /**
+     *
+     */
+    private $referer;
+    /**
+     *
+     */
+    private $accept = 'text/xml,application/xml,application/xhtml+xml,text/html,text/plain,image/png,image/jpeg,image/gif,*/*';
+    /**
+     *
+     */
+    private $accept_encoding = 'gzip';
+    /**
+     *
+     */
+    private $accept_language = 'en-us';
+    /**
+     *
+     */
+    private $user_agent = 'Incutio HttpClient v0.9';
     // Options
-    public $timeout = 20;
-    public $use_gzip = true;
-    public $persist_cookies = true;  // If true, received cookies are placed in the $this->cookies array ready for the next request
+    /**
+     *
+     */
+    private $timeout = 20;
+    /**
+     *
+     */
+    private $use_gzip = true;
+    /**
+     *
+     */
+    private $persist_cookies = true;  // If true, received cookies are placed in the $this->cookies array ready for the next request
     // Note: This currently ignores the cookie path (and time) completely. Time is not important,
     //       but path could possibly lead to security problems.
-    public $persist_referers = true; // For each request, sends path of last request as referer
-    public $debug = false;
-    public $handle_redirects = true; // Auaomtically redirect if Location or URI header is found
-    public $max_redirects = 5;
-    public $headers_only = false;    // If true, stops receiving once headers have been read.
+    /**
+     *
+     */
+    private $persist_referers = true; // For each request, sends path of last request as referer
+    /**
+     *
+     */
+    private $debug = false;
+    /**
+     *
+     */
+    private $handle_redirects = true; // Auaomtically redirect if Location or URI header is found
+    /**
+     *
+     */
+    private $max_redirects = 5;
+    /**
+     *
+     */
+    private $headers_only = false;    // If true, stops receiving once headers have been read.
+    /**
+     *
+     */
     // Basic authorization variables
-    public $username;
-    public $password;
+    /**
+     *
+     */
+    private $username;
+    /**
+     *
+     */
+    private $password;
     // Response vars
-    public $status;
-    public $headers = [];
-    public $content = '';
-    public $errormsg;
+    /**
+     *
+     */
+    private $status;
+    /**
+     *
+     */
+    private $headers = [];
+    /**
+     *
+     */
+    private $content = '';
+    /**
+     *
+     */
+    private $errormsg;
     // Tracker variables
-    public $redirect_count = 0;
-    public $cookie_host = '';
+    /**
+     *
+     */
+    private $redirect_count = 0;
+    /**
+     *
+     */
+    private $cookie_host = '';
 
     /**
      * Constructor.
@@ -62,6 +147,9 @@ class HttpClient
         $this->port = $port;
     }
 
+    /**
+     *
+     */
     public function get($path, $data = false)
     {
         $this->path = $path;
@@ -73,6 +161,9 @@ class HttpClient
         return $this->doRequest();
     }
 
+    /**
+     *
+     */
     public function post($path, $data)
     {
         $this->path = $path;
@@ -82,6 +173,9 @@ class HttpClient
         return $this->doRequest();
     }
 
+    /**
+     *
+     */
     public function buildQueryString($data)
     {
         $querystring = '';
@@ -104,6 +198,9 @@ class HttpClient
         return $querystring;
     }
 
+    /**
+     *
+     */
     public function doRequest()
     {
         // Performs the actual HTTP request, returning true or false depending on outcome
@@ -230,6 +327,9 @@ class HttpClient
         return true;
     }
 
+    /**
+     *
+     */
     public function buildRequest()
     {
         $headers = [];
@@ -266,21 +366,33 @@ class HttpClient
         return $request;
     }
 
+    /**
+     *
+     */
     public function getStatus()
     {
         return $this->status;
     }
 
+    /**
+     *
+     */
     public function getContent()
     {
         return $this->content;
     }
 
+    /**
+     *
+     */
     public function getHeaders()
     {
         return $this->headers;
     }
 
+    /**
+     *
+     */
     public function getHeader($header)
     {
         $header = strtolower($header);
@@ -291,16 +403,25 @@ class HttpClient
         }
     }
 
+    /**
+     *
+     */
     public function getError()
     {
         return $this->errormsg;
     }
 
+    /**
+     *
+     */
     public function getCookies()
     {
         return $this->cookies;
     }
 
+    /**
+     *
+     */
     public function getRequestURL()
     {
         $url = 'http://'.$this->host;
@@ -313,60 +434,93 @@ class HttpClient
     }
 
     // Setter methods
+    /**
+     *
+     */
     public function setUserAgent($string)
     {
         $this->user_agent = $string;
     }
 
+    /**
+     *
+     */
     public function setAuthorization($username, $password)
     {
         $this->username = $username;
         $this->password = $password;
     }
 
+    /**
+     *
+     */
     public function setCookies($array)
     {
         $this->cookies = $array;
     }
 
     // Option setting methods
+    /**
+     *
+     */
     public function useGzip($boolean)
     {
         $this->use_gzip = $boolean;
     }
 
+    /**
+     *
+     */
     public function setPersistCookies($boolean)
     {
         $this->persist_cookies = $boolean;
     }
 
+    /**
+     *
+     */
     public function setPersistReferers($boolean)
     {
         $this->persist_referers = $boolean;
     }
 
+    /**
+     *
+     */
     public function setHandleRedirects($boolean)
     {
         $this->handle_redirects = $boolean;
     }
 
+    /**
+     *
+     */
     public function setMaxRedirects($num)
     {
         $this->max_redirects = $num;
     }
 
+    /**
+     *
+     */
     public function setHeadersOnly($boolean)
     {
         $this->headers_only = $boolean;
     }
 
+    /**
+     *
+     */
     public function setDebug($boolean)
     {
         $this->debug = $boolean;
     }
 
+    /**
+     *
+     */
     // "Quick" static methods
-    public function quickGet($url)
+    public static function quickGet($url)
     {
         $bits = parse_url($url);
         $host = $bits['host'];
@@ -383,7 +537,10 @@ class HttpClient
         }
     }
 
-    public function quickPost($url, $data)
+    /**
+     *
+     */
+    public static function quickPost($url, $data)
     {
         $bits = parse_url($url);
         $host = $bits['host'];
@@ -397,6 +554,9 @@ class HttpClient
         }
     }
 
+    /**
+     *
+     */
     public function debug($msg, $object = false)
     {
         if ($this->debug) {
