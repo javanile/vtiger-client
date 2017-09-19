@@ -48,7 +48,7 @@ class HttpClient
     /**
      *
      */
-    private $accept = 'text/xml,application/xml,application/xhtml+xml,text/html,text/plain,image/png,image/jpeg,image/gif,*/*';
+    private $accept = 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8';
     /**
      *
      */
@@ -60,7 +60,7 @@ class HttpClient
     /**
      *
      */
-    private $user_agent = 'Incutio HttpClient v0.9';
+    private $user_agent = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/61.0.3163.79 Safari/537.36';
     // Options
     /**
      *
@@ -69,7 +69,7 @@ class HttpClient
     /**
      *
      */
-    private $use_gzip = true;
+    private $use_gzip = false;
     /**
      *
      */
@@ -79,11 +79,18 @@ class HttpClient
     /**
      *
      */
-    private $persist_referers = true; // For each request, sends path of last request as referer
+    private $persist_referers = false; // For each request, sends path of last request as referer
+
     /**
      *
      */
     private $debug = false;
+
+    /**
+     *
+     */
+    private $logs = [];
+
     /**
      *
      */
@@ -155,7 +162,7 @@ class HttpClient
         $this->path = $path;
         $this->method = 'GET';
         if ($data) {
-            $this->path .= '?'.$this->buildQueryString($data);
+            $this->path .= '?' . $this->buildQueryString($data);
         }
 
         return $this->doRequest();
@@ -184,10 +191,10 @@ class HttpClient
             foreach ($data as $key => $val) {
                 if (is_array($val)) {
                     foreach ($val as $val2) {
-                        $querystring .= urlencode($key).'='.urlencode($val2).'&';
+                        $querystring .= urlencode($key) . '=' . urlencode($val2) . '&';
                     }
                 } else {
-                    $querystring .= urlencode($key).'='.urlencode($val).'&';
+                    $querystring .= urlencode($key) . '=' . urlencode($val) . '&';
                 }
             }
             $querystring = substr($querystring, 0, -1); // Eliminate unnecessary &
@@ -204,7 +211,7 @@ class HttpClient
     public function doRequest()
     {
         // Performs the actual HTTP request, returning true or false depending on outcome
-        if (!$fp = @fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout)) {
+        if (!$fp = fsockopen($this->host, $this->port, $errno, $errstr, $this->timeout)) {
             // Set error message
             switch ($errno) {
                 case -3:
@@ -214,8 +221,8 @@ class HttpClient
                 case -5:
                     $this->errormsg = 'Connection refused or timed out (-5)';
                 default:
-                    $this->errormsg = 'Connection failed ('.$errno.')';
-                    $this->errormsg .= ' '.$errstr;
+                    $this->errormsg = 'Connection failed (' . $errno . ')';
+                    $this->errormsg .= ' ' . $errstr;
                     $this->debug($this->errormsg);
             }
 
@@ -239,8 +246,8 @@ class HttpClient
                 // Deal with first line of returned data
                 $atStart = false;
                 if (!preg_match('/HTTP\/(\\d\\.\\d)\\s*(\\d+)\\s*(.*)/', $line, $m)) {
-                    $this->errormsg = 'Status code line invalid: '.htmlentities($line);
-                    $this->debug($this->errormsg);
+                    $this->errormsg = 'Status code line invalid: ' . htmlentities($line);
+                    $this->debug($this->errormsg, $line);
 
                     return false;
                 }
@@ -303,13 +310,13 @@ class HttpClient
         }
         // If $persist_referers, set the referer ready for the next request
         if ($this->persist_referers) {
-            $this->debug('Persisting referer: '.$this->getRequestURL());
+            $this->debug('Persisting referer: ' . $this->getRequestURL());
             $this->referer = $this->getRequestURL();
         }
         // Finally, if handle_redirects and a redirect is sent, do that
         if ($this->handle_redirects) {
             if (++$this->redirect_count >= $this->max_redirects) {
-                $this->errormsg = 'Number of redirects exceeded maximum ('.$this->max_redirects.')';
+                $this->errormsg = 'Number of redirects exceeded maximum (' . $this->max_redirects . ')';
                 $this->debug($this->errormsg);
                 $this->redirect_count = 0;
 
@@ -318,7 +325,7 @@ class HttpClient
             $location = isset($this->headers['location']) ? $this->headers['location'] : '';
             $uri = isset($this->headers['uri']) ? $this->headers['uri'] : '';
             if ($location || $uri) {
-                $url = parse_url($location.$uri);
+                $url = parse_url($location . $uri);
                 // This will FAIL if redirect is to a different site
                 return $this->get($url['path']);
             }
@@ -333,10 +340,14 @@ class HttpClient
     public function buildRequest()
     {
         $headers = [];
-        $headers[] = "{$this->method} {$this->path} HTTP/1.0"; // Using 1.1 leads to all manner of problems, such as "chunked" encoding
+        $headers[] = "{$this->method} {$this->path} HTTP/1.1"; // Using 1.1 leads to all manner of problems, such as "chunked" encoding
         $headers[] = "Host: {$this->host}";
         $headers[] = "User-Agent: {$this->user_agent}";
         $headers[] = "Accept: {$this->accept}";
+        $headers[] = "Cache-Control: max-age=0";
+        $headers[] = "Upgrade-Insecure-Requests: 1";
+        $headers[] = 'If-None-Match: "d5bef2b847ea6cc2c31e02c592c1b9ad32eb91c3"';
+
         if ($this->use_gzip) {
             $headers[] = "Accept-encoding: {$this->accept_encoding}";
         }
@@ -354,14 +365,17 @@ class HttpClient
         }
         // Basic authentication
         if ($this->username && $this->password) {
-            $headers[] = 'Authorization: BASIC '.base64_encode($this->username.':'.$this->password);
+            $headers[] = 'Authorization: BASIC ' . base64_encode($this->username . ':' . $this->password);
         }
         // If this is a POST, set the content type and length
         if ($this->postdata) {
             $headers[] = 'Content-Type: application/x-www-form-urlencoded';
-            $headers[] = 'Content-Length: '.strlen($this->postdata);
+            $headers[] = 'Content-Length: ' . strlen($this->postdata);
         }
-        $request = implode("\r\n", $headers)."\r\n\r\n".$this->postdata;
+
+        $headers[] = 'Connection: keep-alive';
+
+        $request = implode("\r\n", $headers) . "\r\n\r\n" . $this->postdata;
 
         return $request;
     }
@@ -424,9 +438,9 @@ class HttpClient
      */
     public function getRequestURL()
     {
-        $url = 'http://'.$this->host;
+        $url = 'http://' . $this->host;
         if ($this->port != 80) {
-            $url .= ':'.$this->port;
+            $url .= ':' . $this->port;
         }
         $url .= $this->path;
 
@@ -434,6 +448,7 @@ class HttpClient
     }
 
     // Setter methods
+
     /**
      *
      */
@@ -460,6 +475,7 @@ class HttpClient
     }
 
     // Option setting methods
+
     /**
      *
      */
@@ -517,9 +533,8 @@ class HttpClient
     }
 
     /**
-     *
+     * "Quick" static methods
      */
-    // "Quick" static methods
     public static function quickGet($url)
     {
         $bits = parse_url($url);
@@ -527,7 +542,7 @@ class HttpClient
         $port = isset($bits['port']) ? $bits['port'] : 80;
         $path = isset($bits['path']) ? $bits['path'] : '/';
         if (isset($bits['query'])) {
-            $path .= '?'.$bits['query'];
+            $path .= '?' . $bits['query'];
         }
         $client = new self($host, $port);
         if (!$client->get($path)) {
@@ -557,18 +572,23 @@ class HttpClient
     /**
      *
      */
-    public function debug($msg, $object = false)
+    private function debug($message, $object = null)
     {
-        if ($this->debug) {
-            echo '<div style="border: 1px solid red; padding: 0.5em; margin: 0.5em;"><strong>HttpClient Debug:</strong> '.$msg;
-            if ($object) {
-                ob_start();
-                print_r($object);
-                $content = htmlentities(ob_get_contents());
-                ob_end_clean();
-                echo '<pre>'.$content.'</pre>';
-            }
-            echo '</div>';
+        if (!$this->debug) {
+            return;
         }
+
+        $this->logs[] = [
+            'message' => $message,
+            'object' => $object,
+        ];
+    }
+
+    /**
+     *
+     */
+    public function getLogs()
+    {
+        return $this->logs;
     }
 }

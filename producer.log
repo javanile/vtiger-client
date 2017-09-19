@@ -1,0 +1,643 @@
+>  array(3):[{"message":"Request","object":"GET \/example.html HTTP\/1.1\r\nHost: json.org\r\nUser-Agent: Mozilla\/5.0 (X11; Linux x86_64) AppleWebKit\/537.36 (KHTML, like Gecko) Chrome\/61.0.3163.79 Safari\/537.36\r\nAccept: text\/html,application\/xhtml+xml,application\/xml;q=0.9,image\/webp,image\/apng,*\/*;q=0.8\r\nCache-Control: max-age=0\r\nUpgrade-Insecure-Requests: 1\r\nIf-None-Match: \"d5bef2b847ea6cc2c31e02c592c1b9ad32eb91c3\"\r\nAccept-language: en-us\r\nConnection: keep-alive\r\n\r\n"},{"message":"HTTP\/1.1 200 OK","object":null},{"message":"Received Headers","object":{"content-type":"text\/html","content-length":"25152","connection":"keep-alive","keep-alive":"timeout=15","date":"Tue, 19 Sep 2017 21:20:25 GMT","server":"Apache","last-modified":"Sat, 10 Mar 2007 23:08:05 GMT","etag":"\"6240-42b5a9cd37f40\"","accept-ranges":"bytes"}}]
+>  <html>
+<head>
+<title>JSON Example</title>
+</head>
+<body bgcolor=linen>
+<table width="100%" border="0">
+  <tr>
+    <td valign="middle" width=160 align="center"><a href="http://www.JSON.org"><img src="img/json160.gif" width="160" height="160" align=left border="0">
+      </a>
+    </td>
+    <td valign="middle" align="center">
+      <div style="background-color: white; margin-left: 40px; margin-right: 40px; border: 2px solid black; padding: 10px; font-family : serif;">
+        <h1 align="center">JSON Example</h1>
+      </div>
+    </td>
+  </tr>
+</table>
+<hr>
+<p>This page shows examples of  messages formatted using <a href="http://www.JSON.org/">JSON (JavaScript Object Notation)</a>.</p>
+<hr>
+<pre>{
+    "glossary": {
+        "title": "example glossary",
+		"GlossDiv": {
+            "title": "S",
+			"GlossList": {
+                "GlossEntry": {
+                    "ID": "SGML",
+					"SortAs": "SGML",
+					"GlossTerm": "Standard Generalized Markup Language",
+					"Acronym": "SGML",
+					"Abbrev": "ISO 8879:1986",
+					"GlossDef": {
+                        "para": "A meta-markup language, used to create markup languages such as DocBook.",
+						"GlossSeeAlso": ["GML", "XML"]
+                    },
+					"GlossSee": "markup"
+                }
+            }
+        }
+    }
+}
+</pre>
+<p>The same text expressed as <a href="http://hotwired.lycos.com/webmonkey/templates/print_template.htmlt?meta=/webmonkey/02/42/index4a_meta.html">XML</a>:
+<p>
+<pre>&lt;!DOCTYPE glossary PUBLIC "-//OASIS//DTD DocBook V3.1//EN"&gt;
+ &lt;glossary&gt;&lt;title&gt;example glossary&lt;/title&gt;
+  &lt;GlossDiv&gt;&lt;title&gt;S&lt;/title&gt;
+   &lt;GlossList&gt;
+    &lt;GlossEntry ID="SGML" SortAs="SGML"&gt;
+     &lt;GlossTerm&gt;Standard Generalized Markup Language&lt;/GlossTerm&gt;
+     &lt;Acronym&gt;SGML&lt;/Acronym&gt;
+     &lt;Abbrev&gt;ISO 8879:1986&lt;/Abbrev&gt;
+     &lt;GlossDef&gt;
+      &lt;para&gt;A meta-markup language, used to create markup
+languages such as DocBook.&lt;/para&gt;
+      &lt;GlossSeeAlso OtherTerm="GML"&gt;
+      &lt;GlossSeeAlso OtherTerm="XML"&gt;
+     &lt;/GlossDef&gt;
+     &lt;GlossSee OtherTerm="markup"&gt;
+    &lt;/GlossEntry&gt;
+   &lt;/GlossList&gt;
+  &lt;/GlossDiv&gt;
+ &lt;/glossary&gt;
+</pre>
+<hr>
+<pre>{&quot;menu&quot;: {
+  &quot;id&quot;: &quot;file&quot;,
+  &quot;value&quot;: &quot;File&quot;,
+  &quot;popup&quot;: {
+    &quot;menuitem&quot;: [
+      {&quot;value&quot;: &quot;New&quot;, &quot;onclick&quot;: &quot;CreateNewDoc()&quot;},
+      {&quot;value&quot;: &quot;Open&quot;, &quot;onclick&quot;: &quot;OpenDoc()&quot;},
+      {&quot;value&quot;: &quot;Close&quot;, &quot;onclick&quot;: &quot;CloseDoc()&quot;}
+    ]
+  }
+}}</pre>
+<p>The same text expressed as <a href="http://www.mozilla.org/docs/xul/xulnotes/xulnote_beasts.html">XML</a>:
+<p>
+<pre>
+&lt;menu id=&quot;file&quot; value=&quot;File&quot;&gt;
+  &lt;popup&gt;
+    &lt;menuitem value=&quot;New&quot; onclick=&quot;CreateNewDoc()&quot; /&gt;
+    &lt;menuitem value=&quot;Open&quot; onclick=&quot;OpenDoc()&quot; /&gt;
+    &lt;menuitem value=&quot;Close&quot; onclick=&quot;CloseDoc()&quot; /&gt;
+  &lt;/popup&gt;
+&lt;/menu&gt;</pre>
+<p></p>
+<hr>
+<p></p>
+<pre>{"widget": {
+    &quot;debug&quot;: &quot;on&quot;,
+    &quot;window&quot;: {
+        &quot;title&quot;: &quot;Sample Konfabulator Widget&quot;,<br>        &quot;name&quot;: &quot;main_window&quot;,<br>        &quot;width&quot;: 500,<br>        &quot;height&quot;: 500
+    },<br>    &quot;image&quot;: { 
+        &quot;src&quot;: &quot;Images/Sun.png&quot;,
+        &quot;name&quot;: &quot;sun1&quot;,<br>        &quot;hOffset&quot;: 250,<br>        &quot;vOffset&quot;: 250,<br>        &quot;alignment&quot;: &quot;center&quot;
+    },<br>    &quot;text&quot;: {
+        &quot;data&quot;: &quot;Click Here&quot;,
+        &quot;size&quot;: 36,
+        &quot;style&quot;: &quot;bold&quot;,<br>        &quot;name&quot;: &quot;text1&quot;,<br>        &quot;hOffset&quot;: 250,<br>        &quot;vOffset&quot;: 100,<br>        &quot;alignment&quot;: &quot;center&quot;,
+        &quot;onMouseUp&quot;: &quot;sun1.opacity = (sun1.opacity / 100) * 90;&quot;
+    }
+}}    </pre>
+<p>The same text expressed as <a href="http://www.konfabulator.com/workshop/Konfabulator_Ref_1.8.pdf">XML</a>: 
+</p>
+<pre>&lt;widget&gt;<br>    &lt;debug&gt;on&lt;/debug&gt;<br>    &lt;window title=&quot;Sample Konfabulator Widget&quot;&gt;<br>        &lt;name&gt;main_window&lt;/name&gt;<br>        &lt;width&gt;500&lt;/width&gt;<br>        &lt;height&gt;500&lt;/height&gt;<br>    &lt;/window&gt;<br>    &lt;image src=&quot;Images/Sun.png&quot; name=&quot;sun1&quot;&gt;<br>        &lt;hOffset&gt;250&lt;/hOffset&gt;<br>        &lt;vOffset&gt;250&lt;/vOffset&gt;<br>        &lt;alignment&gt;center&lt;/alignment&gt;<br>    &lt;/image&gt;<br>    &lt;text data=&quot;Click Here&quot; size=&quot;36&quot; style=&quot;bold&quot;&gt;<br>        &lt;name&gt;text1&lt;/name&gt;<br>        &lt;hOffset&gt;250&lt;/hOffset&gt;<br>        &lt;vOffset&gt;100&lt;/vOffset&gt;<br>        &lt;alignment&gt;center&lt;/alignment&gt;<br>        &lt;onMouseUp&gt;<br>            sun1.opacity = (sun1.opacity / 100) * 90;<br>        &lt;/onMouseUp&gt;<br>    &lt;/text&gt;<br>&lt;/widget&gt;</pre>
+<hr>
+<pre>{"web-app": {
+  "servlet": [   
+    {
+      "servlet-name": "cofaxCDS",
+      "servlet-class": "org.cofax.cds.CDSServlet",
+      "init-param": {
+        "configGlossary:installationAt": "Philadelphia, PA",
+        "configGlossary:adminEmail": "ksm@pobox.com",
+        "configGlossary:poweredBy": "Cofax",
+        "configGlossary:poweredByIcon": "/images/cofax.gif",
+        "configGlossary:staticPath": "/content/static",
+        "templateProcessorClass": "org.cofax.WysiwygTemplate",
+        "templateLoaderClass": "org.cofax.FilesTemplateLoader",
+        "templatePath": "templates",
+        "templateOverridePath": "",
+        "defaultListTemplate": "listTemplate.htm",
+        "defaultFileTemplate": "articleTemplate.htm",
+        "useJSP": false,
+        "jspListTemplate": "listTemplate.jsp",
+        "jspFileTemplate": "articleTemplate.jsp",
+        "cachePackageTagsTrack": 200,
+        "cachePackageTagsStore": 200,
+        "cachePackageTagsRefresh": 60,
+        "cacheTemplatesTrack": 100,
+        "cacheTemplatesStore": 50,
+        "cacheTemplatesRefresh": 15,
+        "cachePagesTrack": 200,
+        "cachePagesStore": 100,
+        "cachePagesRefresh": 10,
+        "cachePagesDirtyRead": 10,
+        "searchEngineListTemplate": "forSearchEnginesList.htm",
+        "searchEngineFileTemplate": "forSearchEngines.htm",
+        "searchEngineRobotsDb": "WEB-INF/robots.db",
+        "useDataStore": true,
+        "dataStoreClass": "org.cofax.SqlDataStore",
+        "redirectionClass": "org.cofax.SqlRedirection",
+        "dataStoreName": "cofax",
+        "dataStoreDriver": "com.microsoft.jdbc.sqlserver.SQLServerDriver",
+        "dataStoreUrl": "jdbc:microsoft:sqlserver://LOCALHOST:1433;DatabaseName=goon",
+        "dataStoreUser": "sa",
+        "dataStorePassword": "dataStoreTestQuery",
+        "dataStoreTestQuery": "SET NOCOUNT ON;select test='test';",
+        "dataStoreLogFile": "/usr/local/tomcat/logs/datastore.log",
+        "dataStoreInitConns": 10,
+        "dataStoreMaxConns": 100,
+        "dataStoreConnUsageLimit": 100,
+        "dataStoreLogLevel": "debug",
+        "maxUrlLength": 500}},
+    {
+      "servlet-name": "cofaxEmail",
+      "servlet-class": "org.cofax.cds.EmailServlet",
+      "init-param": {
+      "mailHost": "mail1",
+      "mailHostOverride": "mail2"}},
+    {
+      "servlet-name": "cofaxAdmin",
+      "servlet-class": "org.cofax.cds.AdminServlet"},
+ 
+    {
+      "servlet-name": "fileServlet",
+      "servlet-class": "org.cofax.cds.FileServlet"},
+    {
+      "servlet-name": "cofaxTools",
+      "servlet-class": "org.cofax.cms.CofaxToolsServlet",
+      "init-param": {
+        "templatePath": "toolstemplates/",
+        "log": 1,
+        "logLocation": "/usr/local/tomcat/logs/CofaxTools.log",
+        "logMaxSize": "",
+        "dataLog": 1,
+        "dataLogLocation": "/usr/local/tomcat/logs/dataLog.log",
+        "dataLogMaxSize": "",
+        "removePageCache": "/content/admin/remove?cache=pages&id=",
+        "removeTemplateCache": "/content/admin/remove?cache=templates&id=",
+        "fileTransferFolder": "/usr/local/tomcat/webapps/content/fileTransferFolder",
+        "lookInContext": 1,
+        "adminGroupID": 4,
+        "betaServer": true}}],
+  "servlet-mapping": {
+    "cofaxCDS": "/",
+    "cofaxEmail": "/cofaxutil/aemail/*",
+    "cofaxAdmin": "/admin/*",
+    "fileServlet": "/static/*",
+    "cofaxTools": "/tools/*"},
+ 
+  "taglib": {
+    "taglib-uri": "cofax.tld",
+    "taglib-location": "/WEB-INF/tlds/cofax.tld"}}}</pre>
+<p>The same file expressed as <a href="http://www.cofax.org/site/docs/sample-web.xml">XML</a>:</p>
+<pre>&lt;?xml version="1.0" encoding="ISO-8859-1"?&gt;
+
+&lt;!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.2//EN"
+    "http://java.sun.com/j2ee/dtds/web-app_2.2.dtd"&gt;
+&lt;web-app&gt;
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;
+            cofaxCDS
+        &lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+            org.cofax.cds.CDSServlet
+        &lt;/servlet-class&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;configGlossary:installationAt&lt;/param-name&gt;
+      &lt;param-value&gt;Philadelphia, PA&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;configGlossary:adminEmail&lt;/param-name&gt;
+      &lt;param-value&gt;ksm@pobox.com&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;configGlossary:poweredBy&lt;/param-name&gt;
+      &lt;param-value&gt;Cofax&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;configGlossary:poweredByIcon&lt;/param-name&gt;
+      &lt;param-value&gt;/images/cofax.gif&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;configGlossary:staticPath&lt;/param-name&gt;
+      &lt;param-value&gt;/content/static&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;templateProcessorClass&lt;/param-name&gt;
+      &lt;param-value&gt;org.cofax.WysiwygTemplate&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;templateLoaderClass&lt;/param-name&gt;
+      &lt;param-value&gt;org.cofax.FilesTemplateLoader&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;templatePath&lt;/param-name&gt;
+      &lt;param-value&gt;templates&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;templateOverridePath&lt;/param-name&gt;
+      &lt;param-value&gt;&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;defaultListTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;listTemplate.htm&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+       &lt;init-param&gt;
+          &lt;param-name&gt;defaultFileTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;articleTemplate.htm&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+       &lt;init-param&gt;
+          &lt;param-name&gt;useJSP&lt;/param-name&gt;
+      &lt;param-value&gt;false&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;jspListTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;listTemplate.jsp&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+       &lt;init-param&gt;
+          &lt;param-name&gt;jspFileTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;articleTemplate.jsp&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;cachePackageTagsTrack&lt;/param-name&gt;
+      &lt;param-value&gt;200&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePackageTagsStore&lt;/param-name&gt;
+      &lt;param-value&gt;200&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePackageTagsRefresh&lt;/param-name&gt;
+      &lt;param-value&gt;60&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;cacheTemplatesTrack&lt;/param-name&gt;
+      &lt;param-value&gt;100&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cacheTemplatesStore&lt;/param-name&gt;
+      &lt;param-value&gt;50&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cacheTemplatesRefresh&lt;/param-name&gt;
+      &lt;param-value&gt;15&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePagesTrack&lt;/param-name&gt;
+      &lt;param-value&gt;200&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePagesStore&lt;/param-name&gt;
+      &lt;param-value&gt;100&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePagesRefresh&lt;/param-name&gt;
+      &lt;param-value&gt;10&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;cachePagesDirtyRead&lt;/param-name&gt;
+      &lt;param-value&gt;10&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;searchEngineListTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;forSearchEnginesList.htm&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+       &lt;init-param&gt;
+          &lt;param-name&gt;searchEngineFileTemplate&lt;/param-name&gt;
+      &lt;param-value&gt;forSearchEngines.htm&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+       &lt;init-param&gt;
+          &lt;param-name&gt;searchEngineRobotsDb&lt;/param-name&gt;
+      &lt;param-value&gt;WEB-INF/robots.db&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;init-param&gt;
+          &lt;param-name&gt;useDataStore&lt;/param-name&gt;
+      &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreClass&lt;/param-name&gt;
+      &lt;param-value&gt;org.cofax.SqlDataStore&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;redirectionClass&lt;/param-name&gt;
+      &lt;param-value&gt;org.cofax.SqlRedirection&lt;/param-value&gt;
+        &lt;/init-param&gt;
+        &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreName&lt;/param-name&gt;
+      &lt;param-value&gt;cofax&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreDriver&lt;/param-name&gt;
+      &lt;param-value&gt;com.microsoft.jdbc.sqlserver.SQLServerDriver&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreUrl&lt;/param-name&gt;
+      &lt;param-value&gt;jdbc:microsoft:sqlserver://LOCALHOST:1433;DatabaseName=goon&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreUser&lt;/param-name&gt;
+      &lt;param-value&gt;sa&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStorePassword&lt;/param-name&gt;
+      &lt;param-value&gt;&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreTestQuery&lt;/param-name&gt;
+      &lt;param-value&gt;SET NOCOUNT ON;select test='test';&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreLogFile&lt;/param-name&gt;
+      &lt;param-value&gt;/usr/local/tomcat/logs/datastore.log&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreInitConns&lt;/param-name&gt;
+      &lt;param-value&gt;10&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreMaxConns&lt;/param-name&gt;
+      &lt;param-value&gt;100&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreConnUsageLimit&lt;/param-name&gt;
+      &lt;param-value&gt;100&lt;/param-value&gt;
+        &lt;/init-param&gt;
+ &lt;init-param&gt;
+          &lt;param-name&gt;dataStoreLogLevel&lt;/param-name&gt;
+      &lt;param-value&gt;debug&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+     &lt;init-param&gt;
+          &lt;param-name&gt;maxUrlLength&lt;/param-name&gt;
+      &lt;param-value&gt;500&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;/servlet&gt;
+
+     &lt;servlet&gt;
+        &lt;servlet-name&gt;
+            cofaxEmail
+        &lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+            org.cofax.cds.EmailServlet
+        &lt;/servlet-class&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;mailHost&lt;/param-name&gt;
+      &lt;param-value&gt;mail1&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;mailHostOverride&lt;/param-name&gt;
+      &lt;param-value&gt;mail2&lt;/param-value&gt;
+        &lt;/init-param&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet&gt;
+        &lt;servlet-name&gt;
+            cofaxAdmin
+        &lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+            org.cofax.cds.AdminServlet
+        &lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+    &lt;servlet&gt;
+         &lt;servlet-name&gt;
+             fileServlet
+         &lt;/servlet-name&gt;
+         &lt;servlet-class&gt;
+             org.cofax.cds.FileServlet
+         &lt;/servlet-class&gt;
+    &lt;/servlet&gt;
+
+   &lt;servlet&gt;
+        &lt;servlet-name&gt;
+            cofaxTools
+        &lt;/servlet-name&gt;
+        &lt;servlet-class&gt;
+            org.cofax.cms.CofaxToolsServlet
+        &lt;/servlet-class&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;templatePath&lt;/param-name&gt;
+          &lt;param-value&gt;toolstemplates/&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;log&lt;/param-name&gt;
+          &lt;param-value&gt;1&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;logLocation&lt;/param-name&gt;
+          &lt;param-value&gt;/usr/local/tomcat/logs/CofaxTools.log&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;logMaxSize&lt;/param-name&gt;
+          &lt;param-value&gt;&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataLog&lt;/param-name&gt;
+          &lt;param-value&gt;1&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataLogLocation&lt;/param-name&gt;
+          &lt;param-value&gt;/usr/local/tomcat/logs/dataLog.log&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;dataLogMaxSize&lt;/param-name&gt;
+          &lt;param-value&gt;&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;removePageCache&lt;/param-name&gt;
+          &lt;param-value&gt;/content/admin/remove?cache=pages&amp;id=&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;removeTemplateCache&lt;/param-name&gt;
+          &lt;param-value&gt;/content/admin/remove?cache=templates&amp;id=&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;fileTransferFolder&lt;/param-name&gt;
+          &lt;param-value&gt;/usr/local/tomcat/webapps/content/fileTransferFolder&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+         &lt;init-param&gt;
+          &lt;param-name&gt;lookInContext&lt;/param-name&gt;
+          &lt;param-value&gt;1&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;adminGroupID&lt;/param-name&gt;
+          &lt;param-value&gt;4&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+        &lt;init-param&gt;
+          &lt;param-name&gt;betaServer&lt;/param-name&gt;
+          &lt;param-value&gt;true&lt;/param-value&gt;
+        &lt;/init-param&gt;
+
+    &lt;/servlet&gt;
+
+    &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;
+    cofaxCDS
+    &lt;/servlet-name&gt;
+    &lt;url-pattern&gt;
+    /
+    &lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+    &lt;servlet-mapping&gt;
+    &lt;servlet-name&gt;
+    cofaxEmail
+    &lt;/servlet-name&gt;
+    &lt;url-pattern&gt;
+    /cofaxutil/aemail/*
+    &lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+    &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;
+        cofaxAdmin
+        &lt;/servlet-name&gt;
+        &lt;url-pattern&gt;
+        /admin/*
+        &lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+    &lt;servlet-mapping&gt;
+         &lt;servlet-name&gt;
+         fileServlet
+         &lt;/servlet-name&gt;
+         &lt;url-pattern&gt;
+         /static/*
+         &lt;/url-pattern&gt;
+     &lt;/servlet-mapping&gt;
+
+  &lt;servlet-mapping&gt;
+        &lt;servlet-name&gt;
+        cofaxTools
+        &lt;/servlet-name&gt;
+        &lt;url-pattern&gt;
+        /tools/*
+        &lt;/url-pattern&gt;
+    &lt;/servlet-mapping&gt;
+
+   &lt;taglib&gt;
+      &lt;taglib-uri&gt;cofax.tld&lt;/taglib-uri&gt;
+      &lt;taglib-location&gt;/WEB-INF/tlds/cofax.tld&lt;/taglib-location&gt;
+   &lt;/taglib&gt;
+
+&lt;/web-app&gt;
+</pre>
+<hr>
+<p>The <tt>action</tt> and <tt>label</tt> values only need to be provided if they are not the same as the <tt>id</tt>.</p>
+      
+<pre>{"menu": {
+    &quot;header&quot;: &quot;SVG Viewer&quot;,
+    &quot;items&quot;: [
+        {&quot;id&quot;: &quot;Open&quot;},
+        {&quot;id&quot;: &quot;OpenNew&quot;, &quot;label&quot;: &quot;Open New&quot;},
+        null,
+        {&quot;id&quot;: &quot;ZoomIn&quot;, &quot;label&quot;: &quot;Zoom In&quot;},
+        {&quot;id&quot;: &quot;ZoomOut&quot;, &quot;label&quot;: &quot;Zoom Out&quot;},
+        {&quot;id&quot;: &quot;OriginalView&quot;, &quot;label&quot;: &quot;Original View&quot;},
+        null,
+        {&quot;id&quot;: &quot;Quality&quot;},
+        {&quot;id&quot;: &quot;Pause&quot;},
+        {&quot;id&quot;: &quot;Mute&quot;},
+        null,
+        {&quot;id&quot;: &quot;Find&quot;, &quot;label&quot;: &quot;Find...&quot;},
+        {&quot;id&quot;: &quot;FindAgain&quot;, &quot;label&quot;: &quot;Find Again&quot;},
+        {&quot;id&quot;: &quot;Copy&quot;},
+        {&quot;id&quot;: &quot;CopyAgain&quot;, &quot;label&quot;: &quot;Copy Again&quot;},
+        {&quot;id&quot;: &quot;CopySVG&quot;, &quot;label&quot;: &quot;Copy SVG&quot;},
+        {&quot;id&quot;: &quot;ViewSVG&quot;, &quot;label&quot;: &quot;View SVG&quot;},
+        {&quot;id&quot;: &quot;ViewSource&quot;, &quot;label&quot;: &quot;View Source&quot;},
+        {&quot;id&quot;: &quot;SaveAs&quot;, &quot;label&quot;: &quot;Save As&quot;},
+        null,
+        {&quot;id&quot;: &quot;Help&quot;},
+        {&quot;id&quot;: &quot;About&quot;, &quot;label&quot;: &quot;About Adobe CVG Viewer...&quot;}
+    ]
+}}
+</pre>
+      <p>The same message expressed as <a href="http://xml.com/pub/a/2002/07/03/adobesvg.html">XML</a>:</p>
+      
+<pre>&lt;menu&gt;
+    &lt;header&gt;Adobe SVG Viewer&lt;/header&gt;
+    &lt;item action=&quot;Open&quot; id=&quot;Open&quot;&gt;Open&lt;/item&gt;
+    &lt;item action=&quot;OpenNew&quot; id=&quot;OpenNew&quot;&gt;Open New&lt;/item&gt;
+    &lt;separator/&gt;
+    &lt;item action=&quot;ZoomIn&quot; id=&quot;ZoomIn&quot;&gt;Zoom In&lt;/item&gt;
+    &lt;item action=&quot;ZoomOut&quot; id=&quot;ZoomOut&quot;&gt;Zoom Out&lt;/item&gt;
+    &lt;item action=&quot;OriginalView&quot; id=&quot;OriginalView&quot;&gt;Original View&lt;/item&gt;
+    &lt;separator/&gt;
+    &lt;item action=&quot;Quality&quot; id=&quot;Quality&quot;&gt;Quality&lt;/item&gt;
+    &lt;item action=&quot;Pause&quot; id=&quot;Pause&quot;&gt;Pause&lt;/item&gt;
+    &lt;item action=&quot;Mute&quot; id=&quot;Mute&quot;&gt;Mute&lt;/item&gt;
+    &lt;separator/&gt;
+    &lt;item action=&quot;Find&quot; id=&quot;Find&quot;&gt;Find...&lt;/item&gt;
+    &lt;item action=&quot;FindAgain&quot; id=&quot;FindAgain&quot;&gt;Find Again&lt;/item&gt;
+    &lt;item action=&quot;Copy&quot; id=&quot;Copy&quot;&gt;Copy&lt;/item&gt;
+    &lt;item action=&quot;CopyAgain&quot; id=&quot;CopyAgain&quot;&gt;Copy Again&lt;/item&gt;
+    &lt;item action=&quot;CopySVG&quot; id=&quot;CopySVG&quot;&gt;Copy SVG&lt;/item&gt;
+    &lt;item action=&quot;ViewSVG&quot; id=&quot;ViewSVG&quot;&gt;View SVG&lt;/item&gt;
+    &lt;item action=&quot;ViewSource&quot; id=&quot;ViewSource&quot;&gt;View Source&lt;/item&gt;
+    &lt;item action=&quot;SaveAs&quot; id=&quot;SaveAs&quot;&gt;Save As&lt;/item&gt;
+    &lt;separator/&gt;
+    &lt;item action=&quot;Help&quot; id=&quot;Help&quot;&gt;Help&lt;/item&gt;
+    &lt;item action=&quot;About&quot; id=&quot;About&quot;&gt;About Adobe CVG Viewer...&lt;/item&gt;
+&lt;/menu&gt;
+</pre>
+</body>
+</html>

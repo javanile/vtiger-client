@@ -15,10 +15,17 @@ final class HttpClientTest extends TestCase
 {
     public function testCreateAnInstance()
     {
-        $object = new HttpClient();
-        $this->assertInstanceOf('Javanile\HttpClient\HttpClient', $object);
 
-        $output = 'Hello World!';
-        $this->assertRegexp('/World/i', $output);
+        $client = new HttpClient('json.org', 80);
+        $client->setDebug(true);
+
+        $this->assertInstanceOf('Javanile\HttpClient\HttpClient', $client);
+
+        $client->get('/example.html');
+
+        $body = $client->getContent();
+
+        Producer::log($client->getLogs());
+        Producer::log($body);
     }
 }
