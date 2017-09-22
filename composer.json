@@ -1,10 +1,10 @@
 {
-    "name": "javanile/http-client",
+    "name": "javanile/vtiger-client",
     "version": "0.0.7",
     "repositories": [
         {
             "type": "git",
-            "url": "https://github.com/javanile/http-client"
+            "url": "https://github.com/javanile/vtiger-client"
         }
     ]
 }
