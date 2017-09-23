@@ -1,10 +1,13 @@
 {
     "name": "javanile/vtiger-client",
-    "version": "0.0.7",
+    "version": "0.0.8",
     "repositories": [
         {
             "type": "git",
             "url": "https://github.com/javanile/vtiger-client"
         }
-    ]
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "^6.3"
+    }
 }
