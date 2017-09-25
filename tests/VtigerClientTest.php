@@ -18,20 +18,23 @@ final class VtigerClientTest extends TestCase
         $client = new VtigerClient([
             'endpoint'  => 'http://vtigercrm.javanile.org',
             'username'  => 'admin',
-            'accessKey' => 'asd',
+            'accessKey' => getenv('VTIGER_ACCESS_KEY'),
         ]);
 
         $this->assertInstanceOf('Javanile\VtigerClient\VtigerClient', $client);
 
         $response = $client->doGetChallenge();
-
         $challengeToken = $client->getChallengeToken();
-
         $this->assertEquals(13, strlen($challengeToken));
 
         $response = $client->doLogin();
+        $sessionName = $client->getSessionName();
+        $this->assertEquals(21, strlen($sessionName));
+
+        $response = $client->doListTypes();
+        $types = $client->getTypes();
+        $this->assertTrue(is_array($types));
 
         Producer::log($response);
-
     }
 }

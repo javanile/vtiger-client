@@ -26,6 +26,11 @@ class VtigerClient
     private $sessionName;
 
     /**
+     *
+     */
+    private $types;
+
+    /**
      * Constructor.
      */
     public function __construct($args)
@@ -50,7 +55,6 @@ class VtigerClient
         ]);
 
         $body = $response->getBody();
-
         $json = json_decode($body, true);
 
         $this->challengeToken = $json['result']['token'];
@@ -88,4 +92,41 @@ class VtigerClient
 
         return $body;
     }
+
+    /**
+     *
+     */
+    public function getSessionName()
+    {
+        return $this->sessionName;
+    }
+
+    /**
+     *
+     */
+    function doListTypes()
+    {
+        $response = $this->client->request('GET', $this->endpoint, [
+            'query' => [
+                'operation' => 'listtypes',
+                'sessionName' => $this->sessionName,
+            ]
+        ]);
+
+        $body = $response->getBody();
+        $json = json_decode($body, true);
+
+        $this->types = $json['result']['types'];
+
+        return $json;
+    }
+
+    /**
+     *
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
 }
