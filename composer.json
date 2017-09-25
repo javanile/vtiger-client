@@ -1,6 +1,6 @@
 {
     "name": "javanile/vtiger-client",
-    "version": "0.0.11",
+    "version": "0.0.12",
     "repositories": [
         {
             "type": "git",
