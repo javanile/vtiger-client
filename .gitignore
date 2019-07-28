@@ -1,6 +1,7 @@
 .idea/
 vendor/
 node_modules/
+volumes/
 npm-debug.log
 phpunit.xml
 composer.lock
