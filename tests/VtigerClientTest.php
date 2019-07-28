@@ -40,7 +40,7 @@ final class VtigerClientTest extends TestCase
         $actual = (new Client([
             'endpoint'  => getenv('VT_ENDPOINT'),
             'username'  => getenv('VT_USERNAME'),
-            'accessKey' => getenv('VT_accessKey'),
+            'accessKey' => getenv('VT_ACCESS_KEY'),
         ]))->getChallenge();
 
         $expected['result']['token'] = $actual['result']['token'];

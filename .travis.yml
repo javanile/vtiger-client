@@ -19,6 +19,7 @@ before_script:
   - sleep 15
   - docker-compose ps
   - docker-compose run --rm composer install --no-interaction --prefer-source
+  - docker-compose exec mysql bash -c 'mysql -uroot -p\$MYSQL_ROOT_PASSWORD -e "SELECT * FROM vtiger_users"'
 
 script:
   - docker-compose run --rm phpunit tests
