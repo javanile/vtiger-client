@@ -1,6 +1,6 @@
+.idea/
 vendor/
 node_modules/
 npm-debug.log
 phpunit.xml
-producer
-producer.log
+composer.lock

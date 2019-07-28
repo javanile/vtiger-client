@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<phpunit>
+<phpunit bootstrap="./vendor/autoload.php" colors="true">
+    <php>
+        <env name="VT_ENDPOINT" value="http://vtiger"/>
+        <env name="VT_USERNAME" value="admin"/>
+        <env name="VT_ACCESS_KEY" value="7IJXiH9gR4FfCPZp"/>
+    </php>
     <filter>
         <whitelist>
             <directory>./src</directory>

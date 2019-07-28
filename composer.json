@@ -1,13 +1,28 @@
 {
     "name": "javanile/vtiger-client",
     "version": "0.0.12",
-    "repositories": [
+    "license": "MIT",
+    "type": "project",
+    "authors": [
         {
-            "type": "git",
-            "url": "https://github.com/javanile/vtiger-client"
+            "name": "Francesco Bianco",
+            "email": "bianco@javanile.org"
         }
     ],
+    "autoload": {
+        "psr-4": {
+            "Javanile\\VtigerClient\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Javanile\\VtigerClient\\Tests\\": "tests/"
+        }
+    },
     "require": {
         "guzzlehttp/guzzle": "^6.3"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^6.5"
     }
 }
