@@ -16,7 +16,7 @@ before_install:
 
 before_script:
   - docker-compose up -d vtiger
-  - sleep 10
+  - sleep 30
   - docker-compose ps
   - docker-compose logs mysql
   - docker-compose exec mysql bash -c "mysql --version"
