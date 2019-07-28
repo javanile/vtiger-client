@@ -37,6 +37,8 @@ class VtigerClient
 
     /**
      * Constructor.
+     *
+     * @param mixed $args
      */
     public function __construct($args)
     {
@@ -44,7 +46,7 @@ class VtigerClient
             $args = ['endpoint' => $args];
         }
 
-        $this->endpoint = $args['endpoint'] . '/webservice.php';
+        $this->endpoint = $args['endpoint'].'/webservice.php';
         $this->username = isset($args['username']) ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
 
@@ -53,6 +55,8 @@ class VtigerClient
 
     /**
      * Perform get challenge operation.
+     *
+     * @param null|mixed $username
      */
     public function getChallenge($username = null)
     {
@@ -63,8 +67,8 @@ class VtigerClient
         $json = $this->get([
             'query' => [
                 'operation' => 'getchallenge',
-                'username' => $this->username,
-            ]
+                'username'  => $this->username,
+            ],
         ]);
 
         $this->token = isset($json['result']['token']) ? $json['result']['token'] : null;
@@ -82,6 +86,9 @@ class VtigerClient
 
     /**
      * Performi login action.
+     *
+     * @param null|mixed $username
+     * @param null|mixed $accessKey
      */
     public function login($username = null, $accessKey = null)
     {
@@ -101,8 +108,8 @@ class VtigerClient
             'form_params' => [
                 'operation' => 'login',
                 'username'  => $this->username,
-                'accessKey' => md5($this->token . $this->accessKey)
-            ]
+                'accessKey' => md5($this->token.$this->accessKey),
+            ],
         ]);
 
         $this->sessionName = isset($json['result']['sessionName'])
@@ -126,9 +133,9 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation' => 'listtypes',
+                'operation'   => 'listtypes',
                 'sessionName' => $this->sessionName,
-            ]
+            ],
         ]);
 
         $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
@@ -151,10 +158,10 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation' => 'describe',
+                'operation'   => 'describe',
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -163,17 +170,18 @@ class VtigerClient
     /**
      * @param $elementType
      * @param $element
+     *
      * @return mixed
      */
     public function create($elementType, $element)
     {
         $json = $this->post([
             'form_params' => [
-                'operation' => 'create',
-                'element' => json_encode($element),
+                'operation'   => 'create',
+                'element'     => json_encode($element),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -181,16 +189,18 @@ class VtigerClient
 
     /**
      * @param $crmid
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function retrieve($id)
     {
         $json = $this->get([
             'query' => [
-                'operation' => 'retrieve',
-                'id' => $id,
+                'operation'   => 'retrieve',
+                'id'          => $id,
                 'sessionName' => $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -199,17 +209,18 @@ class VtigerClient
     /**
      * @param $elementType
      * @param $element
+     *
      * @return mixed
      */
     public function update($elementType, $element)
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		=> 'update',
-                'element'		=> json_encode($element),
+                'operation'		 => 'update',
+                'element'		   => json_encode($element),
                 'elementType'	=> $elementType,
                 'sessionName'	=> $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -217,16 +228,18 @@ class VtigerClient
 
     /**
      * @param $crmid
+     * @param mixed $id
+     *
      * @return mixed
      */
     public function delete($id)
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		=> 'delete',
-                'id'			=> $id,
+                'operation'		 => 'delete',
+                'id'			       => $id,
                 'sessionName'	=> $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -234,18 +247,19 @@ class VtigerClient
 
     /**
      * @param $query
+     *
      * @return mixed
      */
     public function query($query)
     {
-        $query = trim(trim($query), ';') . ';';
+        $query = trim(trim($query), ';').';';
 
         $json = $this->get([
             'query' => [
-                'operation' => 'query',
-                'query' => $query,
+                'operation'   => 'query',
+                'query'       => $query,
                 'sessionName' => $this->sessionName,
-            ]
+            ],
         ]);
 
         return $json;
@@ -253,6 +267,7 @@ class VtigerClient
 
     /**
      * @param $element
+     *
      * @return mixed
      */
     public function upload($element)
@@ -263,33 +278,33 @@ class VtigerClient
         $filename = basename($filedata);
         $filesize = filesize($filedata);
 
-        $headers = array("Content-Type:multipart/form-data");
-        $postfields = array(
-            "operation" => "create",
-            "elementType" => "Documents",
-            "element" => json_encode($element),
-            "sessionName" => $this->sessionName,
-            "filename" => "@$filedata",
-        );
+        $headers = ['Content-Type:multipart/form-data'];
+        $postfields = [
+            'operation'   => 'create',
+            'elementType' => 'Documents',
+            'element'     => json_encode($element),
+            'sessionName' => $this->sessionName,
+            'filename'    => "@$filedata",
+        ];
 
         $ch = curl_init();
-        $options = array(
-            CURLOPT_URL => $url,
-            CURLOPT_HEADER => false,
-            CURLOPT_POST => 1,
-            CURLOPT_HTTPHEADER => $headers,
-            CURLOPT_POSTFIELDS => $postfields,
-            CURLOPT_INFILESIZE => $filesize,
-            CURLOPT_RETURNTRANSFER => true
-        );
+        $options = [
+            CURLOPT_URL            => $url,
+            CURLOPT_HEADER         => false,
+            CURLOPT_POST           => 1,
+            CURLOPT_HTTPHEADER     => $headers,
+            CURLOPT_POSTFIELDS     => $postfields,
+            CURLOPT_INFILESIZE     => $filesize,
+            CURLOPT_RETURNTRANSFER => true,
+        ];
 
         curl_setopt_array($ch, $options);
-        $result  = curl_exec($ch);
+        $result = curl_exec($ch);
 
         if (!curl_errno($ch)) {
             $info = curl_getinfo($ch);
             if ($info['http_code'] == 200) {
-                $errmsg = "File uploaded successfully";
+                $errmsg = 'File uploaded successfully';
             }
         } else {
             $errmsg = curl_error($ch);
@@ -307,13 +322,14 @@ class VtigerClient
      */
     public function listUsers()
     {
-        $json = $this->query("SELECT * FROM Users;");
+        $json = $this->query('SELECT * FROM Users;');
 
         return $json;
     }
 
     /**
      * @param $flag
+     * @param mixed $debug
      */
     public function setDebug($debug)
     {
@@ -321,13 +337,13 @@ class VtigerClient
     }
 
     /**
-     *
      * @param $user_password
      * @param $user_name
      * @param string $crypt_type
+     *
      * @return string
      */
-    static protected function encryptPassword($user_password, $user_name, $crypt_type='')
+    protected static function encryptPassword($user_password, $user_name, $crypt_type = '')
     {
         $salt = substr($user_name, 0, 2);
 
@@ -336,11 +352,11 @@ class VtigerClient
         }
 
         if ($crypt_type == 'MD5') {
-            $salt = '$1$' . $salt . '$';
+            $salt = '$1$'.$salt.'$';
         } elseif ($crypt_type == 'BLOWFISH') {
-            $salt = '$2$' . $salt . '$';
+            $salt = '$2$'.$salt.'$';
         } elseif ($crypt_type == 'PHP5.3MD5') {
-            $salt = '$1$' . str_pad($salt, 9, '0');
+            $salt = '$1$'.str_pad($salt, 9, '0');
         }
 
         $encrypted_password = crypt($user_password, $salt);
@@ -349,7 +365,6 @@ class VtigerClient
     }
 
     /**
-     *
      * @param $response
      */
     protected function decodeResponse($response)
@@ -362,6 +377,7 @@ class VtigerClient
 
     /**
      * @param $request
+     *
      * @return mixed
      */
     protected function get($request)
@@ -373,6 +389,7 @@ class VtigerClient
 
     /**
      * @param $request
+     *
      * @return mixed
      */
     protected function post($request)
