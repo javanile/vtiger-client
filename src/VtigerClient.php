@@ -144,7 +144,7 @@ class VtigerClient
     }
 
     /**
-     *
+     * Get list name of types.
      */
     public function getTypes()
     {

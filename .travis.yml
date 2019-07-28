@@ -1,21 +1,27 @@
+os: linux
+group: stable
+dist: trusty
+sudo: required
+language: generic
 
-language: php
+env:
+  DOCKER_COMPOSE_VERSION: 1.22.0
 
-php:
-  - '5.6'
+before_install:
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+  - docker-compose --version
 
 before_script:
-  - mkdir -p build/logs
-  - composer install --no-interaction
+  - docker-compose up -d
+  - sleep 10
+  - docker-compose run vtiger composer install --no-interaction --prefer-source
 
 script:
-  - vendor/bin/phpunit
-    --configuration phpunit.xml
-    --bootstrap ./vendor/autoload.php
-    --coverage-clover build/logs/clover.xml
+  - docker-compose run vtiger vendor/bin/phpunit tests
 
 after_success:
-  - ./vendor/bin/test-reporter
-
-notifications:
-  email: "bianco@javanile.org"
+  - bash <(curl -s https://codecov.io/bash)
+  - echo "${SFTP_KEY}" | base64 --decode >/tmp/sftp_rsa
