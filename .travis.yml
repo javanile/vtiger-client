@@ -16,10 +16,10 @@ before_install:
 
 before_script:
   - docker-compose up -d vtiger
-  - sleep 15
+  - sleep 5
+  - docker-compose exec mysql bash -c "mysql -uroot -p\$MYSQL_ROOT_PASSWORD \$MYSQL_DATABASE -e \"SELECT * FROM vtiger_users\""
   - docker-compose ps
   - docker-compose run --rm composer install --no-interaction --prefer-source
-  - docker-compose exec mysql bash -c 'mysql -uroot -p\$MYSQL_ROOT_PASSWORD \$MYSQL_DATABASE -e "SELECT * FROM vtiger_users"'
 
 script:
   - docker-compose run --rm phpunit tests
