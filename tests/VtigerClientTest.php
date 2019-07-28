@@ -4,9 +4,30 @@ namespace Javanile\VtigerClient\Tests;
 
 use Javanile\VtigerClient\VtigerClient as Client;
 use PHPUnit\Framework\TestCase;
+use PDO;
 
 final class VtigerClientTest extends TestCase
 {
+    protected static $username;
+
+    protected static $accessKey;
+
+    protected static $endpoint;
+
+    public static function setUpBeforeClass()
+    {
+        self::$endpoint = getenv('VT_ENDPOINT');
+        self::$username = $username = getenv('VT_USERNAME');
+
+        $mysqlHost = getenv('MYSQL_HOST');
+        $mysqlDatabase = getenv('MYSQL_DATABASE');
+        $mysqlRootPassword = getenv('MYSQL_ROOT_PASSWORD');
+        $db = new PDO("mysql:host={$mysqlHost};dbname={$mysqlDatabase}", 'root', $mysqlRootPassword);
+        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT accesskey FROM vtiger_users WHERE user_name='{$username}'";
+        self::$accessKey = $db->query($sql)->fetchObject()->accesskey;
+    }
+
     public function testGetChallengeWithoutUsername()
     {
         $expected = [
@@ -18,7 +39,7 @@ final class VtigerClientTest extends TestCase
         ];
 
         $actual = (new Client([
-            'endpoint' => getenv('VT_ENDPOINT'),
+            'endpoint' => self::$endpoint,
         ]))->getChallenge();
 
         $this->assertEquals($expected, $actual);
@@ -38,9 +59,9 @@ final class VtigerClientTest extends TestCase
         ];
 
         $actual = (new Client([
-            'endpoint'  => getenv('VT_ENDPOINT'),
-            'username'  => getenv('VT_USERNAME'),
-            'accessKey' => getenv('VT_ACCESS_KEY'),
+            'username'  => self::$username,
+            'accessKey' => self::$accessKey,
+            'endpoint'  => self::$endpoint,
         ]))->getChallenge();
 
         $expected['result']['token'] = $actual['result']['token'];
@@ -61,9 +82,9 @@ final class VtigerClientTest extends TestCase
         ];
 
         $actual = (new Client([
-            'endpoint'  => getenv('VT_ENDPOINT'),
-            'username'  => getenv('VT_USERNAME'),
-            'accessKey' => getenv('VT_ACCESS_KEY'),
+            'username'  => self::$username,
+            'accessKey' => self::$accessKey,
+            'endpoint'  => self::$endpoint,
         ]))->login();
 
         if (empty($actual['result']['sessionName'])) {
@@ -77,9 +98,9 @@ final class VtigerClientTest extends TestCase
 
     public function testListTypes()
     {
-        $client = new Client(getenv('VT_ENDPOINT'));
+        $client = new Client(self::$endpoint);
 
-        $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
+        $client->login(self::$username, self::$accessKey);
 
         $expected =  json_decode(file_get_contents(__DIR__.'/fixtures/listTypes.json'), true);
 
@@ -91,9 +112,9 @@ final class VtigerClientTest extends TestCase
 
     public function testDescribe()
     {
-        $client = new Client(getenv('VT_ENDPOINT'));
+        $client = new Client(self::$endpoint);
 
-        $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
+        $client->login(self::$username, self::$accessKey);
 
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/describeFaq.json'), true);
 
@@ -105,9 +126,9 @@ final class VtigerClientTest extends TestCase
 
     public function testListUsers()
     {
-        $client = new Client(getenv('VT_ENDPOINT'));
+        $client = new Client(self::$endpoint);
 
-        $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
+        $client->login(self::$username, self::$accessKey);
 
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/listUsers.json'), true);
 

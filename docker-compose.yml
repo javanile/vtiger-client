@@ -42,6 +42,12 @@ services:
 
   phpunit:
     image: phpunit/phpunit:6.5.3
+    environment:
+      - VT_ENDPOINT=http://vtiger
+      - VT_USERNAME=admin
+      - MYSQL_HOST=mysql
+      - MYSQL_DATABASE=vtiger
+      - MYSQL_ROOT_PASSWORD=secret
     volumes:
       - ./:/app
     links:
