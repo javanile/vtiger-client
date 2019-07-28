@@ -77,7 +77,7 @@ final class VtigerClientTest extends TestCase
                 'sessionName'   => null,
                 'userId'        => '19x1',
                 'version'       => '0.22',
-                'vtigerVersion' => '7.1.0',
+                'vtigerVersion' => null,
             ],
         ];
 
@@ -92,6 +92,7 @@ final class VtigerClientTest extends TestCase
         }
 
         $expected['result']['sessionName'] = $actual['result']['sessionName'];
+        $expected['result']['vtigerVersion'] = $actual['result']['vtigerVersion'];
 
         $this->assertEquals($expected, $actual);
     }
@@ -134,6 +135,7 @@ final class VtigerClientTest extends TestCase
 
         $actual = $client->listUsers();
         #file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
+        $expected['result'][0]['accesskey'] = $actual['result'][0]['accesskey'];
 
         $this->assertEquals($expected, $actual);
     }

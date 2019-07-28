@@ -16,11 +16,7 @@ before_install:
 
 before_script:
   - docker-compose up -d vtiger
-  - sleep 30
-  - docker-compose ps
-  - docker-compose logs mysql
-  - docker-compose exec mysql bash -c "mysql --version"
-  - docker-compose exec mysql bash -c "mysql --skip-column-names --batch --raw -uroot -p\$MYSQL_ROOT_PASSWORD \$MYSQL_DATABASE -e \"SELECT accesskey FROM vtiger_users WHERE user_name='admin'\""
+  - sleep 10
   - docker-compose run --rm composer install --no-interaction --prefer-source
 
 script:
