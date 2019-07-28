@@ -17,6 +17,8 @@ before_install:
 before_script:
   - docker-compose up -d vtiger
   - sleep 10
+  - mkdir vendor
+  - chmod 777 vendor
   - docker-compose run --rm composer install --no-interaction --prefer-source
 
 script:
