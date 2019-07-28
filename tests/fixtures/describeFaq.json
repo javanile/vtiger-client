@@ -1,0 +1,191 @@
+{
+    "success": true,
+    "result": {
+        "label": "Faq",
+        "name": "Faq",
+        "createable": true,
+        "updateable": true,
+        "deleteable": true,
+        "retrieveable": true,
+        "fields": [
+            {
+                "name": "product_id",
+                "label": "Nome Prodotto",
+                "mandatory": false,
+                "type": {
+                    "refersTo": [
+                        "Products"
+                    ],
+                    "name": "reference"
+                },
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "faq_no",
+                "label": "No. Faq",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "nullable": false,
+                "editable": false,
+                "default": ""
+            },
+            {
+                "name": "faqcategories",
+                "label": "Categoria",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Generale",
+                            "value": "General"
+                        }
+                    ],
+                    "defaultValue": "General",
+                    "name": "picklist"
+                },
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "faqstatus",
+                "label": "Stato",
+                "mandatory": true,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Bozza",
+                            "value": "Draft"
+                        },
+                        {
+                            "label": "Reviewed",
+                            "value": "Reviewed"
+                        },
+                        {
+                            "label": "Pubblicato",
+                            "value": "Published"
+                        },
+                        {
+                            "label": "Obsoleto",
+                            "value": "Obsolete"
+                        }
+                    ],
+                    "defaultValue": "Draft",
+                    "name": "picklist"
+                },
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "question",
+                "label": "Domanda",
+                "mandatory": true,
+                "type": {
+                    "name": "text"
+                },
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "faq_answer",
+                "label": "Risposta",
+                "mandatory": true,
+                "type": {
+                    "name": "text"
+                },
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "createdtime",
+                "label": "Orario creazione",
+                "mandatory": false,
+                "type": {
+                    "name": "datetime"
+                },
+                "nullable": false,
+                "editable": false,
+                "default": ""
+            },
+            {
+                "name": "modifiedtime",
+                "label": "Orario modifica",
+                "mandatory": false,
+                "type": {
+                    "name": "datetime"
+                },
+                "nullable": false,
+                "editable": false,
+                "default": ""
+            },
+            {
+                "name": "modifiedby",
+                "label": "Last Modified By",
+                "mandatory": false,
+                "type": {
+                    "refersTo": [
+                        "Users"
+                    ],
+                    "name": "reference"
+                },
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "source",
+                "label": "Fonte",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "nullable": true,
+                "editable": false,
+                "default": ""
+            },
+            {
+                "name": "starred",
+                "label": "starred",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "tags",
+                "label": "tags",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "id",
+                "label": "id",
+                "mandatory": false,
+                "type": {
+                    "name": "autogenerated"
+                },
+                "editable": false,
+                "nullable": false,
+                "default": ""
+            }
+        ],
+        "idPrefix": "3",
+        "isEntity": true,
+        "labelFields": "question"
+    }
+}

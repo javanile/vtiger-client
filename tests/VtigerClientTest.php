@@ -73,31 +73,52 @@ final class VtigerClientTest extends TestCase
 
     public function testListTypes()
     {
+        /*
         $client = new Client(getenv('VT_ENDPOINT'));
 
         $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
 
         $expected = [
             'success' => true,
-            'result' => [
-                'types' => [
-                    'Campaigns', 'Vendors', 'Faq', 'Quotes', 'PurchaseOrder',
-                    'SalesOrder', 'Invoice', 'PriceBooks', 'Calendar', 'Leads',
-                    'Accounts', 'Contacts', 'Potentials', 'Products', 'Documents',
-                    'Emails', 'HelpDesk', 'Events', 'Users', 'PBXManager',
-                    'ServiceContracts', 'Services', 'ModComments', 'SMSNotifier',
-                    'Assets', 'ProjectMilestone', 'ProjectTask', 'Project', 'Groups',
-                    'Currency', 'DocumentFolders', 'CompanyDetails', 'LineItem',
-                    'Tax', 'ProductTaxes',
-                ],
-                'information' => Array (),
-            ]
+            'result' => json_decode(file_get_contents(__DIR__.'/fixtures/'))
         ];
 
         $actual = $client->listTypes();
 
         $this->assertEquals($expected, $actual);
+        */
     }
+
+    public function testDescribe()
+    {
+        $client = new Client(getenv('VT_ENDPOINT'));
+
+        $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
+
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/describeFaq.json'), true);
+
+        $actual = $client->describe('Faq');
+
+        #file_put_contents(__DIR__.'/fixtures/describeFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testListUsers()
+    {
+        $client = new Client(getenv('VT_ENDPOINT'));
+
+        $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
+
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/listUsers.json'), true);
+
+        $actual = $client->listUsers();
+
+        #file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        $this->assertEquals($expected, $actual);
+    }
+
 
 /*
         public function testCreateAnInstance()

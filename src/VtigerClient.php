@@ -122,7 +122,7 @@ class VtigerClient
     /**
      *
      */
-    function listTypes()
+    public function listTypes()
     {
         $json = $this->get([
             'query' => [
@@ -160,109 +160,93 @@ class VtigerClient
         return $json;
     }
 
-    ##
-    function doCreate($elementType,$element) {
-
-        $url = "{$this->endpoint}/webservice.php";
-
-        if ($this->debug) {
-            $url .= "?vtiger_debug=1";
-        }
-
-        $data = HttpClient::quickPost($url,array(
-            'operation' => 'create',
-            'element' => json_encode($element),
-            'elementType' => $elementType,
-            'sessionName' => $this->sessionName,
-        ));
-
-        if ($this->debug) {
-            echo $data;
-            exit();
-        }
-
-        $json = json_decode($data);
+    /**
+     * @param $elementType
+     * @param $element
+     * @return mixed
+     */
+    public function create($elementType, $element)
+    {
+        $json = $this->post([
+            'form_params' => [
+                'operation' => 'create',
+                'element' => json_encode($element),
+                'elementType' => $elementType,
+                'sessionName' => $this->sessionName,
+            ]
+        ]);
 
         return $json;
-
-    }
-
-    ##
-    function doRetrieve($crmid) {
-        $url = "{$this->endpoint}/webservice.php?operation=retrieve&id={$crmid}&sessionName={$this->sessionName}";
-
-        $data = HttpClient::quickGet($url);
-
-        $json = json_decode($data);
-
-        return $json;
-    }
-
-    ##
-    function doUpdate($elementType,$element) {
-
-        $url = "{$this->endpoint}/webservice.php";
-
-        if ($this->debug) {
-            $url .= "?vtiger_debug=1";
-        }
-
-        $data = HttpClient::quickPost($url,array(
-            'operation'		=> 'update',
-            'element'		=> json_encode($element),
-            'elementType'	=> $elementType,
-            'sessionName'	=> $this->sessionName,
-        ));
-
-        if ($this->debug) {
-            echo $data;
-            exit();
-        }
-
-        $json = json_decode($data);
-
-        return $json;
-
     }
 
     /**
      * @param $crmid
      * @return mixed
      */
-    function delete($crmid)
+    public function retrieve($id)
     {
-
-        $url = "{$this->endpoint}/webservice.php";
-
-        if ($this->debug) {
-            $url .= "?vtiger_debug=1";
-        }
-
-        $response = HttpClient::quickPost($url,array(
-            'operation'		=> 'delete',
-            'id'			=> $crmid,
-            'sessionName'	=> $this->sessionName,
-        ));
-
-        if ($this->debug) {
-            echo $data;
-            exit();
-        }
-
-        $json = json_decode($data);
+        $json = $this->get([
+            'query' => [
+                'operation' => 'retrieve',
+                'id' => $id,
+                'sessionName' => $this->sessionName,
+            ]
+        ]);
 
         return $json;
-
     }
 
-    function doQuery($query) {
-        $query = urlencode($query);
+    /**
+     * @param $elementType
+     * @param $element
+     * @return mixed
+     */
+    public function update($elementType, $element)
+    {
+        $json = $this->post([
+            'form_params' => [
+                'operation'		=> 'update',
+                'element'		=> json_encode($element),
+                'elementType'	=> $elementType,
+                'sessionName'	=> $this->sessionName,
+            ]
+        ]);
 
-        $url = "{$this->endpoint}/webservice.php?operation=query&query={$query}&sessionName={$this->sessionName}";
+        return $json;
+    }
 
-        $data = HttpClient::quickGet($url);
+    /**
+     * @param $crmid
+     * @return mixed
+     */
+    public function delete($id)
+    {
+        $json = $this->post([
+            'form_params' => [
+                'operation'		=> 'delete',
+                'id'			=> $id,
+                'sessionName'	=> $this->sessionName,
+            ]
+        ]);
 
-        $json = json_decode($data);
+        return $json;
+    }
+
+    /**
+     * @param $query
+     * @return mixed
+     */
+    public function query($query)
+    {
+        $query = trim(trim($query), ';') . ';';
+
+        $json = $this->get([
+            'query' => [
+                'operation' => 'query',
+                'query' => $query,
+                'sessionName' => $this->sessionName,
+            ]
+        ]);
 
         return $json;
     }
@@ -271,7 +255,7 @@ class VtigerClient
      * @param $element
      * @return mixed
      */
-    function upload($element)
+    public function upload($element)
     {
         $url = "{$this->endpoint}/webservice.php";
 
@@ -279,7 +263,7 @@ class VtigerClient
         $filename = basename($filedata);
         $filesize = filesize($filedata);
 
-        $headers = array("Content-Type:multipart/form-data"); // cURL headers for file uploading
+        $headers = array("Content-Type:multipart/form-data");
         $postfields = array(
             "operation" => "create",
             "elementType" => "Documents",
@@ -297,11 +281,12 @@ class VtigerClient
             CURLOPT_POSTFIELDS => $postfields,
             CURLOPT_INFILESIZE => $filesize,
             CURLOPT_RETURNTRANSFER => true
-        ); // cURL options
+        );
+
         curl_setopt_array($ch, $options);
         $result  = curl_exec($ch);
 
-        if(!curl_errno($ch)) {
+        if (!curl_errno($ch)) {
             $info = curl_getinfo($ch);
             if ($info['http_code'] == 200) {
                 $errmsg = "File uploaded successfully";
@@ -312,7 +297,19 @@ class VtigerClient
 
         curl_close($ch);
 
-        return json_decode($result);
+        $json = json_decode($result);
+
+        return $json;
+    }
+
+    /**
+     *
+     */
+    public function listUsers()
+    {
+        $json = $this->query("SELECT * FROM Users;");
+
+        return $json;
     }
 
     /**
@@ -330,7 +327,7 @@ class VtigerClient
      * @param string $crypt_type
      * @return string
      */
-    static function encryptPassword($user_password, $user_name, $crypt_type='')
+    static protected function encryptPassword($user_password, $user_name, $crypt_type='')
     {
         $salt = substr($user_name, 0, 2);
 

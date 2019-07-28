@@ -1,7 +1,7 @@
-[CRON],"1564331221.6188",http:///,Instance,"2019-07-28 16:27:01","",[STARTS]
+[CRON],"1564334401.2565",http:///,Instance,"2019-07-28 17:20:01","",[STARTS]
 [INFO] Workflow - not ready to run as the time to run again is not completed
 [INFO] RecurringInvoice - not ready to run as the time to run again is not completed
 [INFO] SendReminder - not ready to run as the time to run again is not completed
 [INFO] MailScanner - not ready to run as the time to run again is not completed
 [INFO] ScheduleReports - not ready to run as the time to run again is not completed
-[CRON],"1564331221.6188",http:///,Instance,"2019-07-28 16:27:01","2019-07-28 16:27:01",[ENDS]
+[CRON],"1564334401.2565",http:///,Instance,"2019-07-28 17:20:01","2019-07-28 17:20:01",[ENDS]

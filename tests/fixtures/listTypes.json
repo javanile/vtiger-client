@@ -1,0 +1,188 @@
+{
+  "types" : {
+  "Campaigns", "Vendors", "Faq", "Quotes", "PurchaseOrder",
+  "SalesOrder", "Invoice", "PriceBooks", "Calendar", "Leads",
+  "Accounts", "Contacts", "Potentials", "Products", "Documents",
+  "Emails", "HelpDesk", "Events", "Users", "PBXManager",
+  "ServiceContracts", "Services", "ModComments", "SMSNotifier",
+  "Assets", "ProjectMilestone", "ProjectTask", "Project", "Groups",
+  "Currency", "DocumentFolders", "CompanyDetails", "LineItem",
+  "Tax", "ProductTaxes",
+},
+  "information" : 
+  "Campaigns" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Vendors" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Faq" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Quotes" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "PurchaseOrder" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "SalesOrder" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Invoice" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "PriceBooks" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Calendar" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Leads" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Accounts" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Contacts" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Potentials" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Products" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Documents" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Emails" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "HelpDesk" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Events" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Users" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "PBXManager" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "ServiceContracts" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Services" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "ModComments" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "SMSNotifier" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Assets" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "ProjectMilestone" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "ProjectTask" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Project" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Groups" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Currency" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "DocumentFolders" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "CompanyDetails" :{
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "LineItem" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "Tax" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+  "ProductTaxes" : {
+    "isEntity" : true,
+    "label" : "Campagne",
+    "singular" : "Campagna",
+  },
+}
