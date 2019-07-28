@@ -16,7 +16,8 @@ before_install:
 
 before_script:
   - docker-compose up -d vtiger
-  - sleep 10
+  - sleep 15
+  - docker-compose ps
   - docker-compose run --rm composer install --no-interaction --prefer-source
 
 script:
