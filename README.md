@@ -10,14 +10,17 @@
 
 ## Test
 
+Test all
 ```bash
-
+docker-compose run --rm phpunit tests
 ```
 
+Test driven development
 ```bash
 docker-compose run --rm phpunit tests --stop-on-failure
 ```
 
+Run single test method
 ```bash
-docker-compose run --rm phpunit tests --filter '/::testGetChallenge$/'
+docker-compose run --rm phpunit tests --filter '/::testMethod/'
 ```
