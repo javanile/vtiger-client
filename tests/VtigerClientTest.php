@@ -66,6 +66,10 @@ final class VtigerClientTest extends TestCase
             'accessKey' => getenv('VT_ACCESS_KEY'),
         ]))->login();
 
+        if (empty($actual['result']['sessionName'])) {
+            var_dump($actual);
+        }
+
         $expected['result']['sessionName'] = $actual['result']['sessionName'];
 
         $this->assertEquals($expected, $actual);
@@ -73,20 +77,16 @@ final class VtigerClientTest extends TestCase
 
     public function testListTypes()
     {
-        /*
         $client = new Client(getenv('VT_ENDPOINT'));
 
         $client->login(getenv('VT_USERNAME'), getenv('VT_ACCESS_KEY'));
 
-        $expected = [
-            'success' => true,
-            'result' => json_decode(file_get_contents(__DIR__.'/fixtures/'))
-        ];
+        $expected =  json_decode(file_get_contents(__DIR__.'/fixtures/listTypes.json'), true);
 
         $actual = $client->listTypes();
+        #file_put_contents(__DIR__.'/fixtures/listTypes.json', json_encode($actual, JSON_PRETTY_PRINT));
 
         $this->assertEquals($expected, $actual);
-        */
     }
 
     public function testDescribe()
@@ -98,8 +98,7 @@ final class VtigerClientTest extends TestCase
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/describeFaq.json'), true);
 
         $actual = $client->describe('Faq');
-
-        //file_put_contents(__DIR__.'/fixtures/describeFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
+        #file_put_contents(__DIR__.'/fixtures/describeFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
 
         $this->assertEquals($expected, $actual);
     }
@@ -113,8 +112,7 @@ final class VtigerClientTest extends TestCase
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/listUsers.json'), true);
 
         $actual = $client->listUsers();
-
-        //file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
+        #file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
 
         $this->assertEquals($expected, $actual);
     }
