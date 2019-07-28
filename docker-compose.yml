@@ -37,13 +37,11 @@ services:
 
   composer:
     image: composer
-    user: 1000:1000
     volumes:
       - ./:/app
 
   phpunit:
     image: phpunit/phpunit:6.5.3
-    user: 1000:1000
     volumes:
       - ./:/app
     links:

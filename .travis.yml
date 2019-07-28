@@ -17,7 +17,7 @@ before_install:
 before_script:
   - docker-compose up -d vtiger
   - sleep 10
-  - sudo docker-compose run --rm composer install --no-interaction --prefer-source
+  - docker-compose run --rm composer install --no-interaction --prefer-source
 
 script:
   - docker-compose run --rm phpunit tests
