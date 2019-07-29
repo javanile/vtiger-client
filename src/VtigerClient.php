@@ -272,7 +272,21 @@ class VtigerClient
      */
     public function upload($element)
     {
-        $url = "{$this->endpoint}/webservice.php";
+        /*_*/
+        $file = $element['filename'];
+
+        $json = $this->post([
+            'multipart' => [
+                [ 'name' => 'operation', 'contents' => 'create'],
+                [ 'name' => 'elementType', 'contents' => 'Documents'],
+                [ 'name' => 'element', 'contents' => json_encode($element)],
+                [ 'name' => 'sessionName', 'contents' => $this->sessionName],
+                [ 'name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
+            ]
+        ]);
+
+        /*/
+        $url = "{$this->endpoint}";
 
         $filedata = $element['filename'];
         $filename = basename($filedata);
@@ -301,8 +315,11 @@ class VtigerClient
         curl_setopt_array($ch, $options);
         $result = curl_exec($ch);
 
+        var_Dump($result);
+
         if (!curl_errno($ch)) {
             $info = curl_getinfo($ch);
+            var_dump($info);
             if ($info['http_code'] == 200) {
                 $errmsg = 'File uploaded successfully';
             }
@@ -313,7 +330,7 @@ class VtigerClient
         curl_close($ch);
 
         $json = json_decode($result);
-
+        /*_*/
         return $json;
     }
 
@@ -369,8 +386,23 @@ class VtigerClient
      */
     protected function decodeResponse($response)
     {
-        $body = $response->getBody();
+        $body = $response->getBody()->getContents();
         $json = json_decode($body, true);
+
+        if (!$body && !$json) {
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'EMPTY_RESPONSE',
+                    'message' => 'Web service send an empty body',
+                ],
+            ];
+        }
+
+        if ($body && !$json) {
+            var_dump($body);
+            die();
+        }
 
         return $json;
     }

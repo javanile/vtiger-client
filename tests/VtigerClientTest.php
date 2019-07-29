@@ -140,6 +140,30 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testUpload()
+    {
+        $client = new Client(self::$endpoint);
+
+        $client->login(self::$username, self::$accessKey);
+
+        $expected = [
+            'success' => false,
+            'error'   => [
+                'code'    => 'EMPTY_RESPONSE',
+                'message' => 'Web service send an empty body',
+            ],
+        ];
+
+        $actual = $client->upload([
+            'notes_title' => 'Sample Document',
+            'assigned_user_id' => 1,
+            'filelocationtype' => 'I',
+            'filename' => __DIR__.'/fixtures/sampleDocument.pdf',
+        ]);
+
+        $this->assertEquals($expected, $actual);
+    }
+
     /*
             public function testCreateAnInstance()
         {

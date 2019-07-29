@@ -5,3 +5,4 @@ volumes/
 npm-debug.log
 phpunit.xml
 composer.lock
+coverage.xml
