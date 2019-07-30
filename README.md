@@ -5,10 +5,33 @@
 [![codecov](https://codecov.io/gh/javanile/vtiger-client/branch/master/graph/badge.svg)](https://codecov.io/gh/javanile/vtiger-client)
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/ffb974752a804645978286bc99759a09)](https://www.codacy.com/app/francescobianco/vtiger-client?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=javanile/vtiger-client&amp;utm_campaign=Badge_Grade)
 
-> **LOOKING FOR FAST DEMO! Visit --> https://github.com/javanile/vtiger-demo <--**
+> **LOOKING FOR FAST DEMO! Visit --> [https://github.com/javanile/vtiger-demo]() <--**
 
+## Get started
+
+```bash
+composer require javanile/vtiger-client
+```
+
+```php
+<?php
+use Javanile\VtigerClient\VtigerClient;
+
+$client = new VtigerClient('http://my-vtiger-host');
+
+$client->login('<<username>>', '<<accessKey>>');
+
+$cliet->create('Leads', [
+   'email' => '<<lead@email>>' 
+]);
+```
 
 ## Test
+
+Before test
+```bash
+docker-compose run --rm composer install
+```
 
 Test all
 ```bash
