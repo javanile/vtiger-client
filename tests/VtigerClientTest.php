@@ -49,6 +49,12 @@ final class VtigerClientTest extends TestCase
     {
         $time = time();
 
+        $client = new Client([
+            'username'  => self::$username,
+            'accessKey' => self::$accessKey,
+            'endpoint'  => self::$endpoint,
+        ]);
+
         $expected = [
             'success' => true,
             'result'  => [
@@ -58,19 +64,22 @@ final class VtigerClientTest extends TestCase
             ],
         ];
 
-        $actual = (new Client([
-            'username'  => self::$username,
-            'accessKey' => self::$accessKey,
-            'endpoint'  => self::$endpoint,
-        ]))->getChallenge();
+        $actual = $client->getChallenge();
 
         $expected['result']['token'] = $actual['result']['token'];
 
+        $this->assertEquals($expected['result']['token'], $client->getToken());
         $this->assertEquals($expected, $actual);
     }
 
     public function testLoginSuccess()
     {
+        $client = new Client([
+            'username'  => self::$username,
+            'accessKey' => self::$accessKey,
+            'endpoint'  => self::$endpoint,
+        ]);
+
         $expected = [
             'success' => true,
             'result'  => [
@@ -81,11 +90,7 @@ final class VtigerClientTest extends TestCase
             ],
         ];
 
-        $actual = (new Client([
-            'username'  => self::$username,
-            'accessKey' => self::$accessKey,
-            'endpoint'  => self::$endpoint,
-        ]))->login();
+        $actual = $client->login();
 
         if (empty($actual['result']['sessionName'])) {
             var_dump($actual);
@@ -94,13 +99,13 @@ final class VtigerClientTest extends TestCase
         $expected['result']['sessionName'] = $actual['result']['sessionName'];
         $expected['result']['vtigerVersion'] = $actual['result']['vtigerVersion'];
 
+        $this->assertEquals($expected['result']['sessionName'], $client->getSessionName());
         $this->assertEquals($expected, $actual);
     }
 
     public function testListTypes()
     {
         $client = new Client(self::$endpoint);
-
         $client->login(self::$username, self::$accessKey);
 
         $expected =  json_decode(file_get_contents(__DIR__.'/fixtures/listTypes.json'), true);
@@ -114,13 +119,30 @@ final class VtigerClientTest extends TestCase
     public function testDescribe()
     {
         $client = new Client(self::$endpoint);
-
         $client->login(self::$username, self::$accessKey);
 
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/describeFaq.json'), true);
 
         $actual = $client->describe('Faq');
         #file_put_contents(__DIR__.'/fixtures/describeFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testCreate()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/createFaq.json'), true);
+
+        $actual = $client->create('Faq', [
+            'faqstatus' => 'draft',
+            'question' => 'this is a FAQ',
+            'faq_answer' => 'this is a FAQ answer',
+            'assigned_user_id' => 1,
+        ]);
+        file_put_contents(__DIR__.'/fixtures/createFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
 
         $this->assertEquals($expected, $actual);
     }
@@ -161,33 +183,10 @@ final class VtigerClientTest extends TestCase
             'filename' => __DIR__.'/fixtures/sampleDocument.pdf',
         ]);
 
+        if (isset($actual['success']) && $actual['success']) {
+            var_dump($actual);
+        }
+
         $this->assertEquals($expected, $actual);
     }
-
-    /*
-            public function testCreateAnInstance()
-        {
-            $client = new VtigerClient([
-                'endpoint'  => 'http://vtigercrm.javanile.org',
-                'username'  => 'admin',
-                'accessKey' => getenv('VTIGER_ACCESS_KEY'),
-            ]);
-    
-            $this->assertInstanceOf('Javanile\VtigerClient\VtigerClient', $client);
-    
-            $response = $client->doGetChallenge();
-            $challengeToken = $client->getChallengeToken();
-            $this->assertEquals(13, strlen($challengeToken));
-    
-            $response = $client->doLogin();
-            $sessionName = $client->getSessionName();
-            $this->assertEquals(21, strlen($sessionName));
-    
-            $response = $client->doListTypes();
-            $types = $client->getTypes();
-            $this->assertTrue(is_array($types));
-    
-            Producer::log($response);
-        }
-    */
 }

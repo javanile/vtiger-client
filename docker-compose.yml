@@ -15,6 +15,7 @@ services:
       - ./:/app
       - ./volumes/logs:/var/www/html/vtiger/logs
       - ./volumes/storage:/var/www/html/vtiger/storage
+      - ./config.inc.php:/var/www/html/vtiger/config.inc.php
     links:
       - mysql
       - adminer

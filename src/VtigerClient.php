@@ -13,25 +13,27 @@
 
 namespace Javanile\VtigerClient;
 
+use GuzzleHttp\Client;
+
 class VtigerClient
 {
     /**
-     *
+     * @var string
      */
     protected $token;
 
     /**
-     *
+     * @var string
      */
     protected $sessionName;
 
     /**
-     *
+     * @var array
      */
     protected $types;
 
     /**
-     *
+     * @var Client
      */
     protected $client;
 
@@ -50,7 +52,7 @@ class VtigerClient
         $this->username = isset($args['username']) ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
 
-        $this->client = new \GuzzleHttp\Client();
+        $this->client = new Client();
     }
 
     /**
@@ -400,8 +402,13 @@ class VtigerClient
         }
 
         if ($body && !$json) {
-            var_dump($body);
-            die();
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'JSON_PARSE_ERROR',
+                    'message' => $body,
+                ],
+            ];
         }
 
         return $json;
