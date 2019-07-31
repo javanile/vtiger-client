@@ -47,8 +47,6 @@ final class VtigerClientTest extends TestCase
 
     public function testGetChallengeSuccess()
     {
-        $time = time();
-
         $client = new Client([
             'username'  => self::$username,
             'accessKey' => self::$accessKey,
@@ -59,14 +57,16 @@ final class VtigerClientTest extends TestCase
             'success' => true,
             'result'  => [
                 'token'      => null,
-                'serverTime' => $time,
-                'expireTime' => $time + 300,
+                'serverTime' => null,
+                'expireTime' => null,
             ],
         ];
 
         $actual = $client->getChallenge();
 
         $expected['result']['token'] = $actual['result']['token'];
+        $expected['result']['serverTime'] = $actual['result']['serverTime'];
+        $expected['result']['expireTime'] = $actual['result']['expireTime'];
 
         $this->assertEquals($expected['result']['token'], $client->getToken());
         $this->assertEquals($expected, $actual);
