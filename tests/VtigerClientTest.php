@@ -158,6 +158,7 @@ final class VtigerClientTest extends TestCase
             'notes_title' => 'Sample Document',
             'assigned_user_id' => 1,
             'filelocationtype' => 'I',
+            'filestatus' => 1,
             'filename' => __DIR__.'/fixtures/sampleDocument.pdf',
         ]);
 
