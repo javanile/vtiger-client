@@ -13,8 +13,8 @@ services:
       - "48080:80"
     volumes:
       - ./:/app
-      - ./volumes/logs:/var/www/html/vtiger/logs
-      - ./volumes/storage:/var/www/html/vtiger/storage
+      - ./volumes/logs:/var/www/html/logs
+      - ./volumes/storage:/var/www/html/storage
     links:
       - mysql
       - adminer
