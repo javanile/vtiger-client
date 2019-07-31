@@ -1,7 +1,19 @@
 {
-    "success": false,
-    "error": {
-        "code": "JSON_PARSE_ERROR",
-        "message": "<br \/>\n<b>Warning<\/b>:  require_once(modules\/Vtiger\/handlers\/CheckDuplicateHandler.php) [<a href='0function.require-once0'>function.require-once0<\/a>]: failed to open stream: No such file or directory in <b>\/var\/www\/html\/vtiger\/include\/events\/VTEventTrigger.inc<\/b> on line <b>140<\/b><br \/>\n<br \/>\n<b>Fatal error<\/b>:  require_once() [<a href='0function.require0'>function.require0<\/a>]: Failed opening required 'modules\/Vtiger\/handlers\/CheckDuplicateHandler.php' (include_path='.:\/usr\/local\/lib\/php') in <b>\/var\/www\/html\/vtiger\/include\/events\/VTEventTrigger.inc<\/b> on line <b>140<\/b><br \/>\n"
+    "success": true,
+    "result": {
+        "product_id": "",
+        "faq_no": "FAQ2",
+        "faqcategories": "",
+        "faqstatus": "draft",
+        "question": "this is a FAQ",
+        "faq_answer": "this is a FAQ answer",
+        "createdtime": "2019-07-31 10:41:16",
+        "modifiedtime": "2019-07-31 10:41:16",
+        "modifiedby": "19x1",
+        "source": "WEBSERVICE",
+        "starred": "0",
+        "tags": "",
+        "id": "3x19",
+        "label": "this is a FAQ"
     }
 }

@@ -1,0 +1,25 @@
+{
+    "success": true,
+    "result": {
+        "notes_title": "Sample Document",
+        "createdtime": "2019-07-31 10:37:38",
+        "modifiedtime": "2019-07-31 10:37:38",
+        "filename": "sampleDocument.pdf",
+        "assigned_user_id": "19x1",
+        "notecontent": "",
+        "filetype": "application\/pdf",
+        "filesize": "2830",
+        "filelocationtype": "I",
+        "fileversion": "",
+        "filestatus": "1",
+        "filedownloadcount": "",
+        "folderid": "22x1",
+        "note_no": "DOC5",
+        "modifiedby": "19x1",
+        "source": "WEBSERVICE",
+        "starred": "0",
+        "tags": "",
+        "id": "15x10",
+        "label": "Sample Document"
+    }
+}

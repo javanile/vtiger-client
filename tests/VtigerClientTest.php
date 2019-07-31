@@ -142,7 +142,13 @@ final class VtigerClientTest extends TestCase
             'faq_answer' => 'this is a FAQ answer',
             'assigned_user_id' => 1,
         ]);
-        file_put_contents(__DIR__.'/fixtures/createFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        //file_put_contents(__DIR__.'/fixtures/createFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        $expected['result']['createdtime'] = $actual['result']['createdtime'];
+        $expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
+        $expected['result']['faq_no'] = $actual['result']['faq_no'];
+        $expected['result']['id'] = $actual['result']['id'];
 
         $this->assertEquals($expected, $actual);
     }
@@ -156,7 +162,9 @@ final class VtigerClientTest extends TestCase
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/listUsers.json'), true);
 
         $actual = $client->listUsers();
+
         #file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
+
         $expected['result'][0]['accesskey'] = $actual['result'][0]['accesskey'];
 
         $this->assertEquals($expected, $actual);
@@ -168,13 +176,7 @@ final class VtigerClientTest extends TestCase
 
         $client->login(self::$username, self::$accessKey);
 
-        $expected = [
-            'success' => false,
-            'error'   => [
-                'code'    => 'EMPTY_RESPONSE',
-                'message' => 'Web service send an empty body',
-            ],
-        ];
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/upload.json'), true);
 
         $actual = $client->upload([
             'notes_title' => 'Sample Document',
@@ -184,9 +186,12 @@ final class VtigerClientTest extends TestCase
             'filename' => __DIR__.'/fixtures/sampleDocument.pdf',
         ]);
 
-        if (isset($actual['success']) && $actual['success']) {
-            var_dump($actual);
-        }
+        //file_put_contents(__DIR__.'/fixtures/upload.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        $expected['result']['createdtime'] = $actual['result']['createdtime'];
+        $expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
+        $expected['result']['note_no'] = $actual['result']['note_no'];
+        $expected['result']['id'] = $actual['result']['id'];
 
         $this->assertEquals($expected, $actual);
     }
