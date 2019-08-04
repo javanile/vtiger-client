@@ -153,6 +153,28 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    /*
+    public function testCreateWorkflow()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/createWorkflow.json'), true);
+
+        $actual = $client->create('Wordflow', [
+        ]);
+
+        file_put_contents(__DIR__.'/fixtures/createWorkflow.json', json_encode($actual, JSON_PRETTY_PRINT));
+
+        //$expected['result']['createdtime'] = $actual['result']['createdtime'];
+        //$expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
+        //$expected['result']['faq_no'] = $actual['result']['faq_no'];
+        //$expected['result']['id'] = $actual['result']['id'];
+
+        $this->assertEquals($expected, $actual);
+    }
+    */
+
     public function testListUsers()
     {
         $client = new Client(self::$endpoint);

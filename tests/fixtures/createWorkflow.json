@@ -1,0 +1,7 @@
+{
+    "success": false,
+    "error": {
+        "code": "ACCESS_DENIED",
+        "message": "Permission to perform the operation is denied"
+    }
+}
