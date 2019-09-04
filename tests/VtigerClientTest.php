@@ -28,6 +28,23 @@ final class VtigerClientTest extends TestCase
         self::$accessKey = $db->query($sql)->fetchObject()->accesskey;
     }
 
+    public function testGuzzleError()
+    {
+        $expected = [
+            'success' => false,
+            'error' => [
+                'code' => 'GUZZLE_ERROR',
+                'message' => 'cURL error 6: Could not resolve host: broken_uri (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)',
+            ]
+        ];
+
+        $client = new Client([
+            'endpoint' => 'broken_uri'
+        ]);
+
+        $this->assertEquals($expected, $client->getChallenge());
+    }
+
     public function testGetChallengeWithoutUsername()
     {
         $expected = [
@@ -213,6 +230,7 @@ final class VtigerClientTest extends TestCase
         $expected['result']['createdtime'] = $actual['result']['createdtime'];
         $expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
         $expected['result']['note_no'] = $actual['result']['note_no'];
+        $expected['result']['filesize'] = $actual['result']['filesize'];
         $expected['result']['id'] = $actual['result']['id'];
 
         $this->assertEquals($expected, $actual);

@@ -14,6 +14,7 @@
 namespace Javanile\VtigerClient;
 
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\GuzzleException;
 
 class VtigerClient
 {
@@ -274,7 +275,6 @@ class VtigerClient
      */
     public function upload($element)
     {
-        /*_*/
         $file = $element['filename'];
 
         $json = $this->post([
@@ -287,52 +287,6 @@ class VtigerClient
             ]
         ]);
 
-        /*/
-        $url = "{$this->endpoint}";
-
-        $filedata = $element['filename'];
-        $filename = basename($filedata);
-        $filesize = filesize($filedata);
-
-        $headers = ['Content-Type:multipart/form-data'];
-        $postfields = [
-            'operation'   => 'create',
-            'elementType' => 'Documents',
-            'element'     => json_encode($element),
-            'sessionName' => $this->sessionName,
-            'filename'    => "@$filedata",
-        ];
-
-        $ch = curl_init();
-        $options = [
-            CURLOPT_URL            => $url,
-            CURLOPT_HEADER         => false,
-            CURLOPT_POST           => 1,
-            CURLOPT_HTTPHEADER     => $headers,
-            CURLOPT_POSTFIELDS     => $postfields,
-            CURLOPT_INFILESIZE     => $filesize,
-            CURLOPT_RETURNTRANSFER => true,
-        ];
-
-        curl_setopt_array($ch, $options);
-        $result = curl_exec($ch);
-
-        var_Dump($result);
-
-        if (!curl_errno($ch)) {
-            $info = curl_getinfo($ch);
-            var_dump($info);
-            if ($info['http_code'] == 200) {
-                $errmsg = 'File uploaded successfully';
-            }
-        } else {
-            $errmsg = curl_error($ch);
-        }
-
-        curl_close($ch);
-
-        $json = json_decode($result);
-        /*_*/
         return $json;
     }
 
@@ -421,7 +375,17 @@ class VtigerClient
      */
     protected function get($request)
     {
-        $response = $this->client->request('GET', $this->endpoint, $request);
+        try {
+            $response = $this->client->request('GET', $this->endpoint, $request);
+        } catch (GuzzleException $error) {
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'GUZZLE_ERROR',
+                    'message' => $error->getMessage(),
+                ],
+            ];
+        }
 
         return $this->decodeResponse($response);
     }
@@ -433,7 +397,17 @@ class VtigerClient
      */
     protected function post($request)
     {
-        $response = $this->client->request('POST', $this->endpoint, $request);
+        try {
+            $response = $this->client->request('POST', $this->endpoint, $request);
+        } catch (GuzzleException $error) {
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'GUZZLE_ERROR',
+                    'message' => $error->getMessage(),
+                ],
+            ];
+        }
 
         return $this->decodeResponse($response);
     }
