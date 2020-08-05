@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File description.
  *
@@ -49,7 +50,7 @@ class VtigerClient
             $args = ['endpoint' => $args];
         }
 
-        $this->endpoint = $args['endpoint'].'/webservice.php';
+        $this->endpoint = $args['endpoint'] . '/webservice.php';
         $this->username = isset($args['username']) ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
 
@@ -111,7 +112,7 @@ class VtigerClient
             'form_params' => [
                 'operation' => 'login',
                 'username'  => $this->username,
-                'accessKey' => md5($this->token.$this->accessKey),
+                'accessKey' => md5($this->token . $this->accessKey),
             ],
         ]);
 
@@ -219,10 +220,10 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		 => 'update',
-                'element'		   => json_encode($element),
-                'elementType'	=> $elementType,
-                'sessionName'	=> $this->sessionName,
+                'operation'     => 'update',
+                'element'       => json_encode($element),
+                'elementType'   => $elementType,
+                'sessionName'   => $this->sessionName,
             ],
         ]);
 
@@ -239,9 +240,9 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		 => 'delete',
-                'id'			       => $id,
-                'sessionName'	=> $this->sessionName,
+                'operation'     => 'delete',
+                'id'            => $id,
+                'sessionName'   => $this->sessionName,
             ],
         ]);
 
@@ -255,13 +256,51 @@ class VtigerClient
      */
     public function query($query)
     {
-        $query = trim(trim($query), ';').';';
+        $query = trim(trim($query), ';') . ';';
 
         $json = $this->get([
             'query' => [
                 'operation'   => 'query',
                 'query'       => $query,
                 'sessionName' => $this->sessionName,
+            ],
+        ]);
+
+        return $json;
+    }
+
+    /**
+     * @param string $elementType moduleName
+     * @param string|int|DateTime $timestamp Last known modified time from where you are expecting state changes of records, it should be in unix timestamp.
+     * @param string $syncType  user: fetch records restricted to assigned owner of record.
+     *
+     *                          userandgroup: fetch records restricted to assigned owner of own’s group.
+     *
+     *                          application: fetch records without restriction on assigned owner.
+     *
+     * @return mixed
+     */
+    public function sync($elementType, $timestamp, $syncType = 'application')
+    {
+        if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
+            return ['success' => false];
+        }
+
+        if (!is_numeric($timestamp)) {
+            return ['success' => false];
+        }
+
+        if ($timestamp instanceof DateTime) {
+            $timestamp = $timestamp->format('U');
+        }
+
+        $json = $this->get([
+            'query' => [
+                'operation'     => 'sync',
+                'elementType'   => $elementType,
+                'modifiedTime'  => $timestamp,
+                'syncType'      => $syncType,
+                'sessionName'   => $this->sessionName,
             ],
         ]);
 
@@ -279,11 +318,11 @@ class VtigerClient
 
         $json = $this->post([
             'multipart' => [
-                [ 'name' => 'operation', 'contents' => 'create'],
-                [ 'name' => 'elementType', 'contents' => 'Documents'],
-                [ 'name' => 'element', 'contents' => json_encode($element)],
-                [ 'name' => 'sessionName', 'contents' => $this->sessionName],
-                [ 'name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
+                ['name' => 'operation', 'contents' => 'create'],
+                ['name' => 'elementType', 'contents' => 'Documents'],
+                ['name' => 'element', 'contents' => json_encode($element)],
+                ['name' => 'sessionName', 'contents' => $this->sessionName],
+                ['name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
             ]
         ]);
 
@@ -325,11 +364,11 @@ class VtigerClient
         }
 
         if ($crypt_type == 'MD5') {
-            $salt = '$1$'.$salt.'$';
+            $salt = '$1$' . $salt . '$';
         } elseif ($crypt_type == 'BLOWFISH') {
-            $salt = '$2$'.$salt.'$';
+            $salt = '$2$' . $salt . '$';
         } elseif ($crypt_type == 'PHP5.3MD5') {
-            $salt = '$1$'.str_pad($salt, 9, '0');
+            $salt = '$1$' . str_pad($salt, 9, '0');
         }
 
         $encrypted_password = crypt($user_password, $salt);

@@ -235,4 +235,22 @@ final class VtigerClientTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testSync()
+    {
+        $client = new Client(self::$endpoint);
+
+        $client->login(self::$username, self::$accessKey);
+
+        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/sync.json'), true);
+
+        $actual = $client->sync("Faq", time() - 60);
+
+        $expected['result']['updated'] = $actual['result']['updated'];
+        $expected['result']['deleted'] = $actual['result']['deleted'];
+        $expected['result']['lastModifiedTime'] = $actual['result']['lastModifiedTime'];
+        $expected['result']['more'] = $actual['result']['more'];
+
+        $this->assertEquals($expected, $actual);
+    }
 }
