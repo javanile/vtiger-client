@@ -1,4 +1,5 @@
 <?php
+
 /**
  * File description.
  *
@@ -219,10 +220,10 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		 => 'update',
-                'element'		   => json_encode($element),
-                'elementType'	=> $elementType,
-                'sessionName'	=> $this->sessionName,
+                'operation'     => 'update',
+                'element'       => json_encode($element),
+                'elementType'   => $elementType,
+                'sessionName'   => $this->sessionName,
             ],
         ]);
 
@@ -239,9 +240,9 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'		 => 'delete',
-                'id'			       => $id,
-                'sessionName'	=> $this->sessionName,
+                'operation'     => 'delete',
+                'id'            => $id,
+                'sessionName'   => $this->sessionName,
             ],
         ]);
 
@@ -269,6 +270,57 @@ class VtigerClient
     }
 
     /**
+     * @param string $elementType moduleName
+     * @param string|int|DateTime $timestamp Last known modified time from where you are expecting state changes of records, it should be in unix timestamp.
+     * @param string $syncType  user: fetch records restricted to assigned owner of record.
+     *
+     *                          userandgroup: fetch records restricted to assigned owner of own’s group.
+     *
+     *                          application: fetch records without restriction on assigned owner.
+     *
+     * @return mixed
+     */
+    public function sync($elementType, $timestamp, $syncType = 'application')
+    {
+        if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'WRONG_SYNCTYPE',
+                    'message' => '$syncType must be on of "user", "userandgroup" or "application"',
+                ],
+            ];
+        }
+
+        if ($timestamp instanceof \DateTime) {
+            $timestamp = $timestamp->format('U');
+        }
+
+        if (!is_numeric($timestamp)) {
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'WRONG_TIMESTAMP',
+                    'message' => '$timestamp must be a valid unix time or a instance of DateTime',
+                ],
+            ];
+        }
+
+
+        $json = $this->get([
+            'query' => [
+                'operation'     => 'sync',
+                'elementType'   => $elementType,
+                'modifiedTime'  => $timestamp,
+                'syncType'      => $syncType,
+                'sessionName'   => $this->sessionName,
+            ],
+        ]);
+
+        return $json;
+    }
+
+    /**
      * @param $element
      *
      * @return mixed
@@ -279,11 +331,11 @@ class VtigerClient
 
         $json = $this->post([
             'multipart' => [
-                [ 'name' => 'operation', 'contents' => 'create'],
-                [ 'name' => 'elementType', 'contents' => 'Documents'],
-                [ 'name' => 'element', 'contents' => json_encode($element)],
-                [ 'name' => 'sessionName', 'contents' => $this->sessionName],
-                [ 'name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
+                ['name' => 'operation', 'contents' => 'create'],
+                ['name' => 'elementType', 'contents' => 'Documents'],
+                ['name' => 'element', 'contents' => json_encode($element)],
+                ['name' => 'sessionName', 'contents' => $this->sessionName],
+                ['name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
             ]
         ]);
 
