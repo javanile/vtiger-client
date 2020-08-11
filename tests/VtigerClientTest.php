@@ -244,7 +244,10 @@ final class VtigerClientTest extends TestCase
 
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/sync.json'), true);
 
+
         $actual = $client->sync("Faq", time() - 60);
+        //$actual = $client->sync("Faq", new \DateTime('@'.(time() - 60)));
+
 
         $expected['result']['updated'] = $actual['result']['updated'];
         $expected['result']['deleted'] = $actual['result']['deleted'];

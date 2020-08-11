@@ -50,7 +50,7 @@ class VtigerClient
             $args = ['endpoint' => $args];
         }
 
-        $this->endpoint = $args['endpoint'] . '/webservice.php';
+        $this->endpoint = $args['endpoint'].'/webservice.php';
         $this->username = isset($args['username']) ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
 
@@ -112,7 +112,7 @@ class VtigerClient
             'form_params' => [
                 'operation' => 'login',
                 'username'  => $this->username,
-                'accessKey' => md5($this->token . $this->accessKey),
+                'accessKey' => md5($this->token.$this->accessKey),
             ],
         ]);
 
@@ -256,7 +256,7 @@ class VtigerClient
      */
     public function query($query)
     {
-        $query = trim(trim($query), ';') . ';';
+        $query = trim(trim($query), ';').';';
 
         $json = $this->get([
             'query' => [
@@ -283,16 +283,29 @@ class VtigerClient
     public function sync($elementType, $timestamp, $syncType = 'application')
     {
         if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
-            return ['success' => false];
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'WRONG_SYNCTYPE',
+                    'message' => '$syncType must be on of "user", "userandgroup" or "application"',
+                ],
+            ];
+        }
+
+        if ($timestamp instanceof \DateTime) {
+            $timestamp = $timestamp->format('U');
         }
 
         if (!is_numeric($timestamp)) {
-            return ['success' => false];
+            return [
+                'success' => false,
+                'error'   => [
+                    'code'    => 'WRONG_TIMESTAMP',
+                    'message' => '$timestamp must be a valid unix time or a instance of DateTime',
+                ],
+            ];
         }
 
-        if ($timestamp instanceof DateTime) {
-            $timestamp = $timestamp->format('U');
-        }
 
         $json = $this->get([
             'query' => [
@@ -364,11 +377,11 @@ class VtigerClient
         }
 
         if ($crypt_type == 'MD5') {
-            $salt = '$1$' . $salt . '$';
+            $salt = '$1$'.$salt.'$';
         } elseif ($crypt_type == 'BLOWFISH') {
-            $salt = '$2$' . $salt . '$';
+            $salt = '$2$'.$salt.'$';
         } elseif ($crypt_type == 'PHP5.3MD5') {
-            $salt = '$1$' . str_pad($salt, 9, '0');
+            $salt = '$1$'.str_pad($salt, 9, '0');
         }
 
         $encrypted_password = crypt($user_password, $salt);
