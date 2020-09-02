@@ -40,6 +40,22 @@ class VtigerClient
     protected $client;
 
     /**
+     * @var array
+     */
+    protected $operationsMap = [
+        'getchallenge' => 'getchallenge',
+        'login' => 'login',
+        'listtypes' => 'listtypes',
+        'describe' => 'describe',
+        'create' => 'create',
+        'retrieve' => 'retrieve',
+        'update' => 'update',
+        'delete' => 'delete',
+        'query' => 'query',
+        'sync' => 'sync',
+    ];
+
+    /**
      * Constructor.
      *
      * @param mixed $args
@@ -48,6 +64,14 @@ class VtigerClient
     {
         if (!is_array($args)) {
             $args = ['endpoint' => $args];
+        } else {
+            if (array_key_exists('operationsMap', $args) && is_array($args['operationsMap'])) {
+                foreach (array_keys($this->operationsMap) as $operation) {
+                    if (array_key_exists($operation, $args['operationsMap'])) {
+                        $this->operationsMap[$operation] = $args['operationsMap'];
+                    }
+                }
+            }
         }
 
         $this->endpoint = $args['endpoint'].'/webservice.php';
@@ -70,7 +94,7 @@ class VtigerClient
 
         $json = $this->get([
             'query' => [
-                'operation' => 'getchallenge',
+                'operation' => $this->operationsMap['getchallenge'],
                 'username'  => $this->username,
             ],
         ]);
@@ -110,7 +134,7 @@ class VtigerClient
 
         $json = $this->post([
             'form_params' => [
-                'operation' => 'login',
+                'operation' => $this->operationsMap['login'],
                 'username'  => $this->username,
                 'accessKey' => md5($this->token.$this->accessKey),
             ],
@@ -137,7 +161,7 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => 'listtypes',
+                'operation'   => $this->operationsMap['listtypes'],
                 'sessionName' => $this->sessionName,
             ],
         ]);
@@ -162,7 +186,7 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => 'describe',
+                'operation'   => $this->operationsMap['describe'],
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
@@ -181,7 +205,7 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'   => 'create',
+                'operation'   => $this->operationsMap['create'],
                 'element'     => json_encode($element),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
@@ -201,7 +225,7 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => 'retrieve',
+                'operation'   => $this->operationsMap['retrieve'],
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
@@ -220,7 +244,7 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'     => 'update',
+                'operation'     => $this->operationsMap['update'],
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
@@ -240,7 +264,7 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'     => 'delete',
+                'operation'     => $this->operationsMap['delete'],
                 'id'            => $id,
                 'sessionName'   => $this->sessionName,
             ],
@@ -260,7 +284,7 @@ class VtigerClient
 
         $json = $this->get([
             'query' => [
-                'operation'   => 'query',
+                'operation'   => $this->operationsMap['query'],
                 'query'       => $query,
                 'sessionName' => $this->sessionName,
             ],
@@ -309,7 +333,7 @@ class VtigerClient
 
         $json = $this->get([
             'query' => [
-                'operation'     => 'sync',
+                'operation'     => $this->operationsMap['sync'],
                 'elementType'   => $elementType,
                 'modifiedTime'  => $timestamp,
                 'syncType'      => $syncType,
