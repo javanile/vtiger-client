@@ -256,4 +256,36 @@ final class VtigerClientTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
+
+    public function testChangeOperationsMap()
+    {
+        $args = [
+            'endpoint' => self::$endpoint,
+            'operationsMap' => [
+                'create' => 'custom_create',
+                'retrieve' => 'custom_retrieve',
+                'query' => 'custom_query',
+            ]
+        ];
+
+        $client = new Client($args);
+        // $client->login(self::$username, self::$accessKey);
+
+        $expected = [
+            'getchallenge' => 'getchallenge',
+            'login' => 'login',
+            'listtypes' => 'listtypes',
+            'describe' => 'describe',
+            'create' => 'custom_create',
+            'retrieve' => 'custom_retrieve',
+            'update' => 'update',
+            'delete' => 'delete',
+            'query' => 'custom_query',
+            'sync' => 'sync',
+        ];
+
+        $actual = $client->getOperationsMap();
+
+        $this->assertEquals($expected, $actual);
+    }
 }
