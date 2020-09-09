@@ -34,7 +34,7 @@ final class VtigerClientTest extends TestCase
             'success' => false,
             'error' => [
                 'code' => 'GUZZLE_ERROR',
-                'message' => 'cURL error 6: Could not resolve host: broken_uri (see http://curl.haxx.se/libcurl/c/libcurl-errors.html)',
+                'message' => 'cURL error 6: Could not resolve host: broken_uri (see https://curl.haxx.se/libcurl/c/libcurl-errors.html)',
             ]
         ];
 
@@ -253,6 +253,38 @@ final class VtigerClientTest extends TestCase
         $expected['result']['deleted'] = $actual['result']['deleted'];
         $expected['result']['lastModifiedTime'] = $actual['result']['lastModifiedTime'];
         $expected['result']['more'] = $actual['result']['more'];
+
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testChangeOperationsMap()
+    {
+        $args = [
+            'endpoint' => self::$endpoint,
+            'operationsMap' => [
+                'create' => 'custom_create',
+                'retrieve' => 'custom_retrieve',
+                'query' => 'custom_query',
+            ]
+        ];
+
+        $client = new Client($args);
+        // $client->login(self::$username, self::$accessKey);
+
+        $expected = [
+            'getchallenge' => 'getchallenge',
+            'login' => 'login',
+            'listtypes' => 'listtypes',
+            'describe' => 'describe',
+            'create' => 'custom_create',
+            'retrieve' => 'custom_retrieve',
+            'update' => 'update',
+            'delete' => 'delete',
+            'query' => 'custom_query',
+            'sync' => 'sync',
+        ];
+
+        $actual = $client->getOperationsMap();
 
         $this->assertEquals($expected, $actual);
     }
