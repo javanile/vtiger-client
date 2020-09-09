@@ -42,18 +42,7 @@ class VtigerClient
     /**
      * @var array
      */
-    protected $operationsMap = [
-        'getchallenge' => 'getchallenge',
-        'login' => 'login',
-        'listtypes' => 'listtypes',
-        'describe' => 'describe',
-        'create' => 'create',
-        'retrieve' => 'retrieve',
-        'update' => 'update',
-        'delete' => 'delete',
-        'query' => 'query',
-        'sync' => 'sync',
-    ];
+    protected $operationsMap;
 
     /**
      * Constructor.
@@ -62,6 +51,7 @@ class VtigerClient
      */
     public function __construct($args)
     {
+        $this->resetOperationsMap();
         if (!is_array($args)) {
             $args = ['endpoint' => $args];
         } else {
