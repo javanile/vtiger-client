@@ -2,6 +2,8 @@
 vendor/
 node_modules/
 volumes/
+debug/
+debug.zip
 npm-debug.log
 phpunit.xml
 composer.lock

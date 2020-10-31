@@ -190,7 +190,9 @@ class VtigerClient extends HttpClient
 
         $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
 
-        $this->types = $this->typesManager->sort($this->types);
+        if ($this->types) {
+            $this->types = $this->typesManager->sort($this->types);
+        }
 
         return $json;
     }

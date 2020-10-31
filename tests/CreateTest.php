@@ -84,6 +84,7 @@ final class CreateTest extends TestCase
         $createdElements = [];
 
         foreach ($types as $type) {
+            var_dump($type);
             $result = $client->create($type, self::defaultValues($type, $createdElements));
             if (empty($result['success'])) {
                 var_dump($type, $result);
