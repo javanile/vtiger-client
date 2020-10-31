@@ -69,6 +69,11 @@ final class CreateTest extends TestCase
                 return [
                     'subject' => 'Test Service Contract',
                 ];
+            case 'Assets':
+                return [
+                    'product' => $createdElements['Products']['id'],
+                    'serialnumber' => '123456',
+                ];
             default:
                 return [];
         }
@@ -84,7 +89,6 @@ final class CreateTest extends TestCase
         $createdElements = [];
 
         foreach ($types as $type) {
-            var_dump($type);
             $result = $client->create($type, self::defaultValues($type, $createdElements));
             if (empty($result['success'])) {
                 var_dump($type, $result);

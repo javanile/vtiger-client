@@ -90,7 +90,7 @@ class ElementSanitizer
     {
         $element = $this->sanitizeEmptyElement($element);
         $element = $this->sanitizeAssignedUserId($element);
-        var_dump($element);
+
         return $element;
     }
 
