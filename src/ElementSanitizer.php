@@ -17,170 +17,26 @@ namespace Javanile\VtigerClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class VtigerClient extends ElementSanitizer
+class ElementSanitizer
 {
     /**
-     * @var string
+     * @var Client
      */
-    protected $username;
+    protected $client;
 
     /**
      * @var string
      */
-    protected $accessKey;
+    protected $endpoint;
 
     /**
-     * @var string
-     */
-    protected $token;
-
-    /**
-     * @var string
-     */
-    protected $sessionName;
-
-    /**
-     * @var array
-     */
-    protected $types;
-
-    /**
-     * @var array
-     */
-    protected $operationMapper;
-
-    /**
-     * @var array
-     */
-    protected $elementSanitizer;
-
-    /**
-     * @var array
-     */
-    protected $elementValidator;
-
-    /**
-     * Constructor.
+     * HttpClient constructor.
      *
-     * @param mixed $args
+     * @param $args
      */
     public function __construct($args)
     {
-        if (!is_array($args)) {
-            $args = ['endpoint' => $args];
-        }
 
-        $this->username = isset($args['username']) ? $args['username'] : null;
-        $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
-
-        $this->operationMapper = new OperationMapper();
-
-        $this->elementSanitizer = new ElementSanitizer();
-        $this->elementValidator = new ElementValidator();
-
-        parent::__construct($args);
-    }
-
-    /**
-     * Perform get challenge operation.
-     *
-     * @param null|mixed $username
-     *
-     * @return array|mixed
-     */
-    public function getChallenge($username = null)
-    {
-        if ($username !== null) {
-            $this->username = $username;
-        }
-
-        $json = $this->get([
-            'query' => [
-                'operation' => $this->operationsMap['getchallenge'],
-                'username'  => $this->username,
-            ],
-        ]);
-
-        $this->token = isset($json['result']['token']) ? $json['result']['token'] : null;
-
-        return $json;
-    }
-
-    /**
-     * Retrieve challenge token.
-     */
-    public function getToken()
-    {
-        return $this->token;
-    }
-
-    /**
-     * Performi login action.
-     *
-     * @param null|mixed $username
-     * @param null|mixed $accessKey
-     *
-     * @return array|mixed
-     */
-    public function login($username = null, $accessKey = null)
-    {
-        if ($username !== null) {
-            $this->username = $username;
-        }
-
-        if ($accessKey !== null) {
-            $this->accessKey = $accessKey;
-        }
-
-        if ($this->token === null) {
-            $this->getChallenge();
-        }
-
-        $json = $this->post([
-            'form_params' => [
-                'operation' => $this->operationsMap['login'],
-                'username'  => $this->username,
-                'accessKey' => md5($this->token.$this->accessKey),
-            ],
-        ]);
-
-        $this->sessionName = isset($json['result']['sessionName'])
-            ? $json['result']['sessionName'] : null;
-
-        return $json;
-    }
-
-    /**
-     * Retrieve the login session name.
-     */
-    public function getSessionName()
-    {
-        return $this->sessionName;
-    }
-
-    /**
-     *
-     */
-    public function listTypes()
-    {
-        $json = $this->get([
-            'query' => [
-                'operation'   => $this->operationsMap['listtypes'],
-                'sessionName' => $this->sessionName,
-            ],
-        ]);
-
-        $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
-
-        return $json;
-    }
-
-    /**
-     * Get list name of types.
-     */
-    public function getTypes()
-    {
-        return $this->types;
     }
 
     /**
@@ -380,52 +236,5 @@ class VtigerClient extends ElementSanitizer
         ]);
 
         return $json;
-    }
-
-    /**
-     *
-     */
-    public function listUsers()
-    {
-        $json = $this->query('SELECT * FROM Users;');
-
-        return $json;
-    }
-
-    /**
-     * @param $flag
-     * @param mixed $debug
-     */
-    public function setDebug($debug)
-    {
-        $this->debug = $debug;
-    }
-
-    /**
-     * @param $user_password
-     * @param $user_name
-     * @param string $crypt_type
-     *
-     * @return string
-     */
-    protected static function encryptPassword($user_password, $user_name, $crypt_type = '')
-    {
-        $salt = substr($user_name, 0, 2);
-
-        if ($crypt_type == '') {
-            $crypt_type = 'PHP5.3MD5';
-        }
-
-        if ($crypt_type == 'MD5') {
-            $salt = '$1$'.$salt.'$';
-        } elseif ($crypt_type == 'BLOWFISH') {
-            $salt = '$2$'.$salt.'$';
-        } elseif ($crypt_type == 'PHP5.3MD5') {
-            $salt = '$1$'.str_pad($salt, 9, '0');
-        }
-
-        $encrypted_password = crypt($user_password, $salt);
-
-        return $encrypted_password;
     }
 }
