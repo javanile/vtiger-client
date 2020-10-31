@@ -20,55 +20,58 @@ use GuzzleHttp\Exception\GuzzleException;
 class OperationMapper
 {
     /**
-     * @var Client
+     * @var array
      */
-    protected $client;
+    protected $operations;
 
     /**
-     * @var string
-     */
-    protected $endpoint;
-
-    /**
-     * HttpClient constructor.
+     * OperationMapper constructor.
      *
      * @param $args
      */
     public function __construct($args)
     {
-        $this->resetOperationsMap();
+        $this->reset();
 
-        /*
-    else {
         if (array_key_exists('operationsMap', $args)) {
             if (array_key_exists('operationsMapMode', $args) && $args['operationsMapMode'] == 'set') {
-                $this->setOperationsMap($args['operationsMap']);
+                $this->apply($args['operationsMap']);
             } else {
-                $this->mergeOperationsMap($args['operationsMap']);
+                $this->merge($args['operationsMap']);
             }
         }
-    }
-*/
     }
 
     /**
      * Return the OperationsMap.
      */
-    public function getOperationsMap()
+    public function getOperations()
     {
         return $this->operationsMap;
     }
 
     /**
+     * Return the operation name.
+     *
+     * @param $operation
+     *
+     * @return mixed|null
+     */
+    public function get($operation)
+    {
+        return isset($this->operations[$operation]) ? $this->operations[$operation] : null;
+    }
+
+    /**
      * Set the OperationsMap.
      */
-    public function setOperationsMap($operationsMap)
+    public function apply($operationsMap)
     {
         if (!is_array($operationsMap)) {
             return;
         }
 
-        return $this->operationsMap = $operationsMap;
+        return $this->operations = $operationsMap;
     }
 
     /**
@@ -76,15 +79,15 @@ class OperationMapper
      *
      * @param $operationsMap
      */
-    public function mergeOperationsMap($operationsMap)
+    public function merge($operationsMap)
     {
         if (!is_array($operationsMap)) {
             return;
         }
 
-        foreach (array_keys($this->operationsMap) as $operation) {
+        foreach (array_keys($this->operations) as $operation) {
             if (array_key_exists($operation, $operationsMap)) {
-                $this->operationsMap[$operation] = $operationsMap[$operation];
+                $this->operations[$operation] = $operationsMap[$operation];
             }
         }
     }
@@ -92,9 +95,9 @@ class OperationMapper
     /**
      * Reset the OperationsMap to default value.
      */
-    public function resetOperationsMap()
+    public function reset()
     {
-        $this->operationsMap = [
+        $this->operations = [
             'getchallenge' => 'getchallenge',
             'login' => 'login',
             'listtypes' => 'listtypes',
@@ -107,5 +110,4 @@ class OperationMapper
             'sync' => 'sync',
         ];
     }
-
 }

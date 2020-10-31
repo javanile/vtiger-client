@@ -17,7 +17,7 @@ namespace Javanile\VtigerClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class VtigerClient extends ElementSanitizer
+class VtigerClient extends HttpClient
 {
     /**
      * @var string
@@ -40,6 +40,11 @@ class VtigerClient extends ElementSanitizer
     protected $sessionName;
 
     /**
+     * @var string
+     */
+    protected $userId;
+
+    /**
      * @var array
      */
     protected $types;
@@ -47,10 +52,15 @@ class VtigerClient extends ElementSanitizer
     /**
      * @var array
      */
+    protected $typesManager;
+
+    /**
+     * @var OperationMapper
+     */
     protected $operationMapper;
 
     /**
-     * @var array
+     * @var ElementSanitizer
      */
     protected $elementSanitizer;
 
@@ -70,13 +80,15 @@ class VtigerClient extends ElementSanitizer
             $args = ['endpoint' => $args];
         }
 
-        $this->username = isset($args['username']) ? $args['username'] : null;
-        $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
+        $this->username = isset($args['username']) && $args['username'] ? $args['username'] : null;
+        $this->accessKey = isset($args['accessKey']) && $args['accessKey'] ? $args['accessKey'] : null;
 
-        $this->operationMapper = new OperationMapper();
+        $this->typesManager = new TypesManager($args);
 
-        $this->elementSanitizer = new ElementSanitizer();
-        $this->elementValidator = new ElementValidator();
+        $this->operationMapper = new OperationMapper($args);
+
+        $this->elementSanitizer = new ElementSanitizer($args);
+        $this->elementValidator = new ElementValidator($args);
 
         parent::__construct($args);
     }
@@ -96,7 +108,7 @@ class VtigerClient extends ElementSanitizer
 
         $json = $this->get([
             'query' => [
-                'operation' => $this->operationsMap['getchallenge'],
+                'operation' => $this->operationMapper->get('getchallenge'),
                 'username'  => $this->username,
             ],
         ]);
@@ -138,7 +150,7 @@ class VtigerClient extends ElementSanitizer
 
         $json = $this->post([
             'form_params' => [
-                'operation' => $this->operationsMap['login'],
+                'operation' => $this->operationMapper->get('login'),
                 'username'  => $this->username,
                 'accessKey' => md5($this->token.$this->accessKey),
             ],
@@ -146,6 +158,12 @@ class VtigerClient extends ElementSanitizer
 
         $this->sessionName = isset($json['result']['sessionName'])
             ? $json['result']['sessionName'] : null;
+
+        $this->userId = isset($json['result']['userId']) ? $json['result']['userId'] : null;
+
+        if ($this->userId) {
+            $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
+        }
 
         return $json;
     }
@@ -165,12 +183,14 @@ class VtigerClient extends ElementSanitizer
     {
         $json = $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['listtypes'],
+                'operation'   => $this->operationMapper->get('listtypes'),
                 'sessionName' => $this->sessionName,
             ],
         ]);
 
         $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
+
+        $this->types = $this->typesManager->sort($this->types);
 
         return $json;
     }
@@ -180,6 +200,10 @@ class VtigerClient extends ElementSanitizer
      */
     public function getTypes()
     {
+        if (null === $this->types) {
+            $this->listTypes();
+        }
+
         return $this->types;
     }
 
@@ -198,7 +222,7 @@ class VtigerClient extends ElementSanitizer
 
         return $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['describe'],
+                'operation'   => $this->operationMapper->get('describe'),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
@@ -223,7 +247,7 @@ class VtigerClient extends ElementSanitizer
 
         return $this->post([
             'form_params' => [
-                'operation'   => $this->operationMappper->get('create'),
+                'operation'   => $this->operationMapper->get('create'),
                 'element'     => json_encode($sanitizedElement),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,

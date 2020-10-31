@@ -20,6 +20,19 @@ use GuzzleHttp\Exception\GuzzleException;
 class Factory
 {
     /**
+     * Create success message.
+     *
+     * @return array
+     */
+    public static function createSuccess()
+    {
+        return [
+            'success' => true,
+        ];
+    }
+
+    /**
+     * Create error message.
      *
      * @param $code
      * @param $message

@@ -81,7 +81,7 @@ class HttpClient
      *
      * @return mixed
      */
-    protected function get($request)
+    public function get($request)
     {
         try {
             $response = $this->client->request('GET', $this->endpoint, $request);
@@ -103,7 +103,7 @@ class HttpClient
      *
      * @return mixed
      */
-    protected function post($request)
+    public function post($request)
     {
         try {
             $response = $this->client->request('POST', $this->endpoint, $request);
