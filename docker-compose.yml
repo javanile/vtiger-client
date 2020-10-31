@@ -3,7 +3,7 @@ version: '3'
 services:
 
   vtiger:
-    image: javanile/vtiger:7.0.0
+    image: javanile/vtiger:7.1.0
     environment:
       - VT_DEBUG=false
       - MYSQL_HOST=mysql

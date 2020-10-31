@@ -6,7 +6,7 @@ use Javanile\VtigerClient\VtigerClient as Client;
 use PHPUnit\Framework\TestCase;
 use PDO;
 
-final class VtigerClientTest extends TestCase
+final class HttpClientTest extends TestCase
 {
     protected static $username;
 
