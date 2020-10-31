@@ -163,6 +163,7 @@ class VtigerClient extends HttpClient
 
         if ($this->userId) {
             $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
+            var_dump($this->userId);
         }
 
         return $json;

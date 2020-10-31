@@ -25,13 +25,18 @@ class ElementSanitizer
     protected $defaultAssignedUserId;
 
     /**
+     * @var string
+     */
+    protected $inventoryTypes;
+
+    /**
      * HttpClient constructor.
      *
      * @param $args
      */
     public function __construct($args)
     {
-
+        $this->inventoryTypes = ['Quotes'];
     }
 
     /**
@@ -71,6 +76,28 @@ class ElementSanitizer
     }
 
     /**
+     * @param $element
+     *
+     * @return array
+     */
+    protected function sanitizeInventoryElement($elementType, $element)
+    {
+        if (!in_array($elementType, $this->inventoryTypes)) {
+            return $element;
+        }
+
+        if (empty($element['hdnTaxType'])) {
+            $element['hdnTaxType'] = 'individual';
+        }
+
+        if (empty($element['LineItems'])) {
+            $element['LineItems'] = [[]];
+        }
+
+        return $element;
+    }
+
+    /**
      * @param $elementType
      *
      * @return array|mixed
@@ -90,6 +117,7 @@ class ElementSanitizer
     {
         $element = $this->sanitizeEmptyElement($element);
         $element = $this->sanitizeAssignedUserId($element);
+        $element = $this->sanitizeInventoryElement($elementType, $element);
 
         return $element;
     }

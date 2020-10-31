@@ -32,7 +32,14 @@ final class CreateTest extends TestCase
                 return [
                     'subject' => 'Test Quote',
                     'quotestage' => 'New',
-                    'account_id' => 1
+                    'account_id' => $createdElements['Accounts']['id'],
+                    'bill_street' => 'test',
+                    'ship_street' => 'test',
+                    'productid' => $createdElements['Products']['id'],
+
+                    'LineItems' => [
+                        []
+                    ],
                 ];
             case 'SMSNotifier':
                 return [
@@ -64,6 +71,7 @@ final class CreateTest extends TestCase
             case 'Products':
                 return [
                     'productname' => 'Test Product',
+                    'discontinued' => 1,
                 ];
             case 'ServiceContracts':
                 return [
@@ -71,8 +79,28 @@ final class CreateTest extends TestCase
                 ];
             case 'Assets':
                 return [
+                    'assetname' => 'Test Asset',
+                    'account' => $createdElements['Accounts']['id'],
                     'product' => $createdElements['Products']['id'],
                     'serialnumber' => '123456',
+                    'datesold' => date('Y-m-d'),
+                    'dateinservice' => date('Y-m-d'),
+                    'assetstatus' => 'New',
+                ];
+            case 'Currency':
+                return [
+                    'defaultid' => '1',
+                    'deleted' => '1',
+                ];
+            case 'DocumentFolders':
+                return [
+                    'foldername' => 'Test Folder',
+                    'createdby' => '18x1'
+                ];
+            case 'LineItem':
+                return [
+                    'productid' => $createdElements['Products']['id'],
+                    'quantity' => 1
                 ];
             default:
                 return [];
@@ -81,6 +109,7 @@ final class CreateTest extends TestCase
 
     public function testCreate()
     {
+
         $client = new Client(self::$endpoint);
         $result = $client->login(self::$username, self::$accessKey);
 
@@ -88,12 +117,24 @@ final class CreateTest extends TestCase
 
         $createdElements = [];
 
+        $count = 0;
+
         foreach ($types as $type) {
+            if (in_array($type, ['ServiceContracts', 'Groups', 'DocumentFolders', 'CompanyDetails'])) {
+                continue;
+            }
+            $stamp = time();
             $result = $client->create($type, self::defaultValues($type, $createdElements));
+            echo $count++." ".$type.' '.(time()-$stamp)."\n";
             if (empty($result['success'])) {
                 var_dump($type, $result);
+                file_put_contents(__DIR__.'/result.log', $result['error']['message'], FILE_APPEND);
                 die();
             }
+            if ($count > 9) {
+                //die();
+            }
+            var_dump($result);
 
             $createdElements[$type] = $result['result'];
             //$this->assertEquals($expected, $actual);

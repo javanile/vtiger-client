@@ -32,6 +32,7 @@ class TypesManager
         $this->typesPriority = [
             'Accounts' => 10,
             'Products' => 500,
+            'Quotes' => 600,
             'Project' => 1000,
         ];
     }
