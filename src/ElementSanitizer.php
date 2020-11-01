@@ -36,7 +36,7 @@ class ElementSanitizer
      */
     public function __construct($args)
     {
-        $this->inventoryTypes = ['Quotes'];
+        $this->inventoryTypes = ['Quotes', 'SalesOrder', 'Invoice', 'PurchaseOrder'];
     }
 
     /**

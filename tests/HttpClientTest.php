@@ -3,31 +3,9 @@
 namespace Javanile\VtigerClient\Tests;
 
 use Javanile\VtigerClient\VtigerClient as Client;
-use PHPUnit\Framework\TestCase;
-use PDO;
 
 final class HttpClientTest extends TestCase
 {
-    protected static $username;
-
-    protected static $accessKey;
-
-    protected static $endpoint;
-
-    public static function setUpBeforeClass()
-    {
-        self::$endpoint = getenv('VT_ENDPOINT');
-        self::$username = $username = getenv('VT_USERNAME');
-
-        $mysqlHost = getenv('MYSQL_HOST');
-        $mysqlDatabase = getenv('MYSQL_DATABASE');
-        $mysqlRootPassword = getenv('MYSQL_ROOT_PASSWORD');
-        $db = new PDO("mysql:host={$mysqlHost};dbname={$mysqlDatabase}", 'root', $mysqlRootPassword);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT accesskey FROM vtiger_users WHERE user_name='{$username}'";
-        self::$accessKey = $db->query($sql)->fetchObject()->accesskey;
-    }
-
     public function testGuzzleError()
     {
         $expected = [

@@ -3,48 +3,9 @@
 namespace Javanile\VtigerClient\Tests;
 
 use Javanile\VtigerClient\VtigerClient as Client;
-use PHPUnit\Framework\TestCase;
-use PDO;
 
 final class VtigerClientTest extends TestCase
 {
-    protected static $username;
-
-    protected static $accessKey;
-
-    protected static $endpoint;
-
-    public static function setUpBeforeClass()
-    {
-        self::$endpoint = getenv('VT_ENDPOINT');
-        self::$username = $username = getenv('VT_USERNAME');
-
-        $mysqlHost = getenv('MYSQL_HOST');
-        $mysqlDatabase = getenv('MYSQL_DATABASE');
-        $mysqlRootPassword = getenv('MYSQL_ROOT_PASSWORD');
-        $db = new PDO("mysql:host={$mysqlHost};dbname={$mysqlDatabase}", 'root', $mysqlRootPassword);
-        $db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-        $sql = "SELECT accesskey FROM vtiger_users WHERE user_name='{$username}'";
-        self::$accessKey = $db->query($sql)->fetchObject()->accesskey;
-    }
-
-    public function testGuzzleError()
-    {
-        $expected = [
-            'success' => false,
-            'error' => [
-                'code' => 'GUZZLE_ERROR',
-                'message' => 'cURL error 6: Could not resolve host: broken_uri (see https://curl.haxx.se/libcurl/c/libcurl-errors.html)',
-            ]
-        ];
-
-        $client = new Client([
-            'endpoint' => 'broken_uri'
-        ]);
-
-        $this->assertEquals($expected, $client->getChallenge());
-    }
-
     public function testGetChallengeWithoutUsername()
     {
         $expected = [
@@ -169,28 +130,6 @@ final class VtigerClientTest extends TestCase
 
         $this->assertEquals($expected, $actual);
     }
-
-    /*
-    public function testCreateWorkflow()
-    {
-        $client = new Client(self::$endpoint);
-        $client->login(self::$username, self::$accessKey);
-
-        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/createWorkflow.json'), true);
-
-        $actual = $client->create('Wordflow', [
-        ]);
-
-        file_put_contents(__DIR__.'/fixtures/createWorkflow.json', json_encode($actual, JSON_PRETTY_PRINT));
-
-        //$expected['result']['createdtime'] = $actual['result']['createdtime'];
-        //$expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
-        //$expected['result']['faq_no'] = $actual['result']['faq_no'];
-        //$expected['result']['id'] = $actual['result']['id'];
-
-        $this->assertEquals($expected, $actual);
-    }
-    */
 
     public function testListUsers()
     {
