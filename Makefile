@@ -3,6 +3,9 @@
 install:
 	@docker-compose run --rm composer install
 
+update:
+	@docker-compose run --rm composer update
+
 ## -------
 ## Testing
 ## -------
