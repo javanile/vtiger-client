@@ -10,7 +10,7 @@
         "fields": [
             {
                 "name": "product_id",
-                "label": "Nome Prodotto",
+                "label": "Product Name",
                 "mandatory": false,
                 "type": {
                     "refersTo": [
@@ -18,47 +18,50 @@
                     ],
                     "name": "reference"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "faq_no",
-                "label": "No. Faq",
+                "label": "Faq Number",
                 "mandatory": false,
                 "type": {
                     "name": "string"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": false,
                 "default": ""
             },
             {
                 "name": "faqcategories",
-                "label": "Categoria",
+                "label": "Category",
                 "mandatory": false,
                 "type": {
                     "picklistValues": [
                         {
-                            "label": "Generale",
+                            "label": "General",
                             "value": "General"
                         }
                     ],
                     "defaultValue": "General",
                     "name": "picklist"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "faqstatus",
-                "label": "Stato",
+                "label": "Status",
                 "mandatory": true,
                 "type": {
                     "picklistValues": [
                         {
-                            "label": "Bozza",
+                            "label": "Draft",
                             "value": "Draft"
                         },
                         {
@@ -66,61 +69,66 @@
                             "value": "Reviewed"
                         },
                         {
-                            "label": "Pubblicato",
+                            "label": "Published",
                             "value": "Published"
                         },
                         {
-                            "label": "Obsoleto",
+                            "label": "Obsolete",
                             "value": "Obsolete"
                         }
                     ],
                     "defaultValue": "Draft",
                     "name": "picklist"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "question",
-                "label": "Domanda",
+                "label": "Question",
                 "mandatory": true,
                 "type": {
                     "name": "text"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "faq_answer",
-                "label": "Risposta",
+                "label": "Answer",
                 "mandatory": true,
                 "type": {
                     "name": "text"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "createdtime",
-                "label": "Orario creazione",
+                "label": "Created Time",
                 "mandatory": false,
                 "type": {
                     "name": "datetime"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": false,
                 "default": ""
             },
             {
                 "name": "modifiedtime",
-                "label": "Orario modifica",
+                "label": "Modified Time",
                 "mandatory": false,
                 "type": {
                     "name": "datetime"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": false,
                 "default": ""
@@ -135,17 +143,19 @@
                     ],
                     "name": "reference"
                 },
+                "isunique": false,
                 "nullable": false,
                 "editable": true,
                 "default": ""
             },
             {
                 "name": "source",
-                "label": "Fonte",
+                "label": "Source",
                 "mandatory": false,
                 "type": {
                     "name": "string"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": false,
                 "default": ""
@@ -157,6 +167,7 @@
                 "type": {
                     "name": "boolean"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": true,
                 "default": ""
@@ -168,6 +179,7 @@
                 "type": {
                     "name": "string"
                 },
+                "isunique": false,
                 "nullable": true,
                 "editable": true,
                 "default": ""
@@ -186,6 +198,7 @@
         ],
         "idPrefix": "3",
         "isEntity": true,
+        "allowDuplicates": true,
         "labelFields": "question"
     }
 }

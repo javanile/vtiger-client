@@ -47,7 +47,7 @@ class OperationMapper
      */
     public function getOperations()
     {
-        return $this->operationsMap;
+        return $this->operations;
     }
 
     /**
@@ -64,14 +64,17 @@ class OperationMapper
 
     /**
      * Set the OperationsMap.
+     * @param $operationsMap
+     *
+     * @return array|void
      */
-    public function apply($operationsMap)
+    public function apply($operations)
     {
-        if (!is_array($operationsMap)) {
+        if (!is_array($operations)) {
             return;
         }
 
-        return $this->operations = $operationsMap;
+        return $this->operations = $operations;
     }
 
     /**
@@ -79,15 +82,15 @@ class OperationMapper
      *
      * @param $operationsMap
      */
-    public function merge($operationsMap)
+    public function merge($operations)
     {
-        if (!is_array($operationsMap)) {
+        if (!is_array($operations)) {
             return;
         }
 
         foreach (array_keys($this->operations) as $operation) {
-            if (array_key_exists($operation, $operationsMap)) {
-                $this->operations[$operation] = $operationsMap[$operation];
+            if (array_key_exists($operation, $operations)) {
+                $this->operations[$operation] = $operations[$operation];
             }
         }
     }

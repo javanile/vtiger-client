@@ -163,7 +163,6 @@ class VtigerClient extends HttpClient
 
         if ($this->userId) {
             $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
-            var_dump($this->userId);
         }
 
         return $json;
@@ -268,7 +267,7 @@ class VtigerClient extends HttpClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['retrieve'],
+                'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
@@ -287,7 +286,7 @@ class VtigerClient extends HttpClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'     => $this->operationsMap['update'],
+                'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
@@ -305,15 +304,13 @@ class VtigerClient extends HttpClient
      */
     public function delete($id)
     {
-        $json = $this->post([
+        return $this->post([
             'form_params' => [
-                'operation'     => $this->operationsMap['delete'],
+                'operation'     => $this->operationMapper->get('delete'),
                 'id'            => $id,
                 'sessionName'   => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -323,17 +320,13 @@ class VtigerClient extends HttpClient
      */
     public function query($query)
     {
-        $query = trim(trim($query), ';').';';
-
-        $json = $this->get([
+        return $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['query'],
-                'query'       => $query,
+                'operation'   => $this->operationMapper->get('query'),
+                'query'       => trim(trim($query), ';').';',
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -376,7 +369,7 @@ class VtigerClient extends HttpClient
 
         $json = $this->get([
             'query' => [
-                'operation'     => $this->operationsMap['sync'],
+                'operation'     => $this->operationMapper->get('sync'),
                 'elementType'   => $elementType,
                 'modifiedTime'  => $timestamp,
                 'syncType'      => $syncType,

@@ -166,15 +166,7 @@ class ElementSanitizer
     }
 
     /**
-     * @param string $elementType moduleName
-     * @param string|int|DateTime $timestamp Last known modified time from where you are expecting state changes of records, it should be in unix timestamp.
-     * @param string $syncType  user: fetch records restricted to assigned owner of record.
-     *
-     *                          userandgroup: fetch records restricted to assigned owner of own’s group.
-     *
-     *                          application: fetch records without restriction on assigned owner.
-     *
-     * @return mixed
+
      */
     public function sync($elementType, $timestamp, $syncType = 'application')
     {

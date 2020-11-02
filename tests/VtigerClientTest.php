@@ -16,9 +16,10 @@ final class VtigerClientTest extends TestCase
             ],
         ];
 
-        $actual = (new Client([
-            'endpoint' => self::$endpoint,
-        ]))->getChallenge();
+        $client = new Client(['endpoint' => self::$endpoint]);
+        $actual = $client->getChallenge();
+
+        $expected['error']['xdebug_message'] = $actual['error']['xdebug_message'];
 
         $this->assertEquals($expected, $actual);
     }
@@ -131,6 +132,36 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testCreateEveryTypes()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $createdElements = [];
+
+        $types = $client->getTypes();
+        $ignoredTypes = [
+            'ServiceContracts',
+            'Groups',
+            'DocumentFolders',
+            'CompanyDetails',
+            'PBXManager',
+            'Users',
+            'ProductTaxes'
+        ];
+
+        foreach ($types as $type) {
+            if (in_array($type, $ignoredTypes)) {
+                continue;
+            }
+            $result = $client->create($type, self::defaultValues($type, $createdElements));
+            $this->assertTrue($result['success']);
+            if (isset($result['success'])) {
+                $createdElements[$type] = $result['result'];
+            }
+        }
+    }
+
     public function testListUsers()
     {
         $client = new Client(self::$endpoint);
@@ -192,38 +223,6 @@ final class VtigerClientTest extends TestCase
         $expected['result']['deleted'] = $actual['result']['deleted'];
         $expected['result']['lastModifiedTime'] = $actual['result']['lastModifiedTime'];
         $expected['result']['more'] = $actual['result']['more'];
-
-        $this->assertEquals($expected, $actual);
-    }
-
-    public function testChangeOperationsMap()
-    {
-        $args = [
-            'endpoint' => self::$endpoint,
-            'operationsMap' => [
-                'create' => 'custom_create',
-                'retrieve' => 'custom_retrieve',
-                'query' => 'custom_query',
-            ]
-        ];
-
-        $client = new Client($args);
-        // $client->login(self::$username, self::$accessKey);
-
-        $expected = [
-            'getchallenge' => 'getchallenge',
-            'login' => 'login',
-            'listtypes' => 'listtypes',
-            'describe' => 'describe',
-            'create' => 'custom_create',
-            'retrieve' => 'custom_retrieve',
-            'update' => 'update',
-            'delete' => 'delete',
-            'query' => 'custom_query',
-            'sync' => 'sync',
-        ];
-
-        $actual = $client->getOperationsMap();
 
         $this->assertEquals($expected, $actual);
     }
