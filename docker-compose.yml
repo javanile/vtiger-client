@@ -38,7 +38,7 @@ services:
       - "48081:8080"
 
   composer:
-    image: composer
+    image: composer:1.3
     volumes:
       - ./:/app
 
