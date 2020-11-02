@@ -21,15 +21,15 @@
             "HelpDesk",
             "Events",
             "Users",
-            "PBXManager",
             "ServiceContracts",
+            "PBXManager",
             "Services",
             "ModComments",
-            "SMSNotifier",
-            "Assets",
             "ProjectMilestone",
             "ProjectTask",
             "Project",
+            "SMSNotifier",
+            "Assets",
             "Groups",
             "Currency",
             "DocumentFolders",
@@ -41,48 +41,48 @@
         "information": {
             "Campaigns": {
                 "isEntity": true,
-                "label": "Campagne",
-                "singular": "Campagna"
+                "label": "Campaigns",
+                "singular": "Campaign"
             },
             "Vendors": {
                 "isEntity": true,
-                "label": "Fornitori",
-                "singular": "Fornitore"
+                "label": "Vendors",
+                "singular": "Vendor"
             },
             "Faq": {
                 "isEntity": true,
                 "label": "FAQ",
-                "singular": "Faq"
+                "singular": "FAQ"
             },
             "Quotes": {
                 "isEntity": true,
-                "label": "Preventivo",
-                "singular": "Preventivo"
+                "label": "Quotes",
+                "singular": "Quote"
             },
             "PurchaseOrder": {
                 "isEntity": true,
-                "label": "Ordini d'acquisto",
-                "singular": "Ordini d'acquisto"
+                "label": "Purchase Orders",
+                "singular": "Purchase Order"
             },
             "SalesOrder": {
                 "isEntity": true,
-                "label": "Ordini di vendita",
-                "singular": "Ordine di Vendita"
+                "label": "Sales Orders",
+                "singular": "Sales Order"
             },
             "Invoice": {
                 "isEntity": true,
-                "label": "Fatture",
-                "singular": "Fattura"
+                "label": "Invoices",
+                "singular": "Invoice"
             },
             "PriceBooks": {
                 "isEntity": true,
-                "label": "Listini",
-                "singular": "Listino"
+                "label": "Price Books",
+                "singular": "Price Book"
             },
             "Calendar": {
                 "isEntity": true,
                 "label": "Calendar",
-                "singular": "Compito"
+                "singular": "Task"
             },
             "Leads": {
                 "isEntity": true,
@@ -91,28 +91,28 @@
             },
             "Accounts": {
                 "isEntity": true,
-                "label": "Aziende",
-                "singular": "Azienda"
+                "label": "Organizations",
+                "singular": "Organization"
             },
             "Contacts": {
                 "isEntity": true,
-                "label": "Contatti",
-                "singular": "Contatto"
+                "label": "Contacts",
+                "singular": "Contact"
             },
             "Potentials": {
                 "isEntity": true,
-                "label": "Opportunita'",
-                "singular": "Opportunit&agrave;"
+                "label": "Opportunities",
+                "singular": "Opportunity"
             },
             "Products": {
                 "isEntity": true,
-                "label": "Prodotti",
-                "singular": "Prodotto"
+                "label": "Products",
+                "singular": "Product"
             },
             "Documents": {
                 "isEntity": true,
                 "label": "Documents",
-                "singular": "Documento"
+                "singular": "Document"
             },
             "Emails": {
                 "isEntity": true,
@@ -121,38 +121,53 @@
             },
             "HelpDesk": {
                 "isEntity": true,
-                "label": "Assistenza Clienti",
+                "label": "Tickets",
                 "singular": "Ticket"
             },
             "Events": {
                 "isEntity": true,
                 "label": "Events",
-                "singular": "Evento"
+                "singular": "Event"
             },
             "Users": {
                 "isEntity": true,
                 "label": "Users",
-                "singular": "Utente"
-            },
-            "PBXManager": {
-                "isEntity": true,
-                "label": "Gestione chiamate",
-                "singular": "Gestione chiamate"
+                "singular": "User"
             },
             "ServiceContracts": {
                 "isEntity": true,
-                "label": "Contratti di servizio",
-                "singular": "Contratto di servizio"
+                "label": "Service Contracts",
+                "singular": "Service Contract"
+            },
+            "PBXManager": {
+                "isEntity": true,
+                "label": "PBX Manager",
+                "singular": "Call Record"
             },
             "Services": {
                 "isEntity": true,
-                "label": "Servizi",
-                "singular": "Servizi"
+                "label": "Services",
+                "singular": "Service"
             },
             "ModComments": {
                 "isEntity": true,
                 "label": "Comments",
                 "singular": "Comment"
+            },
+            "ProjectMilestone": {
+                "isEntity": true,
+                "label": "Project Milestones",
+                "singular": "Project Milestone"
+            },
+            "ProjectTask": {
+                "isEntity": true,
+                "label": "Project Tasks",
+                "singular": "Project Task"
+            },
+            "Project": {
+                "isEntity": true,
+                "label": "Projects",
+                "singular": "Project"
             },
             "SMSNotifier": {
                 "isEntity": true,
@@ -161,23 +176,8 @@
             },
             "Assets": {
                 "isEntity": true,
-                "label": "Attivit\u00e0",
+                "label": "Assets",
                 "singular": "Asset"
-            },
-            "ProjectMilestone": {
-                "isEntity": true,
-                "label": "Project Milestones",
-                "singular": "Progetto Milestone"
-            },
-            "ProjectTask": {
-                "isEntity": true,
-                "label": "Project Tasks",
-                "singular": "Compito del progetto"
-            },
-            "Project": {
-                "isEntity": true,
-                "label": "Progetto",
-                "singular": "Progetto"
             },
             "Groups": {
                 "isEntity": false,

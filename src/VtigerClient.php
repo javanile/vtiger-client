@@ -17,8 +17,18 @@ namespace Javanile\VtigerClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class VtigerClient
+class VtigerClient extends HttpClient
 {
+    /**
+     * @var string
+     */
+    protected $username;
+
+    /**
+     * @var string
+     */
+    protected $accessKey;
+
     /**
      * @var string
      */
@@ -30,19 +40,34 @@ class VtigerClient
     protected $sessionName;
 
     /**
+     * @var string
+     */
+    protected $userId;
+
+    /**
      * @var array
      */
     protected $types;
 
     /**
-     * @var Client
+     * @var array
      */
-    protected $client;
+    protected $typesManager;
+
+    /**
+     * @var OperationMapper
+     */
+    protected $operationMapper;
+
+    /**
+     * @var ElementSanitizer
+     */
+    protected $elementSanitizer;
 
     /**
      * @var array
      */
-    protected $operationsMap;
+    protected $elementValidator;
 
     /**
      * Constructor.
@@ -51,30 +76,29 @@ class VtigerClient
      */
     public function __construct($args)
     {
-        $this->resetOperationsMap();
         if (!is_array($args)) {
             $args = ['endpoint' => $args];
-        } else {
-            if (array_key_exists('operationsMap', $args)) {
-                if (array_key_exists('operationsMapMode', $args) && $args['operationsMapMode'] == 'set') {
-                    $this->setOperationsMap($args['operationsMap']);
-                } else {
-                    $this->mergeOperationsMap($args['operationsMap']);
-                }
-            }
         }
 
-        $this->endpoint = $args['endpoint'].'/webservice.php';
-        $this->username = isset($args['username']) ? $args['username'] : null;
-        $this->accessKey = isset($args['accessKey']) ? $args['accessKey'] : null;
+        $this->username = isset($args['username']) && $args['username'] ? $args['username'] : null;
+        $this->accessKey = isset($args['accessKey']) && $args['accessKey'] ? $args['accessKey'] : null;
 
-        $this->client = new Client();
+        $this->typesManager = new TypesManager($args);
+
+        $this->operationMapper = new OperationMapper($args);
+
+        $this->elementSanitizer = new ElementSanitizer($args);
+        $this->elementValidator = new ElementValidator($args);
+
+        parent::__construct($args);
     }
 
     /**
      * Perform get challenge operation.
      *
      * @param null|mixed $username
+     *
+     * @return array|mixed
      */
     public function getChallenge($username = null)
     {
@@ -84,7 +108,7 @@ class VtigerClient
 
         $json = $this->get([
             'query' => [
-                'operation' => $this->operationsMap['getchallenge'],
+                'operation' => $this->operationMapper->get('getchallenge'),
                 'username'  => $this->username,
             ],
         ]);
@@ -107,6 +131,8 @@ class VtigerClient
      *
      * @param null|mixed $username
      * @param null|mixed $accessKey
+     *
+     * @return array|mixed
      */
     public function login($username = null, $accessKey = null)
     {
@@ -124,7 +150,7 @@ class VtigerClient
 
         $json = $this->post([
             'form_params' => [
-                'operation' => $this->operationsMap['login'],
+                'operation' => $this->operationMapper->get('login'),
                 'username'  => $this->username,
                 'accessKey' => md5($this->token.$this->accessKey),
             ],
@@ -132,6 +158,12 @@ class VtigerClient
 
         $this->sessionName = isset($json['result']['sessionName'])
             ? $json['result']['sessionName'] : null;
+
+        $this->userId = isset($json['result']['userId']) ? $json['result']['userId'] : null;
+
+        if ($this->userId) {
+            $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
+        }
 
         return $json;
     }
@@ -151,12 +183,16 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['listtypes'],
+                'operation'   => $this->operationMapper->get('listtypes'),
                 'sessionName' => $this->sessionName,
             ],
         ]);
 
         $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
+
+        if ($this->types) {
+            $this->types = $this->typesManager->sort($this->types);
+        }
 
         return $json;
     }
@@ -166,78 +202,33 @@ class VtigerClient
      */
     public function getTypes()
     {
+        if (null === $this->types) {
+            $this->listTypes();
+        }
+
         return $this->types;
     }
 
     /**
-     * Return the OperationsMap.
-     */
-    public function getOperationsMap()
-    {
-        return $this->operationsMap;
-    }
-
-    /**
-     * Set the OperationsMap.
-     */
-    public function setOperationsMap($operationsMap)
-    {
-        if (!is_array($operationsMap)) {
-            return;
-        }
-
-        return $this->operationsMap = $operationsMap;
-    }
-
-    /**
-     * Merge the OperationsMap.
-     */
-    public function mergeOperationsMap($operationsMap)
-    {
-        if (!is_array($operationsMap)) {
-            return;
-        }
-
-        foreach (array_keys($this->operationsMap) as $operation) {
-            if (array_key_exists($operation, $operationsMap)) {
-                $this->operationsMap[$operation] = $operationsMap[$operation];
-            }
-        }
-    }
-
-    /**
-     * Reset the OperationsMap to default value.
-     */
-    public function resetOperationsMap()
-    {
-        $this->operationsMap = [
-            'getchallenge' => 'getchallenge',
-            'login' => 'login',
-            'listtypes' => 'listtypes',
-            'describe' => 'describe',
-            'create' => 'create',
-            'retrieve' => 'retrieve',
-            'update' => 'update',
-            'delete' => 'delete',
-            'query' => 'query',
-            'sync' => 'sync',
-        ];
-    }
-
-    /**
      * @param $elementType
+     *
+     * @return array|mixed
      */
     public function describe($elementType)
     {
-        $json = $this->get([
+        $validate = $this->elementValidator->describe($elementType);
+
+        if (!$validate['success']) {
+            return $validate;
+        }
+
+        return $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['describe'],
+                'operation'   => $this->operationMapper->get('describe'),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -248,16 +239,22 @@ class VtigerClient
      */
     public function create($elementType, $element)
     {
-        $json = $this->post([
+        $sanitizedElement = $this->elementSanitizer->create($elementType, $element);
+
+        $validate = $this->elementValidator->create($elementType, $sanitizedElement);
+
+        if (!$validate['success']) {
+            return $validate;
+        }
+
+        return $this->post([
             'form_params' => [
-                'operation'   => $this->operationsMap['create'],
-                'element'     => json_encode($element),
+                'operation'   => $this->operationMapper->get('create'),
+                'element'     => json_encode($sanitizedElement),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -270,7 +267,7 @@ class VtigerClient
     {
         $json = $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['retrieve'],
+                'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
@@ -289,7 +286,7 @@ class VtigerClient
     {
         $json = $this->post([
             'form_params' => [
-                'operation'     => $this->operationsMap['update'],
+                'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
@@ -307,15 +304,13 @@ class VtigerClient
      */
     public function delete($id)
     {
-        $json = $this->post([
+        return $this->post([
             'form_params' => [
-                'operation'     => $this->operationsMap['delete'],
+                'operation'     => $this->operationMapper->get('delete'),
                 'id'            => $id,
                 'sessionName'   => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -325,17 +320,13 @@ class VtigerClient
      */
     public function query($query)
     {
-        $query = trim(trim($query), ';').';';
-
-        $json = $this->get([
+        return $this->get([
             'query' => [
-                'operation'   => $this->operationsMap['query'],
-                'query'       => $query,
+                'operation'   => $this->operationMapper->get('query'),
+                'query'       => trim(trim($query), ';').';',
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -378,7 +369,7 @@ class VtigerClient
 
         $json = $this->get([
             'query' => [
-                'operation'     => $this->operationsMap['sync'],
+                'operation'     => $this->operationMapper->get('sync'),
                 'elementType'   => $elementType,
                 'modifiedTime'  => $timestamp,
                 'syncType'      => $syncType,
@@ -456,80 +447,5 @@ class VtigerClient
         $encrypted_password = crypt($user_password, $salt);
 
         return $encrypted_password;
-    }
-
-    /**
-     * @param $response
-     */
-    protected function decodeResponse($response)
-    {
-        $body = $response->getBody()->getContents();
-        $json = json_decode($body, true);
-
-        if (!$body && !$json) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'EMPTY_RESPONSE',
-                    'message' => 'Web service send an empty body',
-                ],
-            ];
-        }
-
-        if ($body && !$json) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'JSON_PARSE_ERROR',
-                    'message' => $body,
-                ],
-            ];
-        }
-
-        return $json;
-    }
-
-    /**
-     * @param $request
-     *
-     * @return mixed
-     */
-    protected function get($request)
-    {
-        try {
-            $response = $this->client->request('GET', $this->endpoint, $request);
-        } catch (GuzzleException $error) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'GUZZLE_ERROR',
-                    'message' => $error->getMessage(),
-                ],
-            ];
-        }
-
-        return $this->decodeResponse($response);
-    }
-
-    /**
-     * @param $request
-     *
-     * @return mixed
-     */
-    protected function post($request)
-    {
-        try {
-            $response = $this->client->request('POST', $this->endpoint, $request);
-        } catch (GuzzleException $error) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'GUZZLE_ERROR',
-                    'message' => $error->getMessage(),
-                ],
-            ];
-        }
-
-        return $this->decodeResponse($response);
     }
 }

@@ -3,7 +3,7 @@ version: '3'
 services:
 
   vtiger:
-    image: javanile/vtiger:7.0.0
+    image: javanile/vtiger-dev:7.1.0
     environment:
       - VT_DEBUG=false
       - MYSQL_HOST=mysql
@@ -12,12 +12,14 @@ services:
     ports:
       - "48080:80"
     volumes:
+      - vtiger:/var/lib/vtiger
       - ./:/app
-      - ./volumes/logs:/var/www/html/logs
-      - ./volumes/storage:/var/www/html/storage
+      - ./volumes/logs:/var/lib/vtiger/logs
+      - ./volumes/storage:/var/lib/vtiger/storage
     links:
       - mysql
       - adminer
+      #- xdebug
 
   mysql:
     image: mysql:5.5
@@ -53,5 +55,11 @@ services:
     links:
       - vtiger
 
+  #xdebug:
+  #  image: javanile/xdebug
+  #  cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+  #  restart: on-failure
+
 volumes:
   mysql:
+  vtiger:
