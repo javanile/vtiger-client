@@ -21,15 +21,15 @@
             "HelpDesk",
             "Events",
             "Users",
-            "ServiceContracts",
             "PBXManager",
+            "ServiceContracts",
             "Services",
             "ModComments",
+            "SMSNotifier",
+            "Assets",
             "ProjectMilestone",
             "ProjectTask",
             "Project",
-            "SMSNotifier",
-            "Assets",
             "Groups",
             "Currency",
             "DocumentFolders",
@@ -134,15 +134,15 @@
                 "label": "Users",
                 "singular": "User"
             },
-            "ServiceContracts": {
-                "isEntity": true,
-                "label": "Service Contracts",
-                "singular": "Service Contract"
-            },
             "PBXManager": {
                 "isEntity": true,
                 "label": "PBX Manager",
                 "singular": "Call Record"
+            },
+            "ServiceContracts": {
+                "isEntity": true,
+                "label": "Service Contracts",
+                "singular": "Service Contract"
             },
             "Services": {
                 "isEntity": true,
@@ -153,6 +153,16 @@
                 "isEntity": true,
                 "label": "Comments",
                 "singular": "Comment"
+            },
+            "SMSNotifier": {
+                "isEntity": true,
+                "label": "SMS Notifier",
+                "singular": "SMS Notifier"
+            },
+            "Assets": {
+                "isEntity": true,
+                "label": "Assets",
+                "singular": "Asset"
             },
             "ProjectMilestone": {
                 "isEntity": true,
@@ -168,16 +178,6 @@
                 "isEntity": true,
                 "label": "Projects",
                 "singular": "Project"
-            },
-            "SMSNotifier": {
-                "isEntity": true,
-                "label": "SMS Notifier",
-                "singular": "SMS Notifier"
-            },
-            "Assets": {
-                "isEntity": true,
-                "label": "Assets",
-                "singular": "Asset"
             },
             "Groups": {
                 "isEntity": false,
