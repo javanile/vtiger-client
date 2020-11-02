@@ -6,6 +6,5 @@ debug/
 debug.zip
 npm-debug.log
 phpunit.xml
-composer.lock
 coverage.xml
 vtiger.json
