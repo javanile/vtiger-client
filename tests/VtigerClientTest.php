@@ -132,6 +132,30 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testCreatePurchaseOrder()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+        $product = $client->create('Products', ['productname' => 'Test Product', 'discontinued' => 1])['result'];
+        $vendor = $client->create('Vendors', ['vendorname' => 'Test Vendor'])['result'];
+        $element = json_decode('{
+            "subject":"test",
+            "assigned_user_id":"19x1",
+            "bill_street":"test",
+            "postatus":"New",
+            "productid": "'.$product['id'].'",
+            "ship_street":"test",
+            "vendor_id":"'.$vendor['id'].'",
+            "quantity":1,
+            "LineItems":[{"productid":"'.$product['id'].'","quantity":1,"sequence_no":1}]
+        }', true);
+
+        #$element['LineItems'] = [[]];
+
+        $purchaseOrderResponse = $client->create('PurchaseOrder', $element);
+        $this->assertTrue($purchaseOrderResponse['success']);
+    }
+
     public function testCreateEveryTypes()
     {
         $client = new Client(self::$endpoint);

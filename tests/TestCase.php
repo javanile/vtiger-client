@@ -210,6 +210,7 @@ class TestCase extends PHPUnitTestCase
                     'productid' => $createdElements['Products']['id'],
                 ];
             case 'PurchaseOrder':
+                var_dump($createdElements['Vendors']['id']);
                 return [
                     'subject' => 'Test Purchase Order',
                     'vendor_id' => $createdElements['Vendors']['id'],
