@@ -17,14 +17,14 @@ namespace Javanile\VtigerClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Factory
+class Response
 {
     /**
      * Create success message.
      *
      * @return array
      */
-    public static function createSuccess()
+    public static function success()
     {
         return [
             'success' => true,
@@ -39,7 +39,7 @@ class Factory
      *
      * @return array
      */
-    public static function createError($code, $message)
+    public static function error($code, $message)
     {
         return [
             'success' => false,

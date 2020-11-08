@@ -239,18 +239,17 @@ class VtigerClient extends HttpClient
      */
     public function create($elementType, $element)
     {
-        $sanitizedElement = $this->elementSanitizer->create($elementType, $element);
+        $element = $this->elementSanitizer->create($elementType, $element);
+        $validate = $this->elementValidator->create($elementType, $element);
 
-        $validate = $this->elementValidator->create($elementType, $sanitizedElement);
-
-        if (!$validate['success']) {
+        if (empty($validate['success'])) {
             return $validate;
         }
 
         return $this->post([
             'form_params' => [
                 'operation'   => $this->operationMapper->get('create'),
-                'element'     => json_encode($sanitizedElement),
+                'element'     => json_encode($element),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
@@ -284,16 +283,21 @@ class VtigerClient extends HttpClient
      */
     public function update($elementType, $element)
     {
-        $json = $this->post([
+        $element = $this->elementSanitizer->update($elementType, $element);
+        $validate = $this->elementValidator->update($elementType, $element);
+
+        if (empty($validate['success'])) {
+            return $validate;
+        }
+
+        return $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
-            ],
+            ]
         ]);
-
-        return $json;
     }
 
     /**

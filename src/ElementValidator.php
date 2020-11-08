@@ -58,10 +58,10 @@ class ElementValidator
     public function create($elementType, $element)
     {
         if (empty($element)) {
-            return Factory::createError('EMPTY_ELEMENT', 'Empty element in create');
+            return Response::error('EMPTY_ELEMENT', 'Empty element in create');
         }
 
-        return Factory::createSuccess();
+        return Response::success();
     }
 
     /**
@@ -83,7 +83,11 @@ class ElementValidator
      */
     public function update($elementType, $element)
     {
+        if (empty($element)) {
+            return Response::error('EMPTY_ELEMENT', 'Empty element in create');
+        }
 
+        return Response::success();
     }
 
     /**
