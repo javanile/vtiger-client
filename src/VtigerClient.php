@@ -83,14 +83,12 @@ class VtigerClient extends HttpClient
         $this->username = isset($args['username']) && $args['username'] ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) && $args['accessKey'] ? $args['accessKey'] : null;
 
-        $this->typesManager = new TypesManager($args);
-
-        $this->operationMapper = new OperationMapper($args);
-
-        $this->elementSanitizer = new ElementSanitizer($args);
-        $this->elementValidator = new ElementValidator($args);
-
         parent::__construct($args);
+
+        $this->typesManager = new TypesManager($args);
+        $this->operationMapper = new OperationMapper($args);
+        $this->elementSanitizer = new ElementSanitizer($args);
+        $this->elementValidator = new ElementValidator($args, $this->getLogger());
     }
 
     /**

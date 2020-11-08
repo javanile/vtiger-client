@@ -20,23 +20,18 @@ use GuzzleHttp\Exception\GuzzleException;
 class ElementValidator
 {
     /**
-     * @var Client
+     * @var Logger
      */
-    protected $client;
-
-    /**
-     * @var string
-     */
-    protected $endpoint;
+    protected $logger;
 
     /**
      * HttpClient constructor.
      *
      * @param $args
      */
-    public function __construct($args)
+    public function __construct($args, $logger)
     {
-
+        $this->logger = $logger;
     }
 
     /**

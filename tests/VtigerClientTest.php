@@ -71,9 +71,9 @@ final class VtigerClientTest extends TestCase
 
         $actual = $client->login();
 
-        if (empty($actual['result']['sessionName'])) {
-            var_dump($actual);
-        }
+        //if (empty($actual['result']['sessionName'])) {
+        //    var_dump($actual);
+        //}
 
         $expected['result']['sessionName'] = $actual['result']['sessionName'];
         $expected['result']['vtigerVersion'] = $actual['result']['vtigerVersion'];
@@ -201,7 +201,9 @@ final class VtigerClientTest extends TestCase
             'CompanyDetails',
             'PBXManager',
             'Users',
-            'ProductTaxes'
+            'ProductTaxes',
+            'LineItem',
+            'Calendar',
         ];
 
         foreach ($types as $type) {
@@ -216,6 +218,7 @@ final class VtigerClientTest extends TestCase
                 $newElement['id'] = $resultCreate['result']['id'];
                 $resultUpdate = $client->update($type, $newElement);
                 if (empty($resultUpdate['success'])) {
+                    var_dump($type);
                     var_dump($newElement);
                     var_dump($resultUpdate);
                 }

@@ -1,5 +1,8 @@
 #!make
 
+clean:
+	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-clinet.log
+
 install:
 	@docker-compose run --rm composer install
 
@@ -15,7 +18,7 @@ test-create:
 test-create-purchase-order:
 	@docker-compose run --rm phpunit tests --filter ::testCreatePurchaseOrder
 
-test-update-every-types:
+test-update-every-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
 
 test-stop-on-failure:
