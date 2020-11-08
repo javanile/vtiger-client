@@ -186,6 +186,36 @@ final class VtigerClientTest extends TestCase
         }
     }
 
+    public function testUpdateEveryTypes()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $createdElements = [];
+
+        $types = $client->getTypes();
+        $ignoredTypes = [
+            'ServiceContracts',
+            'Groups',
+            'DocumentFolders',
+            'CompanyDetails',
+            'PBXManager',
+            'Users',
+            'ProductTaxes'
+        ];
+
+        foreach ($types as $type) {
+            if (in_array($type, $ignoredTypes)) {
+                continue;
+            }
+            $result = $client->create($type, self::defaultValues($type, $createdElements));
+            $this->assertTrue($result['success']);
+            if (isset($result['success'])) {
+                $createdElements[$type] = $result['result'];
+            }
+        }
+    }
+
     public function testListUsers()
     {
         $client = new Client(self::$endpoint);
