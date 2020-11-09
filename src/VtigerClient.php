@@ -102,6 +102,7 @@ class VtigerClient extends HttpClient
     {
         if ($username !== null) {
             $this->username = $username;
+            $this->logger->setTag($this->username, $this->endpoint);
         }
 
         $json = $this->get([
@@ -136,6 +137,7 @@ class VtigerClient extends HttpClient
     {
         if ($username !== null) {
             $this->username = $username;
+            $this->logger->setTag($this->username, $this->endpoint);
         }
 
         if ($accessKey !== null) {
@@ -262,15 +264,13 @@ class VtigerClient extends HttpClient
      */
     public function retrieve($id)
     {
-        $json = $this->get([
+        return $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**

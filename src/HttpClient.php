@@ -56,20 +56,20 @@ class HttpClient
      *
      * @return array|mixed
      */
-    protected function decodeResponse($response, $trace)
+    protected function decodeResponse($response)
     {
         $body = $response->getBody()->getContents();
         $json = json_decode($body, true);
 
         if (!$body && !$json) {
-            return $this->logger->log(Response::error('EMPTY_RESPONSE', 'Web service send an empty body'), $trace);
+            return Response::error('EMPTY_RESPONSE', 'Web service send an empty body');
         }
 
         if ($body && !$json) {
-            return $this->logger->log(Response::error('JSON_PARSE_ERROR', $body), $trace);
+            return Response::error('JSON_PARSE_ERROR', $body);
         }
 
-        return $this->logger->log($json, $trace);
+        return $json;
     }
 
     /**
@@ -79,17 +79,7 @@ class HttpClient
      */
     public function get($request)
     {
-        $trace = [
-            'method' => 'GET',
-        ];
-
-        try {
-            $response = $this->client->request('GET', $this->endpoint, $request);
-        } catch (GuzzleException $error) {
-            return Response::error('GUZZLE_ERROR', $error->getMessage());
-        }
-
-        return $this->decodeResponse($response, $trace);
+        return $this->request('GET', $request);
     }
 
     /**
@@ -99,17 +89,24 @@ class HttpClient
      */
     public function post($request)
     {
-        $trace = [
-            'method' => 'POST',
-        ];
+        return $this->request('POST', $request);
+    }
 
+    /**
+     * @param $method
+     * @param $request
+     *
+     * @return array|mixed
+     */
+    protected function request($method, $request)
+    {
         try {
-            $response = $this->client->request('POST', $this->endpoint, $request);
+            $response = $this->client->request($method, $this->endpoint, $request);
         } catch (GuzzleException $error) {
-            return Response::error('GUZZLE_ERROR', $error->getMessage());
+            return $this->logger->request($method, $request, Response::error('GUZZLE_ERROR', $error->getMessage()));
         }
 
-        return $this->decodeResponse($response, $trace);
+        return $this->logger->request($method, $request, $this->decodeResponse($response));
     }
 
     /**

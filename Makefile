@@ -1,7 +1,7 @@
 #!make
 
 clean:
-	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-clinet.log
+	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-client.log
 
 install:
 	@docker-compose run --rm composer install
