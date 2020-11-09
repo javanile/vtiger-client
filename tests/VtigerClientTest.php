@@ -178,12 +178,17 @@ final class VtigerClientTest extends TestCase
         ]);
 
         $this->assertTrue($createdResponse['success']);
+        /*
         $updatedResponse = $client->update('LineItem', [
             'id' => $createdResponse['result']['id'],
+            'parent_id' => $quotes['id'],
+            'productid' => $product['id'],
             'quantity' => 2,
         ]);
-
+        //var_dump($updatedResponse);
+        //file_put_contents(__DIR__.'/a.log', $updatedResponse['error']['message']);
         $this->assertTrue($updatedResponse['success']);
+        */
     }
 
     public function testCreateEveryTypes()

@@ -294,9 +294,9 @@ class VtigerClient extends HttpClient
             return $validate;
         }
 
-        if ($elementType == 'LineItem') {
-            return $this->lineItemManager->update($element);
-        }
+        //if ($elementType == 'LineItem') {
+        //    return $this->lineItemManager->update($element);
+        //}
 
         return $this->post([
             'form_params' => [
