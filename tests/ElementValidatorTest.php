@@ -3,6 +3,7 @@
 namespace Javanile\VtigerClient\Tests;
 
 use Javanile\VtigerClient\ElementValidator;
+use Javanile\VtigerClient\Logger;
 use Javanile\VtigerClient\VtigerClient as Client;
 
 final class ElementValidatorTest extends TestCase
@@ -17,7 +18,7 @@ final class ElementValidatorTest extends TestCase
             ]
         ];
 
-        $elementValidator = new ElementValidator([]);
+        $elementValidator = new ElementValidator([], new Logger(['endpoint' => 'fake']));
         $actual = $elementValidator->create('Faq', []);
 
         $this->assertEquals($expected, $actual);

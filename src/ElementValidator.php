@@ -41,7 +41,7 @@ class ElementValidator
      */
     public function describe($elementType)
     {
-        return Factory::createSuccess();
+        return Response::success();
     }
 
     /**
