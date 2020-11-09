@@ -141,6 +141,10 @@ class ElementSanitizer
      */
     public function update($elementType, $element)
     {
+        $element = $this->sanitizeEmptyElement($element);
+        $element = $this->sanitizeAssignedUserId($element);
+        $element = $this->sanitizeInventoryElement($elementType, $element);
+
         return $element;
     }
 

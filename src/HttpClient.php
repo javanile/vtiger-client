@@ -30,6 +30,11 @@ class HttpClient
     protected $endpoint;
 
     /**
+     * @var string
+     */
+    protected $logger;
+
+    /**
      * HttpClient constructor.
      *
      * @param $args
@@ -39,12 +44,15 @@ class HttpClient
         $this->endpoint = $args['endpoint'].'/webservice.php';
 
         $this->client = new Client();
+
+        $this->logger = new Logger($args);
     }
 
     /**
      * Decode webservice response to JSON.
      *
      * @param $response
+     * @param $trace
      *
      * @return array|mixed
      */
@@ -54,23 +62,11 @@ class HttpClient
         $json = json_decode($body, true);
 
         if (!$body && !$json) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'EMPTY_RESPONSE',
-                    'message' => 'Web service send an empty body',
-                ],
-            ];
+            return Response::error('EMPTY_RESPONSE', 'Web service send an empty body');
         }
 
         if ($body && !$json) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'JSON_PARSE_ERROR',
-                    'message' => $body,
-                ],
-            ];
+            return Response::error('JSON_PARSE_ERROR', $body);
         }
 
         return $json;
@@ -83,19 +79,7 @@ class HttpClient
      */
     public function get($request)
     {
-        try {
-            $response = $this->client->request('GET', $this->endpoint, $request);
-        } catch (GuzzleException $error) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'GUZZLE_ERROR',
-                    'message' => $error->getMessage(),
-                ],
-            ];
-        }
-
-        return $this->decodeResponse($response);
+        return $this->request('GET', $request);
     }
 
     /**
@@ -105,18 +89,31 @@ class HttpClient
      */
     public function post($request)
     {
+        return $this->request('POST', $request);
+    }
+
+    /**
+     * @param $method
+     * @param $request
+     *
+     * @return array|mixed
+     */
+    protected function request($method, $request)
+    {
         try {
-            $response = $this->client->request('POST', $this->endpoint, $request);
+            $response = $this->client->request($method, $this->endpoint, $request);
         } catch (GuzzleException $error) {
-            return [
-                'success' => false,
-                'error'   => [
-                    'code'    => 'GUZZLE_ERROR',
-                    'message' => $error->getMessage(),
-                ],
-            ];
+            return $this->logger->request($method, $request, Response::error('GUZZLE_ERROR', $error->getMessage()));
         }
 
-        return $this->decodeResponse($response);
+        return $this->logger->request($method, $request, $this->decodeResponse($response));
+    }
+
+    /**
+     *
+     */
+    public function getLogger()
+    {
+        return $this->logger;
     }
 }

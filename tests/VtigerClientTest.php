@@ -71,9 +71,9 @@ final class VtigerClientTest extends TestCase
 
         $actual = $client->login();
 
-        if (empty($actual['result']['sessionName'])) {
-            var_dump($actual);
-        }
+        //if (empty($actual['result']['sessionName'])) {
+        //    var_dump($actual);
+        //}
 
         $expected['result']['sessionName'] = $actual['result']['sessionName'];
         $expected['result']['vtigerVersion'] = $actual['result']['vtigerVersion'];
@@ -201,17 +201,28 @@ final class VtigerClientTest extends TestCase
             'CompanyDetails',
             'PBXManager',
             'Users',
-            'ProductTaxes'
+            'ProductTaxes',
+            'LineItem',
+            'Calendar',
         ];
 
         foreach ($types as $type) {
             if (in_array($type, $ignoredTypes)) {
                 continue;
             }
-            $result = $client->create($type, self::defaultValues($type, $createdElements));
-            $this->assertTrue($result['success']);
-            if (isset($result['success'])) {
-                $createdElements[$type] = $result['result'];
+            $newElement = self::defaultValues($type, $createdElements);
+            $resultCreate = $client->create($type, $newElement);
+            $this->assertTrue($resultCreate['success']);
+            if (isset($resultCreate['success'])) {
+                $createdElements[$type] = $resultCreate['result'];
+                $newElement['id'] = $resultCreate['result']['id'];
+                $resultUpdate = $client->update($type, $newElement);
+                if (empty($resultUpdate['success'])) {
+                    var_dump($type);
+                    var_dump($newElement);
+                    var_dump($resultUpdate);
+                }
+                $this->assertTrue($resultUpdate['success']);
             }
         }
     }
