@@ -83,14 +83,12 @@ class VtigerClient extends HttpClient
         $this->username = isset($args['username']) && $args['username'] ? $args['username'] : null;
         $this->accessKey = isset($args['accessKey']) && $args['accessKey'] ? $args['accessKey'] : null;
 
-        $this->typesManager = new TypesManager($args);
-
-        $this->operationMapper = new OperationMapper($args);
-
-        $this->elementSanitizer = new ElementSanitizer($args);
-        $this->elementValidator = new ElementValidator($args);
-
         parent::__construct($args);
+
+        $this->typesManager = new TypesManager($args);
+        $this->operationMapper = new OperationMapper($args);
+        $this->elementSanitizer = new ElementSanitizer($args);
+        $this->elementValidator = new ElementValidator($args, $this->getLogger());
     }
 
     /**
@@ -104,6 +102,7 @@ class VtigerClient extends HttpClient
     {
         if ($username !== null) {
             $this->username = $username;
+            $this->logger->setTag($this->username, $this->endpoint);
         }
 
         $json = $this->get([
@@ -138,6 +137,7 @@ class VtigerClient extends HttpClient
     {
         if ($username !== null) {
             $this->username = $username;
+            $this->logger->setTag($this->username, $this->endpoint);
         }
 
         if ($accessKey !== null) {
@@ -239,18 +239,17 @@ class VtigerClient extends HttpClient
      */
     public function create($elementType, $element)
     {
-        $sanitizedElement = $this->elementSanitizer->create($elementType, $element);
+        $element = $this->elementSanitizer->create($elementType, $element);
+        $validate = $this->elementValidator->create($elementType, $element);
 
-        $validate = $this->elementValidator->create($elementType, $sanitizedElement);
-
-        if (!$validate['success']) {
+        if (empty($validate['success'])) {
             return $validate;
         }
 
         return $this->post([
             'form_params' => [
                 'operation'   => $this->operationMapper->get('create'),
-                'element'     => json_encode($sanitizedElement),
+                'element'     => json_encode($element),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
@@ -265,15 +264,13 @@ class VtigerClient extends HttpClient
      */
     public function retrieve($id)
     {
-        $json = $this->get([
+        return $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
@@ -284,16 +281,21 @@ class VtigerClient extends HttpClient
      */
     public function update($elementType, $element)
     {
-        $json = $this->post([
+        $element = $this->elementSanitizer->update($elementType, $element);
+        $validate = $this->elementValidator->update($elementType, $element);
+
+        if (empty($validate['success'])) {
+            return $validate;
+        }
+
+        return $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
-            ],
+            ]
         ]);
-
-        return $json;
     }
 
     /**
