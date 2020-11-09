@@ -70,6 +70,11 @@ class VtigerClient extends HttpClient
     protected $elementValidator;
 
     /**
+     *
+     */
+    protected $lineItemManager;
+
+    /**
      * Constructor.
      *
      * @param mixed $args
@@ -89,6 +94,7 @@ class VtigerClient extends HttpClient
         $this->operationMapper = new OperationMapper($args);
         $this->elementSanitizer = new ElementSanitizer($args);
         $this->elementValidator = new ElementValidator($args, $this->getLogger());
+        $this->lineItemManager = new LineItemManager($this);
     }
 
     /**
@@ -286,6 +292,10 @@ class VtigerClient extends HttpClient
 
         if (empty($validate['success'])) {
             return $validate;
+        }
+
+        if ($elementType == 'LineItem') {
+            return $this->lineItemManager->update($element);
         }
 
         return $this->post([

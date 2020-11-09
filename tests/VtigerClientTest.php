@@ -156,6 +156,36 @@ final class VtigerClientTest extends TestCase
         $this->assertTrue($purchaseOrderResponse['success']);
     }
 
+    public function testCreateAndUpdateLineItem()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+        $account = $client->create('Accounts', ['accountname' => 'Test Account #'.time()])['result'];
+        $product = $client->create('Products', ['productname' => 'Test Product', 'discontinued' => 1])['result'];
+        $quotes = $client->create('Quotes', [
+            'subject' => 'Test Quote',
+            'quotestage' => 'New',
+            'account_id' => $account['id'],
+            'bill_street' => 'test',
+            'ship_street' => 'test',
+            'productid' => $product['id'],
+        ])['result'];
+
+        $createdResponse = $client->create('LineItem', [
+            'parent_id' => $quotes['id'],
+            'productid' => $product['id'],
+            'quantity' => 1,
+        ]);
+
+        $this->assertTrue($createdResponse['success']);
+        $updatedResponse = $client->update('LineItem', [
+            'id' => $createdResponse['result']['id'],
+            'quantity' => 2,
+        ]);
+
+        $this->assertTrue($updatedResponse['success']);
+    }
+
     public function testCreateEveryTypes()
     {
         $client = new Client(self::$endpoint);
@@ -221,6 +251,7 @@ final class VtigerClientTest extends TestCase
                     var_dump($type);
                     var_dump($newElement);
                     var_dump($resultUpdate);
+                    file_put_contents(__DIR__.'/log.log', $resultUpdate['error']['message']);
                 }
                 $this->assertTrue($resultUpdate['success']);
             }

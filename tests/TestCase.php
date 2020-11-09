@@ -57,10 +57,6 @@ class TestCase extends PHPUnitTestCase
                     'bill_street' => 'test',
                     'ship_street' => 'test',
                     'productid' => $createdElements['Products']['id'],
-
-                    'LineItems' => [
-                        []
-                    ],
                 ];
             case 'SMSNotifier':
                 return [
