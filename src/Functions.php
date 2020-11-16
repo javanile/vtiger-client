@@ -29,6 +29,29 @@ class Functions
     }
 
     /**
+     * @param $id
+     *
+     * @return string|null
+     */
+    public static function isElementId($id)
+    {
+        return preg_match('/[0-9]+x[0-9]+/', $id);
+    }
+
+    /**
+     * @param $id
+     *
+     * @return string|null
+     */
+    public static function getTypeIdPrefix($id)
+    {
+        $id = explode('x', trim($id));
+        $id = trim($id[0]);
+
+        return $id ? $id : null;
+    }
+
+    /**
      * @param $user_password
      * @param $user_name
      * @param string $crypt_type

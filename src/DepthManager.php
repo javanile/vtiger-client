@@ -101,21 +101,50 @@ class DepthManager
     }
 
     /**
-     * @param $crmid
      * @param mixed $id
+     * @param $maxDepth
      *
      * @return mixed
      */
     public function retrieve($id, $maxDepth)
     {
-        $response = $this->client->retrieve($id);
-        $types = $this->client->getTypes();
+        $retrieve = $this->client->retrieve($id);
 
-        for ($depth = 0; $depth < $maxDepth; $depth++) {
-
+        $type = $this->client->getTypeByElementId($id);
+        if (empty($type)) {
+            return $retrieve;
         }
 
-        return $response;
+        $describe = $this->client->describe($type, $maxDepth);
+        //var_dump($describe);
+        file_put_contents(__DIR__.'/i.json', json_encode($describe, JSON_PRETTY_PRINT));
+        //die();
+        if (empty($describe['result']['fields'])) {
+            return $retrieve;
+        }
+
+        $relatedElements = [];
+        foreach ($describe['result']['fields'] as $field) {
+            if (empty($field['type']['refersTo']) || empty($field['depth'])) {
+                continue;
+            }
+            if (empty($retrieve['result'][$field['name']])) {
+                continue;
+            }
+            $value = $retrieve['result'][$field['name']];
+            if (empty($relatedElements[$value])) {
+                $relatedElements[$value] = $this->client->retrieve($value);
+            }
+            if (empty($relatedElements[$value]['result'])) {
+                continue;
+            }
+            foreach ($relatedElements[$value]['result'] as $relatedField => $relatedValue) {
+                echo $field['name'].'__'.$relatedField."\n";
+                $retrieve['result'][$field['name'].'__'.$relatedField] = $relatedValue;
+            }
+        }
+
+        return $retrieve;
     }
 
     /**

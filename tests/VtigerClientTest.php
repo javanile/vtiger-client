@@ -286,11 +286,25 @@ final class VtigerClientTest extends TestCase
         $client = new Client(self::$endpoint);
         $client->login(self::$username, self::$accessKey);
 
-        $faq = $client->create('Faq', ['question' => 'Test', 'faq_answer' => 'Test', 'faqstatus' => 'New'])['result'];
-        $retrieveResult = $client->retrieve($faq['id'], 1);
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
 
-        var_dump($retrieveResult);
-        die();
+        $faq = $client->create('Faq', [
+            'question' => 'Test',
+            'faq_answer' => 'Test',
+            'faqstatus' => 'New',
+            'product_id' => $product['id'],
+        ])['result'];
+
+        for ($depth = 1; $depth < 3; $depth++) {
+            $stubFile = __DIR__.'/fixtures/retrieveFaqWithDepth'.$depth.'.json';
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->retrieve($faq['id'], $depth);
+            file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            $this->assertEquals($expected, $actual);
+        }
     }
 
     public function testListUsers()

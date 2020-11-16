@@ -47,11 +47,6 @@ class VtigerClient extends HttpClient
     /**
      * @var array
      */
-    protected $types;
-
-    /**
-     * @var array
-     */
     protected $typesManager;
 
     /**
@@ -193,22 +188,20 @@ class VtigerClient extends HttpClient
      */
     public function listTypes()
     {
-        $json = $this->get([
+        $response = $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('listtypes'),
                 'sessionName' => $this->sessionName,
             ],
         ]);
 
-        file_put_contents(__DIR__.'/listtypes.json', json_encode($json, JSON_PRETTY_PRINT));
+        file_put_contents(__DIR__.'/listtypes.json', json_encode($response, JSON_PRETTY_PRINT));
 
-        $this->types = isset($json['result']['types']) ? $json['result']['types'] : null;
-
-        if ($this->types) {
-            $this->types = $this->typesManager->sort($this->types);
+        if ($response['success']) {
+            $this->typesManager->setTypes($response['result']);
         }
 
-        return $json;
+        return $response;
     }
 
     /**
@@ -216,11 +209,23 @@ class VtigerClient extends HttpClient
      */
     public function getTypes()
     {
-        if (null === $this->types) {
+        if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
         }
 
-        return $this->types;
+        return $this->typesManager->getTypes();
+    }
+
+    /**
+     * Get list name of types.
+     */
+    public function getTypeByElementId($id)
+    {
+        if (!$this->typesManager->hasTypes()) {
+            $this->listTypes();
+        }
+
+        return $this->typesManager->getTypeByElementId($id);
     }
 
     /**
