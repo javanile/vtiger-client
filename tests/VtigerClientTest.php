@@ -108,6 +108,22 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testDescribeWithDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $stubFile = __DIR__.'/fixtures/describeFaqWithDepth1.json';
+        $expected = json_decode(file_get_contents($stubFile), true);
+
+        $actual = $client->describe('Faq', 1);
+        //var_dump($actual);
+        file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+
+        die();
+        $this->assertEquals($expected, $actual);
+    }
+
     public function testCreate()
     {
         $client = new Client(self::$endpoint);

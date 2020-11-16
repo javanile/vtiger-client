@@ -75,6 +75,11 @@ class VtigerClient extends HttpClient
     protected $lineItemManager;
 
     /**
+     *
+     */
+    protected $depthManager;
+
+    /**
      * Constructor.
      *
      * @param mixed $args
@@ -95,6 +100,7 @@ class VtigerClient extends HttpClient
         $this->elementSanitizer = new ElementSanitizer($args);
         $this->elementValidator = new ElementValidator($args, $this->getLogger());
         $this->lineItemManager = new LineItemManager($this);
+        $this->depthManager = new DepthManager($this);
     }
 
     /**
@@ -132,7 +138,7 @@ class VtigerClient extends HttpClient
     }
 
     /**
-     * Performi login action.
+     * Perform login action.
      *
      * @param null|mixed $username
      * @param null|mixed $accessKey
@@ -216,16 +222,23 @@ class VtigerClient extends HttpClient
     }
 
     /**
+     * Describe an element type structure.
+     *
      * @param $elementType
+     * @param int $depth
      *
      * @return array|mixed
      */
-    public function describe($elementType)
+    public function describe($elementType, $depth = 0)
     {
         $validate = $this->elementValidator->describe($elementType);
 
         if (!$validate['success']) {
             return $validate;
+        }
+
+        if ($depth > 0) {
+            return $this->depthManager->describe($elementType, $depth);
         }
 
         return $this->get([
@@ -263,13 +276,19 @@ class VtigerClient extends HttpClient
     }
 
     /**
-     * @param $crmid
+     * Retrieve
+     *
      * @param mixed $id
+     * @param int $depth
      *
      * @return mixed
      */
-    public function retrieve($id)
+    public function retrieve($id, $depth = 0)
     {
+        if ($depth > 0) {
+            return $this->depthManager->retrieve($id, $depth);
+        }
+
         return $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('retrieve'),
@@ -378,8 +397,7 @@ class VtigerClient extends HttpClient
             ];
         }
 
-
-        $json = $this->get([
+        return $this->get([
             'query' => [
                 'operation'     => $this->operationMapper->get('sync'),
                 'elementType'   => $elementType,
@@ -388,11 +406,11 @@ class VtigerClient extends HttpClient
                 'sessionName'   => $this->sessionName,
             ],
         ]);
-
-        return $json;
     }
 
     /**
+     * Upload file as Document.
+     *
      * @param $element
      *
      * @return mixed
@@ -401,7 +419,7 @@ class VtigerClient extends HttpClient
     {
         $file = $element['filename'];
 
-        $json = $this->post([
+        return $this->post([
             'multipart' => [
                 ['name' => 'operation', 'contents' => 'create'],
                 ['name' => 'elementType', 'contents' => 'Documents'],
@@ -410,8 +428,6 @@ class VtigerClient extends HttpClient
                 ['name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
             ]
         ]);
-
-        return $json;
     }
 
     /**
@@ -419,9 +435,7 @@ class VtigerClient extends HttpClient
      */
     public function listUsers()
     {
-        $json = $this->query('SELECT * FROM Users;');
-
-        return $json;
+        return $this->query('SELECT * FROM Users;');
     }
 
     /**
