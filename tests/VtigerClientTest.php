@@ -115,12 +115,14 @@ final class VtigerClientTest extends TestCase
 
         $stubFile = __DIR__.'/fixtures/describeFaqWithDepth1.json';
         $expected = json_decode(file_get_contents($stubFile), true);
-
         $actual = $client->describe('Faq', 1);
-        //var_dump($actual);
-        file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+        //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+        $this->assertEquals($expected, $actual);
 
-        die();
+        $stubFile = __DIR__.'/fixtures/describeFaqWithDepth2.json';
+        $expected = json_decode(file_get_contents($stubFile), true);
+        $actual = $client->describe('Faq', 2);
+        //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
         $this->assertEquals($expected, $actual);
     }
 
@@ -277,6 +279,18 @@ final class VtigerClientTest extends TestCase
                 $this->assertTrue($resultUpdate['success']);
             }
         }
+    }
+
+    public function testRetrieveWithDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $faq = $client->create('Faq', ['question' => 'Test', 'faq_answer' => 'Test', 'faqstatus' => 'New'])['result'];
+        $retrieveResult = $client->retrieve($faq['id'], 1);
+
+        var_dump($retrieveResult);
+        die();
     }
 
     public function testListUsers()

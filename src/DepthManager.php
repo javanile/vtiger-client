@@ -57,7 +57,10 @@ class DepthManager
     }
 
     /**
+     * @param $fields
+     * @param int $depth
      *
+     * @return mixed
      */
     private function getFieldsByDepth($fields, $depth = 0)
     {
@@ -106,6 +109,7 @@ class DepthManager
     public function retrieve($id, $maxDepth)
     {
         $response = $this->client->retrieve($id);
+        $types = $this->client->getTypes();
 
         for ($depth = 0; $depth < $maxDepth; $depth++) {
 

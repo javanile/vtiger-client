@@ -30,5 +30,8 @@ test-update-every-types: clean
 test-describe-with-depth: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribeWithDepth
 
+test-retrieve-with-depth: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testRetrieveWithDepth
+
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure
