@@ -70,6 +70,9 @@ class DepthManager
 
         $relatedFields = [];
         foreach ($fields as $index => $field) {
+            if ($field['type']['name'] == 'owner') {
+                $fields[$index]['type']['refersTo'] = ['Users'];
+            }
             if (empty($field['type']['refersTo']) || isset($field['depth'])) {
                 continue;
             }

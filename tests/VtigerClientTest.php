@@ -100,12 +100,13 @@ final class VtigerClientTest extends TestCase
         $client = new Client(self::$endpoint);
         $client->login(self::$username, self::$accessKey);
 
-        $expected = json_decode(file_get_contents(__DIR__.'/fixtures/describeFaq.json'), true);
-
-        $actual = $client->describe('Faq');
-        #file_put_contents(__DIR__.'/fixtures/describeFaq.json', json_encode($actual, JSON_PRETTY_PRINT));
-
-        $this->assertEquals($expected, $actual);
+        foreach (['Accounts', 'Faq'] as $type) {
+            $stubFile = __DIR__.'/fixtures/describe'.$type.'.json';
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->describe($type);
+            file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            $this->assertEquals($expected, $actual);
+        }
     }
 
     public function testDescribeWithDepth()
@@ -117,7 +118,7 @@ final class VtigerClientTest extends TestCase
             $stubFile = __DIR__.'/fixtures/describeFaqWithDepth'.$depth.'.json';
             $expected = json_decode(file_get_contents($stubFile), true);
             $actual = $client->describe('Faq', $depth);
-            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
             $this->assertEquals($expected, $actual);
         }
     }

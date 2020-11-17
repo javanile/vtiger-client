@@ -27,6 +27,9 @@ test-create-every-types: clean
 test-update-every-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
 
+test-describe: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribe
+
 test-describe-with-depth: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribeWithDepth
 

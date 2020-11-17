@@ -674,12 +674,16 @@
                 "label": "Handler",
                 "mandatory": true,
                 "type": {
-                    "name": "owner"
+                    "name": "owner",
+                    "refersTo": [
+                        "Users"
+                    ]
                 },
                 "isunique": false,
                 "nullable": false,
                 "editable": true,
-                "default": ""
+                "default": "",
+                "depth": 1
             },
             {
                 "name": "product_id__qtyindemand",
@@ -877,6 +881,50 @@
             },
             {
                 "name": "product_id__tax10",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax11",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax12",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax13",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax14",
                 "label": "",
                 "type": {
                     "name": "double"
@@ -2724,7 +2772,10 @@
                 "label": "Assigned To",
                 "mandatory": true,
                 "type": {
-                    "name": "owner"
+                    "name": "owner",
+                    "refersTo": [
+                        "Users"
+                    ]
                 },
                 "isunique": false,
                 "nullable": false,
@@ -6010,6 +6061,1579 @@
                 "nullable": false,
                 "editable": true,
                 "default": "0"
+            },
+            {
+                "name": "product_id__assigned_user_id__user_name",
+                "label": "User Name",
+                "mandatory": true,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__is_admin",
+                "label": "Admin",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__user_password",
+                "label": "Password",
+                "mandatory": true,
+                "type": {
+                    "name": "password"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__confirm_password",
+                "label": "Confirm Password",
+                "mandatory": true,
+                "type": {
+                    "name": "password"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__first_name",
+                "label": "First Name",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__last_name",
+                "label": "Last Name",
+                "mandatory": true,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__roleid",
+                "label": "Role",
+                "mandatory": true,
+                "type": {
+                    "refersTo": [],
+                    "name": "reference"
+                },
+                "isunique": false,
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__email1",
+                "label": "Primary Email",
+                "mandatory": true,
+                "type": {
+                    "name": "email"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__status",
+                "label": "Status",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Active"
+            },
+            {
+                "name": "product_id__assigned_user_id__activity_view",
+                "label": "Default MyCalendar View",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Today",
+                            "value": "Today"
+                        },
+                        {
+                            "label": "This Week",
+                            "value": "This Week"
+                        },
+                        {
+                            "label": "This Month",
+                            "value": "This Month"
+                        },
+                        {
+                            "label": "This Year",
+                            "value": "This Year"
+                        },
+                        {
+                            "label": "Agenda",
+                            "value": "Agenda"
+                        }
+                    ],
+                    "defaultValue": "Today",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__lead_view",
+                "label": "Default Lead View",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Today",
+                            "value": "Today"
+                        },
+                        {
+                            "label": "Last 2 Days",
+                            "value": "Last 2 Days"
+                        },
+                        {
+                            "label": "Last Week",
+                            "value": "Last Week"
+                        }
+                    ],
+                    "defaultValue": "Today",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__hour_format",
+                "label": "Calendar Hour Format",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "12",
+                            "value": "12"
+                        },
+                        {
+                            "label": "24",
+                            "value": "24"
+                        }
+                    ],
+                    "defaultValue": "12",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "12"
+            },
+            {
+                "name": "product_id__assigned_user_id__end_hour",
+                "label": "Day ends at",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__start_hour",
+                "label": "Day starts at",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "00:00",
+                            "value": "00:00"
+                        },
+                        {
+                            "label": "01:00",
+                            "value": "01:00"
+                        },
+                        {
+                            "label": "02:00",
+                            "value": "02:00"
+                        },
+                        {
+                            "label": "03:00",
+                            "value": "03:00"
+                        },
+                        {
+                            "label": "04:00",
+                            "value": "04:00"
+                        },
+                        {
+                            "label": "05:00",
+                            "value": "05:00"
+                        },
+                        {
+                            "label": "06:00",
+                            "value": "06:00"
+                        },
+                        {
+                            "label": "07:00",
+                            "value": "07:00"
+                        },
+                        {
+                            "label": "08:00",
+                            "value": "08:00"
+                        },
+                        {
+                            "label": "09:00",
+                            "value": "09:00"
+                        },
+                        {
+                            "label": "10:00",
+                            "value": "10:00"
+                        },
+                        {
+                            "label": "11:00",
+                            "value": "11:00"
+                        },
+                        {
+                            "label": "12:00",
+                            "value": "12:00"
+                        },
+                        {
+                            "label": "13:00",
+                            "value": "13:00"
+                        },
+                        {
+                            "label": "14:00",
+                            "value": "14:00"
+                        },
+                        {
+                            "label": "15:00",
+                            "value": "15:00"
+                        },
+                        {
+                            "label": "16:00",
+                            "value": "16:00"
+                        },
+                        {
+                            "label": "17:00",
+                            "value": "17:00"
+                        },
+                        {
+                            "label": "18:00",
+                            "value": "18:00"
+                        },
+                        {
+                            "label": "19:00",
+                            "value": "19:00"
+                        },
+                        {
+                            "label": "20:00",
+                            "value": "20:00"
+                        },
+                        {
+                            "label": "21:00",
+                            "value": "21:00"
+                        },
+                        {
+                            "label": "22:00",
+                            "value": "22:00"
+                        },
+                        {
+                            "label": "23:00",
+                            "value": "23:00"
+                        }
+                    ],
+                    "defaultValue": "00:00",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__is_owner",
+                "label": "Account Owner",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "0"
+            },
+            {
+                "name": "product_id__assigned_user_id__title",
+                "label": "Title",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_work",
+                "label": "Office Phone",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__department",
+                "label": "Department",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_mobile",
+                "label": "Mobile Phone",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__reports_to_id",
+                "label": "Reports To",
+                "mandatory": false,
+                "type": {
+                    "refersTo": [
+                        "Users"
+                    ],
+                    "name": "reference"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_other",
+                "label": "Secondary Phone",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__email2",
+                "label": "Other Email",
+                "mandatory": false,
+                "type": {
+                    "name": "email"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_fax",
+                "label": "Fax",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__secondaryemail",
+                "label": "Secondary Email",
+                "mandatory": false,
+                "type": {
+                    "name": "email"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_home",
+                "label": "Home Phone",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__date_format",
+                "label": "Date Format",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "dd-mm-yyyy",
+                            "value": "dd-mm-yyyy"
+                        },
+                        {
+                            "label": "mm-dd-yyyy",
+                            "value": "mm-dd-yyyy"
+                        },
+                        {
+                            "label": "yyyy-mm-dd",
+                            "value": "yyyy-mm-dd"
+                        }
+                    ],
+                    "defaultValue": "dd-mm-yyyy",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__signature",
+                "label": "Signature",
+                "mandatory": false,
+                "type": {
+                    "name": "text"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__description",
+                "label": "Documents",
+                "mandatory": false,
+                "type": {
+                    "name": "text"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__address_street",
+                "label": "Street Address",
+                "mandatory": false,
+                "type": {
+                    "name": "text"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__address_city",
+                "label": "City",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__address_state",
+                "label": "State",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__address_postalcode",
+                "label": "Postal Code",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__address_country",
+                "label": "Country",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__accesskey",
+                "label": "Access Key",
+                "mandatory": false,
+                "type": {
+                    "name": "autogenerated"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": false,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__time_zone",
+                "label": "Time Zone",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "(UTC-11:00) Coordinated Universal Time-11",
+                            "value": "Pacific\/Midway"
+                        },
+                        {
+                            "label": "(UTC-11:00) Samoa",
+                            "value": "Pacific\/Samoa"
+                        },
+                        {
+                            "label": "(UTC-10:00) Hawaii",
+                            "value": "Pacific\/Honolulu"
+                        },
+                        {
+                            "label": "(UTC-09:00) Alaska",
+                            "value": "America\/Anchorage"
+                        },
+                        {
+                            "label": "(UTC-08:00) Pacific Time (US &amp; Canada)",
+                            "value": "America\/Los_Angeles"
+                        },
+                        {
+                            "label": "(UTC-08:00) Tijuana, Baja California",
+                            "value": "America\/Tijuana"
+                        },
+                        {
+                            "label": "(UTC-07:00) Mountain Time (US &amp; Canada)",
+                            "value": "America\/Denver"
+                        },
+                        {
+                            "label": "(UTC-07:00) Chihuahua, La Paz, Mazatlan",
+                            "value": "America\/Chihuahua"
+                        },
+                        {
+                            "label": "(UTC-07:00) Mazatlan",
+                            "value": "America\/Mazatlan"
+                        },
+                        {
+                            "label": "(UTC-07:00) Arizona",
+                            "value": "America\/Phoenix"
+                        },
+                        {
+                            "label": "(UTC-06:00) Saskatchewan",
+                            "value": "America\/Regina"
+                        },
+                        {
+                            "label": "(UTC-06:00) Central America",
+                            "value": "America\/Tegucigalpa"
+                        },
+                        {
+                            "label": "(UTC-06:00) Central Time (US &amp; Canada)",
+                            "value": "America\/Chicago"
+                        },
+                        {
+                            "label": "(UTC-06:00) Mexico City",
+                            "value": "America\/Mexico_City"
+                        },
+                        {
+                            "label": "(UTC-06:00) Monterrey",
+                            "value": "America\/Monterrey"
+                        },
+                        {
+                            "label": "(UTC-05:00) Eastern Time (US &amp; Canada)",
+                            "value": "America\/New_York"
+                        },
+                        {
+                            "label": "(UTC-05:00) Bogota, Lima, Quito",
+                            "value": "America\/Bogota"
+                        },
+                        {
+                            "label": "(UTC-05:00) Lima",
+                            "value": "America\/Lima"
+                        },
+                        {
+                            "label": "(UTC-05:00) Rio Branco",
+                            "value": "America\/Rio_Branco"
+                        },
+                        {
+                            "label": "(UTC-05:00) Indiana (East)",
+                            "value": "America\/Indiana\/Indianapolis"
+                        },
+                        {
+                            "label": "(UTC-04:30) Caracas",
+                            "value": "America\/Caracas"
+                        },
+                        {
+                            "label": "(UTC-04:00) Atlantic Time (Canada)",
+                            "value": "America\/Halifax"
+                        },
+                        {
+                            "label": "(UTC-04:00) Manaus",
+                            "value": "America\/Manaus"
+                        },
+                        {
+                            "label": "(UTC-04:00) Santiago",
+                            "value": "America\/Santiago"
+                        },
+                        {
+                            "label": "(UTC-04:00) La Paz",
+                            "value": "America\/La_Paz"
+                        },
+                        {
+                            "label": "(UTC-04:00) Cuiaba",
+                            "value": "America\/Cuiaba"
+                        },
+                        {
+                            "label": "(UTC-04:00) Asuncion",
+                            "value": "America\/Asuncion"
+                        },
+                        {
+                            "label": "(UTC-03:30) Newfoundland",
+                            "value": "America\/St_Johns"
+                        },
+                        {
+                            "label": "(UTC-03:00) Buenos Aires",
+                            "value": "America\/Argentina\/Buenos_Aires"
+                        },
+                        {
+                            "label": "(UTC-03:00) Brasilia",
+                            "value": "America\/Sao_Paulo"
+                        },
+                        {
+                            "label": "(UTC-03:00) Greenland",
+                            "value": "America\/Godthab"
+                        },
+                        {
+                            "label": "(UTC-03:00) Montevideo",
+                            "value": "America\/Montevideo"
+                        },
+                        {
+                            "label": "(UTC-02:00) Mid-Atlantic",
+                            "value": "Atlantic\/South_Georgia"
+                        },
+                        {
+                            "label": "(UTC-01:00) Azores",
+                            "value": "Atlantic\/Azores"
+                        },
+                        {
+                            "label": "(UTC-01:00) Cape Verde Is.",
+                            "value": "Atlantic\/Cape_Verde"
+                        },
+                        {
+                            "label": "(UTC) London, Edinburgh, Dublin, Lisbon",
+                            "value": "Europe\/London"
+                        },
+                        {
+                            "label": "(UTC) Coordinated Universal Time, Greenwich Mean Time",
+                            "value": "UTC"
+                        },
+                        {
+                            "label": "(UTC) Monrovia, Reykjavik",
+                            "value": "Africa\/Monrovia"
+                        },
+                        {
+                            "label": "(UTC) Casablanca",
+                            "value": "Africa\/Casablanca"
+                        },
+                        {
+                            "label": "(UTC+01:00) Belgrade, Bratislava, Budapest, Ljubljana, Prague",
+                            "value": "Europe\/Belgrade"
+                        },
+                        {
+                            "label": "(UTC+01:00) Sarajevo, Skopje, Warsaw, Zagreb",
+                            "value": "Europe\/Sarajevo"
+                        },
+                        {
+                            "label": "(UTC+01:00) Brussels, Copenhagen, Madrid, Paris",
+                            "value": "Europe\/Brussels"
+                        },
+                        {
+                            "label": "(UTC+01:00) West Central Africa",
+                            "value": "Africa\/Algiers"
+                        },
+                        {
+                            "label": "(UTC+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+                            "value": "Europe\/Amsterdam"
+                        },
+                        {
+                            "label": "(UTC+02:00) Minsk",
+                            "value": "Europe\/Minsk"
+                        },
+                        {
+                            "label": "(UTC+02:00) Cairo",
+                            "value": "Africa\/Cairo"
+                        },
+                        {
+                            "label": "(UTC+02:00) Helsinki, Riga, Sofia, Tallinn, Vilnius",
+                            "value": "Europe\/Helsinki"
+                        },
+                        {
+                            "label": "(UTC+02:00) Athens, Bucharest",
+                            "value": "Europe\/Athens"
+                        },
+                        {
+                            "label": "(UTC+02:00) Istanbul",
+                            "value": "Europe\/Istanbul"
+                        },
+                        {
+                            "label": "(UTC+02:00) Jerusalem",
+                            "value": "Asia\/Jerusalem"
+                        },
+                        {
+                            "label": "(UTC+02:00) Amman",
+                            "value": "Asia\/Amman"
+                        },
+                        {
+                            "label": "(UTC+02:00) Beirut",
+                            "value": "Asia\/Beirut"
+                        },
+                        {
+                            "label": "(UTC+02:00) Windhoek",
+                            "value": "Africa\/Windhoek"
+                        },
+                        {
+                            "label": "(UTC+02:00) Harare",
+                            "value": "Africa\/Harare"
+                        },
+                        {
+                            "label": "(UTC+03:00) Kuwait, Riyadh",
+                            "value": "Asia\/Kuwait"
+                        },
+                        {
+                            "label": "(UTC+03:00) Baghdad",
+                            "value": "Asia\/Baghdad"
+                        },
+                        {
+                            "label": "(UTC+03:00) Nairobi",
+                            "value": "Africa\/Nairobi"
+                        },
+                        {
+                            "label": "(UTC+03:30) Tehran",
+                            "value": "Asia\/Tehran"
+                        },
+                        {
+                            "label": "(UTC+04:00) Tbilisi",
+                            "value": "Asia\/Tbilisi"
+                        },
+                        {
+                            "label": "(UTC+03:00) Moscow, Volgograd",
+                            "value": "Europe\/Moscow"
+                        },
+                        {
+                            "label": "(UTC+04:00) Abu Dhabi, Muscat",
+                            "value": "Asia\/Muscat"
+                        },
+                        {
+                            "label": "(UTC+04:00) Baku",
+                            "value": "Asia\/Baku"
+                        },
+                        {
+                            "label": "(UTC+04:00) Yerevan",
+                            "value": "Asia\/Yerevan"
+                        },
+                        {
+                            "label": "(UTC+05:00) Islamabad, Karachi",
+                            "value": "Asia\/Karachi"
+                        },
+                        {
+                            "label": "(UTC+05:00) Tashkent",
+                            "value": "Asia\/Tashkent"
+                        },
+                        {
+                            "label": "(UTC+05:30) Chennai, Kolkata, Mumbai, New Delhi",
+                            "value": "Asia\/Kolkata"
+                        },
+                        {
+                            "label": "(UTC+05:30) Sri Jayawardenepura",
+                            "value": "Asia\/Colombo"
+                        },
+                        {
+                            "label": "(UTC+05:45) Kathmandu",
+                            "value": "Asia\/Katmandu"
+                        },
+                        {
+                            "label": "(UTC+06:00) Dhaka",
+                            "value": "Asia\/Dhaka"
+                        },
+                        {
+                            "label": "(UTC+06:00) Almaty",
+                            "value": "Asia\/Almaty"
+                        },
+                        {
+                            "label": "(UTC+06:00) Ekaterinburg",
+                            "value": "Asia\/Yekaterinburg"
+                        },
+                        {
+                            "label": "(UTC+06:30) Yangon (Rangoon)",
+                            "value": "Asia\/Rangoon"
+                        },
+                        {
+                            "label": "(UTC+07:00) Novosibirsk",
+                            "value": "Asia\/Novosibirsk"
+                        },
+                        {
+                            "label": "(UTC+07:00) Bangkok, Jakarta",
+                            "value": "Asia\/Bangkok"
+                        },
+                        {
+                            "label": "(UTC+08:00) Beijing, Chongqing, Hong Kong, Urumqi",
+                            "value": "Asia\/Brunei"
+                        },
+                        {
+                            "label": "(UTC+08:00) Krasnoyarsk",
+                            "value": "Asia\/Krasnoyarsk"
+                        },
+                        {
+                            "label": "(UTC+08:00) Ulaan Bataar",
+                            "value": "Asia\/Ulaanbaatar"
+                        },
+                        {
+                            "label": "(UTC+08:00) Kuala Lumpur, Singapore",
+                            "value": "Asia\/Kuala_Lumpur"
+                        },
+                        {
+                            "label": "(UTC+08:00) Taipei",
+                            "value": "Asia\/Taipei"
+                        },
+                        {
+                            "label": "(UTC+08:00) Perth",
+                            "value": "Australia\/Perth"
+                        },
+                        {
+                            "label": "(UTC+09:00) Irkutsk",
+                            "value": "Asia\/Irkutsk"
+                        },
+                        {
+                            "label": "(UTC+09:00) Seoul",
+                            "value": "Asia\/Seoul"
+                        },
+                        {
+                            "label": "(UTC+09:00) Tokyo",
+                            "value": "Asia\/Tokyo"
+                        },
+                        {
+                            "label": "(UTC+09:30) Darwin",
+                            "value": "Australia\/Darwin"
+                        },
+                        {
+                            "label": "(UTC+09:30) Adelaide",
+                            "value": "Australia\/Adelaide"
+                        },
+                        {
+                            "label": "(UTC+10:00) Canberra, Melbourne, Sydney",
+                            "value": "Australia\/Canberra"
+                        },
+                        {
+                            "label": "(UTC+10:00) Brisbane",
+                            "value": "Australia\/Brisbane"
+                        },
+                        {
+                            "label": "(UTC+10:00) Hobart",
+                            "value": "Australia\/Hobart"
+                        },
+                        {
+                            "label": "(UTC+10:00) Vladivostok",
+                            "value": "Asia\/Vladivostok"
+                        },
+                        {
+                            "label": "(UTC+10:00) Guam, Port Moresby",
+                            "value": "Pacific\/Guam"
+                        },
+                        {
+                            "label": "(UTC+10:00) Yakutsk",
+                            "value": "Asia\/Yakutsk"
+                        },
+                        {
+                            "label": "(UTC+12:00) Fiji",
+                            "value": "Pacific\/Fiji"
+                        },
+                        {
+                            "label": "(UTC+12:00) Kamchatka",
+                            "value": "Asia\/Kamchatka"
+                        },
+                        {
+                            "label": "(UTC+12:00) Auckland",
+                            "value": "Pacific\/Auckland"
+                        },
+                        {
+                            "label": "(UTC+12:00) Magadan",
+                            "value": "Asia\/Magadan"
+                        },
+                        {
+                            "label": "(UTC+13:00) Nukualofa",
+                            "value": "Pacific\/Tongatapu"
+                        },
+                        {
+                            "label": "(UTC+11:00) Solomon Is., New Caledonia",
+                            "value": "Etc\/GMT-11"
+                        }
+                    ],
+                    "defaultValue": "Pacific\/Midway",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__currency_id",
+                "label": "Currency",
+                "mandatory": false,
+                "type": {
+                    "refersTo": [
+                        "Currency"
+                    ],
+                    "name": "reference"
+                },
+                "isunique": false,
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__currency_grouping_pattern",
+                "label": "Digit Grouping Pattern",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "123,456,789",
+                            "value": "123,456,789"
+                        },
+                        {
+                            "label": "123456789",
+                            "value": "123456789"
+                        },
+                        {
+                            "label": "123456,789",
+                            "value": "123456,789"
+                        },
+                        {
+                            "label": "12,34,56,789",
+                            "value": "12,34,56,789"
+                        }
+                    ],
+                    "defaultValue": "123,456,789",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__currency_decimal_separator",
+                "label": "Decimal Separator",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": ".",
+                            "value": "."
+                        },
+                        {
+                            "label": ",",
+                            "value": ","
+                        },
+                        {
+                            "label": "'",
+                            "value": "'"
+                        },
+                        {
+                            "label": " ",
+                            "value": " "
+                        },
+                        {
+                            "label": "$",
+                            "value": "$"
+                        }
+                    ],
+                    "defaultValue": ".",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "."
+            },
+            {
+                "name": "product_id__assigned_user_id__currency_grouping_separator",
+                "label": "Digit Grouping Separator",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": ",",
+                            "value": ","
+                        },
+                        {
+                            "label": ".",
+                            "value": "."
+                        },
+                        {
+                            "label": "'",
+                            "value": "'"
+                        },
+                        {
+                            "label": " ",
+                            "value": " "
+                        },
+                        {
+                            "label": "$",
+                            "value": "$"
+                        }
+                    ],
+                    "defaultValue": ",",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ","
+            },
+            {
+                "name": "product_id__assigned_user_id__currency_symbol_placement",
+                "label": "Symbol Placement",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "$1.0",
+                            "value": "$1.0"
+                        },
+                        {
+                            "label": "1.0$",
+                            "value": "1.0$"
+                        }
+                    ],
+                    "defaultValue": "$1.0",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__imagename",
+                "label": "User Image",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__internal_mailer",
+                "label": "Internal Mail Composer",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "isunique": false,
+                "nullable": false,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__theme",
+                "label": "Theme",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "softed"
+            },
+            {
+                "name": "product_id__assigned_user_id__language",
+                "label": "Language",
+                "mandatory": false,
+                "type": {
+                    "name": "string"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "en_us"
+            },
+            {
+                "name": "product_id__assigned_user_id__reminder_interval",
+                "label": "Popup Reminder Interval",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "1 Minute",
+                            "value": "1 Minute"
+                        },
+                        {
+                            "label": "5 Minutes",
+                            "value": "5 Minutes"
+                        },
+                        {
+                            "label": "15 Minutes",
+                            "value": "15 Minutes"
+                        },
+                        {
+                            "label": "30 Minutes",
+                            "value": "30 Minutes"
+                        },
+                        {
+                            "label": "45 Minutes",
+                            "value": "45 Minutes"
+                        },
+                        {
+                            "label": "1 Hour",
+                            "value": "1 Hour"
+                        },
+                        {
+                            "label": "1 Day",
+                            "value": "1 Day"
+                        }
+                    ],
+                    "defaultValue": "1 Minute",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__phone_crm_extension",
+                "label": "CRM Phone Extension",
+                "mandatory": false,
+                "type": {
+                    "name": "phone"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": ""
+            },
+            {
+                "name": "product_id__assigned_user_id__no_of_currency_decimals",
+                "label": "Number Of Currency Decimals",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "2",
+                            "value": "2"
+                        },
+                        {
+                            "label": "3",
+                            "value": "3"
+                        },
+                        {
+                            "label": "4",
+                            "value": "4"
+                        },
+                        {
+                            "label": "5",
+                            "value": "5"
+                        },
+                        {
+                            "label": "0",
+                            "value": "0"
+                        },
+                        {
+                            "label": "1",
+                            "value": "1"
+                        }
+                    ],
+                    "defaultValue": "2",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "2"
+            },
+            {
+                "name": "product_id__assigned_user_id__truncate_trailing_zeros",
+                "label": "Truncate Trailing Zeros",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "0"
+            },
+            {
+                "name": "product_id__assigned_user_id__dayoftheweek",
+                "label": "Starting Day of the week",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Sunday",
+                            "value": "Sunday"
+                        },
+                        {
+                            "label": "Monday",
+                            "value": "Monday"
+                        },
+                        {
+                            "label": "Tuesday",
+                            "value": "Tuesday"
+                        },
+                        {
+                            "label": "Wednesday",
+                            "value": "Wednesday"
+                        },
+                        {
+                            "label": "Thursday",
+                            "value": "Thursday"
+                        },
+                        {
+                            "label": "Friday",
+                            "value": "Friday"
+                        },
+                        {
+                            "label": "Saturday",
+                            "value": "Saturday"
+                        }
+                    ],
+                    "defaultValue": "Sunday",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Monday"
+            },
+            {
+                "name": "product_id__assigned_user_id__callduration",
+                "label": "Default Call Duration (Mins)",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "5",
+                            "value": "5"
+                        },
+                        {
+                            "label": "10",
+                            "value": "10"
+                        },
+                        {
+                            "label": "30",
+                            "value": "30"
+                        },
+                        {
+                            "label": "60",
+                            "value": "60"
+                        },
+                        {
+                            "label": "120",
+                            "value": "120"
+                        }
+                    ],
+                    "defaultValue": "5",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "5"
+            },
+            {
+                "name": "product_id__assigned_user_id__othereventduration",
+                "label": "Other Event Duration (Mins)",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "5",
+                            "value": "5"
+                        },
+                        {
+                            "label": "10",
+                            "value": "10"
+                        },
+                        {
+                            "label": "30",
+                            "value": "30"
+                        },
+                        {
+                            "label": "60",
+                            "value": "60"
+                        },
+                        {
+                            "label": "120",
+                            "value": "120"
+                        }
+                    ],
+                    "defaultValue": "5",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "5"
+            },
+            {
+                "name": "product_id__assigned_user_id__calendarsharedtype",
+                "label": "Calendar Shared Type",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "shared",
+                            "value": "public"
+                        },
+                        {
+                            "label": "private",
+                            "value": "private"
+                        },
+                        {
+                            "label": "seletedusers",
+                            "value": "seletedusers"
+                        }
+                    ],
+                    "defaultValue": "public",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Public"
+            },
+            {
+                "name": "product_id__assigned_user_id__default_record_view",
+                "label": "Default Record View",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Summary",
+                            "value": "Summary"
+                        },
+                        {
+                            "label": "Detail",
+                            "value": "Detail"
+                        }
+                    ],
+                    "defaultValue": "Summary",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Summary"
+            },
+            {
+                "name": "product_id__assigned_user_id__leftpanelhide",
+                "label": "Left Panel Hide",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "0"
+            },
+            {
+                "name": "product_id__assigned_user_id__rowheight",
+                "label": "Row Height",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "wide",
+                            "value": "wide"
+                        },
+                        {
+                            "label": "medium",
+                            "value": "medium"
+                        },
+                        {
+                            "label": "narrow",
+                            "value": "narrow"
+                        }
+                    ],
+                    "defaultValue": "wide",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "medium"
+            },
+            {
+                "name": "product_id__assigned_user_id__defaulteventstatus",
+                "label": "Default Event Status",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Planned",
+                            "value": "Planned"
+                        },
+                        {
+                            "label": "Held",
+                            "value": "Held"
+                        },
+                        {
+                            "label": "Not Held",
+                            "value": "Not Held"
+                        }
+                    ],
+                    "defaultValue": "Planned",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Planned"
+            },
+            {
+                "name": "product_id__assigned_user_id__defaultactivitytype",
+                "label": "Default Activity Type",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "Call",
+                            "value": "Call"
+                        },
+                        {
+                            "label": "Meeting",
+                            "value": "Meeting"
+                        }
+                    ],
+                    "defaultValue": "Call",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "Call"
+            },
+            {
+                "name": "product_id__assigned_user_id__hidecompletedevents",
+                "label": "Hide Completed Calendar Events",
+                "mandatory": false,
+                "type": {
+                    "name": "boolean"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "0"
+            },
+            {
+                "name": "product_id__assigned_user_id__defaultcalendarview",
+                "label": "Default Calendar View",
+                "mandatory": false,
+                "type": {
+                    "picklistValues": [
+                        {
+                            "label": "List View",
+                            "value": "ListView"
+                        },
+                        {
+                            "label": "My Calendar",
+                            "value": "MyCalendar"
+                        },
+                        {
+                            "label": "Shared Calendar",
+                            "value": "SharedCalendar"
+                        }
+                    ],
+                    "defaultValue": "ListView",
+                    "name": "picklist"
+                },
+                "isunique": false,
+                "nullable": true,
+                "editable": true,
+                "default": "MyCalendar"
+            },
+            {
+                "name": "product_id__assigned_user_id__id",
+                "label": "id",
+                "mandatory": false,
+                "type": {
+                    "name": "autogenerated"
+                },
+                "editable": false,
+                "nullable": false,
+                "default": ""
             },
             {
                 "name": "product_id__vendor_id__modifiedby__user_name",
