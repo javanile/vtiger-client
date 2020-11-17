@@ -195,8 +195,6 @@ class VtigerClient extends HttpClient
             ],
         ]);
 
-        file_put_contents(__DIR__.'/listtypes.json', json_encode($response, JSON_PRETTY_PRINT));
-
         if ($response['success']) {
             $this->typesManager->setTypes($response['result']);
         }

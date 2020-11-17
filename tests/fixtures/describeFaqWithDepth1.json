@@ -841,6 +841,50 @@
                 "default": "0.000"
             },
             {
+                "name": "product_id__tax7",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax8",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax9",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax10",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
                 "name": "product_id__currency1",
                 "label": "Euro EUR",
                 "type": {
