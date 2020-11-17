@@ -16,7 +16,6 @@ namespace Javanile\VtigerClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
-use MongoDB\BSON\Type;
 
 class VtigerClient extends HttpClient
 {
@@ -321,17 +320,13 @@ class VtigerClient extends HttpClient
             return $validate;
         }
 
-        //if ($elementType == 'LineItem') {
-        //    return $this->lineItemManager->update($element);
-        //}
-
         return $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
-            ]
+            ],
         ]);
     }
 
