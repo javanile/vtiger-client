@@ -929,6 +929,72 @@
                 "default": "0.000"
             },
             {
+                "name": "product_id__tax15",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax16",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax17",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax18",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax19",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "product_id__tax20",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
                 "name": "product_id__currency1",
                 "label": "Euro EUR",
                 "type": {
