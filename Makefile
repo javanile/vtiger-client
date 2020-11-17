@@ -18,11 +18,20 @@ test:
 test-create-purchase-order:
 	@docker-compose run --rm phpunit tests --filter ::testCreatePurchaseOrder
 
+test-create-and-update-line-item:
+	@docker-compose run --rm phpunit tests --filter ::testCreateAndUpdateLineItem
+
 test-create-every-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
 
 test-update-every-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
+
+test-describe-with-depth: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribeWithDepth
+
+test-retrieve-with-depth: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testRetrieveWithDepth
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure

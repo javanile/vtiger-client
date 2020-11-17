@@ -22,6 +22,21 @@ class TypesManager
     /**
      * @var
      */
+    protected $types;
+
+    /**
+     * @var
+     */
+    protected $typesTable;
+
+    /**
+     * @var
+     */
+    protected $typesResolver;
+
+    /**
+     * @var
+     */
     protected $typesPriority;
 
     /**
@@ -40,6 +55,61 @@ class TypesManager
             'PurchaseOrder' => 720,
             'Project' => 1000,
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasTypes()
+    {
+        return null !== $this->types;
+    }
+
+    /**
+     * @param $listTypesResult
+     */
+    public function setTypes($listTypesResult)
+    {
+        $types = isset($listTypesResult['types']) ? $listTypesResult['types'] : null;
+
+        if (is_array($types)) {
+            $idPrefix = 1;
+            $this->typesTable = [];
+            $this->typesResolver = [];
+            foreach ($types as $type) {
+                if (isset($listTypesResult['information'][$type])) {
+                    $listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
+                    $this->typesTable[$type] = $listTypesResult['information'][$type];
+                }
+                $this->typesResolver[$idPrefix] = $type;
+                $idPrefix++;
+            }
+            $this->types = $this->sort($types);
+        }
+    }
+
+    /**
+     *
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+    /**
+     * @param $id
+     *
+     * @return mixed|null
+     */
+    public function getTypeByElementId($id)
+    {
+        if (!Functions::isElementId($id)) {
+            return null;
+        }
+
+        $idPrefix = Functions::getTypeIdPrefix($id);
+
+        return isset($this->typesResolver[$idPrefix]) ? $this->typesResolver[$idPrefix] : null;
     }
 
     /**

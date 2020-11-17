@@ -56,6 +56,10 @@ class ElementValidator
             return Response::error('EMPTY_ELEMENT', 'Empty element in create');
         }
 
+        if ($elementType == 'LineItem' && empty($element['parent_id'])) {
+            return Response::error('MISSING_PARENT_ID', 'Missing parent_id on LineItem element');
+        }
+
         return Response::success();
     }
 
@@ -79,7 +83,7 @@ class ElementValidator
     public function update($elementType, $element)
     {
         if (empty($element)) {
-            return Response::error('EMPTY_ELEMENT', 'Empty element in create');
+            return Response::error('EMPTY_ELEMENT', 'Empty element on update');
         }
 
         return Response::success();

@@ -108,6 +108,20 @@ final class VtigerClientTest extends TestCase
         $this->assertEquals($expected, $actual);
     }
 
+    public function testDescribeWithDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        for ($depth = 1; $depth <= 3; $depth++) {
+            $stubFile = __DIR__.'/fixtures/describeFaqWithDepth'.$depth.'.json';
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->describe('Faq', $depth);
+            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            $this->assertEquals($expected, $actual);
+        }
+    }
+
     public function testCreate()
     {
         $client = new Client(self::$endpoint);
@@ -154,6 +168,41 @@ final class VtigerClientTest extends TestCase
 
         $purchaseOrderResponse = $client->create('PurchaseOrder', $element);
         $this->assertTrue($purchaseOrderResponse['success']);
+    }
+
+    public function testCreateAndUpdateLineItem()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+        $account = $client->create('Accounts', ['accountname' => 'Test Account #'.time()])['result'];
+        $product = $client->create('Products', ['productname' => 'Test Product', 'discontinued' => 1])['result'];
+        $quotes = $client->create('Quotes', [
+            'subject' => 'Test Quote',
+            'quotestage' => 'New',
+            'account_id' => $account['id'],
+            'bill_street' => 'test',
+            'ship_street' => 'test',
+            'productid' => $product['id'],
+        ])['result'];
+
+        $createdResponse = $client->create('LineItem', [
+            'parent_id' => $quotes['id'],
+            'productid' => $product['id'],
+            'quantity' => 1,
+        ]);
+
+        $this->assertTrue($createdResponse['success']);
+        /*
+        $updatedResponse = $client->update('LineItem', [
+            'id' => $createdResponse['result']['id'],
+            'parent_id' => $quotes['id'],
+            'productid' => $product['id'],
+            'quantity' => 2,
+        ]);
+        //var_dump($updatedResponse);
+        //file_put_contents(__DIR__.'/a.log', $updatedResponse['error']['message']);
+        $this->assertTrue($updatedResponse['success']);
+        */
     }
 
     public function testCreateEveryTypes()
@@ -221,26 +270,56 @@ final class VtigerClientTest extends TestCase
                     var_dump($type);
                     var_dump($newElement);
                     var_dump($resultUpdate);
+                    file_put_contents(__DIR__.'/log.log', $resultUpdate['error']['message']);
                 }
                 $this->assertTrue($resultUpdate['success']);
             }
         }
     }
 
+    public function testRetrieveWithDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
+
+        $faq = $client->create('Faq', [
+            'question' => 'Test',
+            'faq_answer' => 'Test',
+            'faqstatus' => 'New',
+            'product_id' => $product['id'],
+        ])['result'];
+
+        for ($depth = 1; $depth <= 3; $depth++) {
+            $stubFile = __DIR__.'/fixtures/retrieveFaqWithDepth'.$depth.'.json';
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->retrieve($faq['id'], $depth);
+            $expected['result']['id'] = $actual['result']['id'];
+            $expected['result']['faq_no'] = $actual['result']['faq_no'];
+            $expected['result']['product_id'] = $actual['result']['product_id'];
+            $expected['result']['product_id__id'] = $actual['result']['product_id__id'];
+            $expected['result']['product_id__createdtime'] = $actual['result']['product_id__createdtime'];
+            $expected['result']['product_id__modifiedtime'] = $actual['result']['product_id__modifiedtime'];
+            $expected['result']['product_id__product_no'] = $actual['result']['product_id__product_no'];
+            $expected['result']['createdtime'] = $actual['result']['createdtime'];
+            $expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
+            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            $this->assertEquals($expected, $actual);
+        }
+    }
+
     public function testListUsers()
     {
         $client = new Client(self::$endpoint);
-
         $client->login(self::$username, self::$accessKey);
-
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/listUsers.json'), true);
-
         $actual = $client->listUsers();
-
         #file_put_contents(__DIR__.'/fixtures/listUsers.json', json_encode($actual, JSON_PRETTY_PRINT));
-
         $expected['result'][0]['accesskey'] = $actual['result'][0]['accesskey'];
-
         $this->assertEquals($expected, $actual);
     }
 
@@ -274,21 +353,14 @@ final class VtigerClientTest extends TestCase
     public function testSync()
     {
         $client = new Client(self::$endpoint);
-
         $client->login(self::$username, self::$accessKey);
-
         $expected = json_decode(file_get_contents(__DIR__.'/fixtures/sync.json'), true);
-
-
         $actual = $client->sync("Faq", time() - 60);
         //$actual = $client->sync("Faq", new \DateTime('@'.(time() - 60)));
-
-
         $expected['result']['updated'] = $actual['result']['updated'];
         $expected['result']['deleted'] = $actual['result']['deleted'];
         $expected['result']['lastModifiedTime'] = $actual['result']['lastModifiedTime'];
         $expected['result']['more'] = $actual['result']['more'];
-
         $this->assertEquals($expected, $actual);
     }
 }
