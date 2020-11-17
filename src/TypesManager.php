@@ -89,6 +89,14 @@ class TypesManager
     }
 
     /**
+     *
+     */
+    public function getTypes()
+    {
+        return $this->types;
+    }
+
+    /**
      * @param $id
      *
      * @return mixed|null

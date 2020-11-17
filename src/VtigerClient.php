@@ -16,6 +16,7 @@ namespace Javanile\VtigerClient;
 
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
+use MongoDB\BSON\Type;
 
 class VtigerClient extends HttpClient
 {
@@ -45,7 +46,7 @@ class VtigerClient extends HttpClient
     protected $userId;
 
     /**
-     * @var array
+     * @var TypesManager
      */
     protected $typesManager;
 
