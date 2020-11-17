@@ -116,9 +116,6 @@ class DepthManager
         }
 
         $describe = $this->client->describe($type, $maxDepth);
-        //var_dump($describe);
-        file_put_contents(__DIR__.'/i.json', json_encode($describe, JSON_PRETTY_PRINT));
-        //die();
         if (empty($describe['result']['fields'])) {
             return $retrieve;
         }
@@ -139,7 +136,6 @@ class DepthManager
                 continue;
             }
             foreach ($relatedElements[$value]['result'] as $relatedField => $relatedValue) {
-                echo $field['name'].'__'.$relatedField."\n";
                 $retrieve['result'][$field['name'].'__'.$relatedField] = $relatedValue;
             }
         }

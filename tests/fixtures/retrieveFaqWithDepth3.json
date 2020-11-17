@@ -181,6 +181,14 @@
         "modifiedby__currency_id__conversion_rate": "1.00000",
         "modifiedby__currency_id__currency_status": "Active",
         "modifiedby__currency_id__defaultid": "-11",
-        "modifiedby__currency_id__deleted": "0"
+        "modifiedby__currency_id__deleted": "0",
+        "product_id__modifiedby__currency_id__id": "21x1",
+        "product_id__modifiedby__currency_id__currency_name": "Euro",
+        "product_id__modifiedby__currency_id__currency_code": "EUR",
+        "product_id__modifiedby__currency_id__currency_symbol": "\u20ac",
+        "product_id__modifiedby__currency_id__conversion_rate": "1.00000",
+        "product_id__modifiedby__currency_id__currency_status": "Active",
+        "product_id__modifiedby__currency_id__defaultid": "-11",
+        "product_id__modifiedby__currency_id__deleted": "0"
     }
 }
