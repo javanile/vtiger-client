@@ -364,4 +364,43 @@ final class VtigerClientTest extends TestCase
         $expected['result']['more'] = $actual['result']['more'];
         $this->assertEquals($expected, $actual);
     }
+
+    public function testSyncWithDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
+
+        $faq1 = $client->create('Faq', [
+            'faqstatus' => 'draft',
+            'question' => 'this is a FAQ 1',
+            'faq_answer' => 'this is a FAQ answer',
+            'assigned_user_id' => 1,
+        ])['result'];
+
+        $faq2 = $client->create('Faq', [
+            'faqstatus' => 'draft',
+            'question' => 'this is a FAQ 1',
+            'faq_answer' => 'this is a FAQ answer',
+            'assigned_user_id' => 1,
+            'product_id' => $product['id'],
+        ])['result'];
+
+        for ($depth = 1; $depth <= 3; $depth++) {
+            $stubFile = __DIR__ . '/fixtures/syncFaqWithDepth'.$depth.'.json';
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->sync("Faq", time() - 60, 'application', $depth);
+            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            //$actual = $client->sync("Faq", new \DateTime('@'.(time() - 60)));
+            $expected['result']['updated'] = $actual['result']['updated'];
+            $expected['result']['deleted'] = $actual['result']['deleted'];
+            $expected['result']['lastModifiedTime'] = $actual['result']['lastModifiedTime'];
+            $expected['result']['more'] = $actual['result']['more'];
+            $this->assertEquals($expected, $actual);
+        }
+    }
 }

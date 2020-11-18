@@ -148,53 +148,44 @@ class DepthManager
 
     /**
      * @param $elementType
-     * @param $element
-     *
-     * @return mixed
+     * @param $timestamp
+     * @param $syncType
+     * @param $maxDepth
      */
-    public function update($elementType, $element)
+    public function sync($elementType, $timestamp, $syncType, $maxDepth)
     {
-        $element = $this->sanitizeEmptyElement($element);
-        $element = $this->sanitizeAssignedUserId($element);
-        $element = $this->sanitizeInventoryElement($elementType, $element);
+        $sync = $this->client->sync($elementType, $timestamp, $syncType);
+        if (empty($sync['result']['updated'])) {
+            return $sync;
+        }
 
-        return $element;
-    }
+        $describe = $this->client->describe($elementType, $maxDepth);
+        if (empty($describe['result']['fields'])) {
+            return $sync;
+        }
 
-    /**
-     * @param $crmid
-     * @param mixed $id
-     *
-     * @return mixed
-     */
-    public function delete($id)
-    {
-        return $id;
-    }
+        $relatedElements = [];
+        foreach ($sync['result']['updated'] as $index => $element) {
+            foreach ($describe['result']['fields'] as $field) {
+                if (empty($field['type']['refersTo']) || empty($field['depth'])) {
+                    continue;
+                }
+                if (empty($element[$field['name']])) {
+                    continue;
+                }
+                $value = $element[$field['name']];
+                if (empty($relatedElements[$value])) {
+                    $relatedElements[$value] = $this->client->retrieve($value);
+                }
+                if (empty($relatedElements[$value]['result'])) {
+                    continue;
+                }
+                foreach ($relatedElements[$value]['result'] as $relatedField => $relatedValue) {
+                    $sync['result']['updated'][$index][$field['name'].'__'.$relatedField] = $relatedValue;
+                }
+            }
+        }
 
-    /**
-     * @param $query
-     *
-     * @return mixed
-     */
-    public function query($query)
-    {
-        return $query;
-    }
-
-    /**
-
-     */
-    public function sync($elementType, $timestamp, $syncType = 'application')
-    {
-    }
-
-    /**
-     * @param $element
-     *
-     * @return mixed
-     */
-    public function upload($element)
-    {
+        return $sync;
     }
 }

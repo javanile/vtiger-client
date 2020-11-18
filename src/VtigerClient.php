@@ -372,7 +372,7 @@ class VtigerClient extends HttpClient
      *
      * @return mixed
      */
-    public function sync($elementType, $timestamp, $syncType = 'application')
+    public function sync($elementType, $timestamp, $syncType = 'application', $depth = 0)
     {
         if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
             return [
@@ -396,6 +396,10 @@ class VtigerClient extends HttpClient
                     'message' => '$timestamp must be a valid unix time or a instance of DateTime',
                 ],
             ];
+        }
+
+        if ($depth > 0) {
+            return $this->depthManager->sync($elementType, $timestamp, $syncType, $depth);
         }
 
         return $this->get([
