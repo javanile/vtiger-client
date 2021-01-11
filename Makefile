@@ -9,10 +9,13 @@ install:
 update:
 	@docker-compose run --rm composer update
 
+up:
+	@docker-compose up -d
+
 ## -------
 ## Testing
 ## -------
-test:
+test: up
 	@docker-compose run --rm phpunit tests
 
 test-create-purchase-order:

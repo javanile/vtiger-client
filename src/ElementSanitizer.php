@@ -76,11 +76,15 @@ class ElementSanitizer
     }
 
     /**
+     * Sanitize an element for inventory modules.
+     *
+     * @param $operation
+     * @param $elementType
      * @param $element
      *
      * @return array
      */
-    protected function sanitizeInventoryElement($elementType, $element)
+    protected function sanitizeInventoryElement($operation, $elementType, $element)
     {
         if (!in_array($elementType, $this->inventoryTypes)) {
             return $element;
@@ -90,7 +94,7 @@ class ElementSanitizer
             $element['hdnTaxType'] = 'individual';
         }
 
-        if (empty($element['LineItems'])) {
+        if (empty($element['LineItems']) && $operation == 'create') {
             $element['LineItems'] = [[]];
         }
 
@@ -117,7 +121,7 @@ class ElementSanitizer
     {
         $element = $this->sanitizeEmptyElement($element);
         $element = $this->sanitizeAssignedUserId($element);
-        $element = $this->sanitizeInventoryElement($elementType, $element);
+        $element = $this->sanitizeInventoryElement('create', $elementType, $element);
 
         return $element;
     }
@@ -143,7 +147,7 @@ class ElementSanitizer
     {
         $element = $this->sanitizeEmptyElement($element);
         $element = $this->sanitizeAssignedUserId($element);
-        $element = $this->sanitizeInventoryElement($elementType, $element);
+        $element = $this->sanitizeInventoryElement('update', $elementType, $element);
 
         return $element;
     }
