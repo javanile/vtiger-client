@@ -16,6 +16,7 @@ final class OperationMapperTest extends TestCase
             'describe' => 'describe',
             'create' => 'custom_create',
             'retrieve' => 'custom_retrieve',
+            'revise' => 'revise',
             'update' => 'update',
             'delete' => 'delete',
             'query' => 'custom_query',

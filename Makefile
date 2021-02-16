@@ -12,10 +12,14 @@ update:
 up:
 	@docker-compose up -d
 
+down:
+	@docker-compose down -v
+
 ## -------
 ## Testing
 ## -------
-test: up
+test: down up
+	@while [ -f .vtiger.lock ]; do sleep 2; done
 	@docker-compose run --rm phpunit tests
 
 test-create-purchase-order:
@@ -47,6 +51,9 @@ test-retrieve-with-depth: clean
 
 test-sync-with-depth: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testSyncWithDepth
+
+test-operation-mapper: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter OperationMapperTest
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure

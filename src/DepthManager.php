@@ -85,12 +85,20 @@ class DepthManager
                 }
                 foreach ($response['result']['fields'] as $relatedField) {
                     $relatedField['name'] = $field['name'].'__'.$relatedField['name'];
-                    $relatedFields[] = $relatedField;
+                    if (empty($relatedFields[$relatedField['name']])) {
+                        $relatedFields[$relatedField['name']] = $relatedField;
+                    }
                 }
             }
         }
 
-        return $this->getFieldsByDepth(array_merge($fields, $relatedFields), $depth - 1);
+        foreach ($fields as $field) {
+            if (isset($relatedFields[$field['name']])) {
+                unset($relatedFields[$field['name']]);
+            }
+        }
+
+        return $this->getFieldsByDepth(array_merge($fields, array_values($relatedFields)), $depth - 1);
     }
 
     /**

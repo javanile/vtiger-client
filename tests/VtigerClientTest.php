@@ -134,7 +134,7 @@ final class VtigerClientTest extends TestCase
         $client->login(self::$username, self::$accessKey);
 
         foreach (['Contacts', 'Quotes'] as $module) {
-            for ($depth = 1; $depth <= 3; $depth++) {
+            for ($depth = 1; $depth <= 2; $depth++) {
                 $stubFile = __DIR__.'/fixtures/describe'.$module.'WithDepth'.$depth.'.json';
                 $stubFieldsFile = __DIR__.'/fixtures/describeFields'.$module.'WithDepth'.$depth.'.json';
                 $expected = json_decode(file_get_contents($stubFile), true);
@@ -379,7 +379,7 @@ final class VtigerClientTest extends TestCase
             'product_id' => $product['id'],
         ])['result'];
 
-        for ($depth = 1; $depth <= 3; $depth++) {
+        for ($depth = 1; $depth <= 2; $depth++) {
             $stubFile = __DIR__.'/fixtures/retrieveFaqWithDepth'.$depth.'.json';
             $expected = json_decode(file_get_contents($stubFile), true);
             $actual = $client->retrieve($faq['id'], $depth);
@@ -474,7 +474,7 @@ final class VtigerClientTest extends TestCase
             'product_id' => $product['id'],
         ])['result'];
 
-        for ($depth = 1; $depth <= 3; $depth++) {
+        for ($depth = 1; $depth <= 2; $depth++) {
             $stubFile = __DIR__ . '/fixtures/syncFaqWithDepth'.$depth.'.json';
             $expected = json_decode(file_get_contents($stubFile), true);
             $actual = $client->sync("Faq", time() - 60, 'application', $depth);
