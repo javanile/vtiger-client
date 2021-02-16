@@ -108,6 +108,7 @@ class OperationMapper
             'create' => 'create',
             'retrieve' => 'retrieve',
             'update' => 'update',
+            'revise' => 'revise',
             'delete' => 'delete',
             'query' => 'query',
             'sync' => 'sync',

@@ -329,6 +329,33 @@ class VtigerClient extends HttpClient
     }
 
     /**
+     * @param $elementType
+     * @param $element
+     *
+     * @return mixed
+     */
+    public function revise($elementType, $element)
+    {
+        /*
+        $element = $this->elementSanitizer->update($elementType, $element);
+        $validate = $this->elementValidator->update($elementType, $element);
+
+        if (empty($validate['success'])) {
+            return $validate;
+        }
+        */
+
+        return $this->post([
+            'form_params' => [
+                'operation'     => $this->operationMapper->get('revise'),
+                'element'       => json_encode($element),
+                'elementType'   => $elementType,
+                'sessionName'   => $this->sessionName,
+            ],
+        ]);
+    }
+
+    /**
      * @param $crmid
      * @param mixed $id
      *

@@ -266,6 +266,60 @@ final class VtigerClientTest extends TestCase
         }
     }
 
+    public function testReviseEveryTypes()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $createdElements = [];
+
+        $types = $client->getTypes();
+        $ignoredTypes = [
+            'PurchaseOrder',
+            'Invoice',
+            'SalesOrder',
+            'Quotes',
+            'ServiceContracts',
+            'Groups',
+            'DocumentFolders',
+            'CompanyDetails',
+            'PBXManager',
+            'Users',
+            'ProductTaxes',
+            'LineItem',
+            'Calendar',
+        ];
+
+        foreach ($types as $type) {
+            if (in_array($type, $ignoredTypes)) {
+                continue;
+            }
+            $newElement = self::defaultValues($type, $createdElements);
+            $resultCreate = $client->create($type, $newElement);
+            $this->assertTrue($resultCreate['success']);
+            if (isset($resultCreate['success'])) {
+                $createdElements[$type] = $resultCreate['result'];
+                $reviseElement = ['id' => $resultCreate['result']['id']];
+                foreach ($resultCreate['result'] as $field => $value) {
+                    if (in_array($field, ['id']) || preg_match('/(_no|id|_start)$/', $field)) {
+                        continue;
+                    }
+                    $reviseElement[$field] = $value.' (UPDATED)';
+                    break;
+                }
+                $resultRevise = $client->revise($type, $reviseElement);
+                if (empty($resultRevise['success'])) {
+                    var_dump($type);
+                    var_dump($reviseElement);
+                    var_dump($resultRevise);
+                    file_put_contents(__DIR__.'/log.log', $resultRevise['error']['message']);
+                }
+                $this->assertTrue($resultRevise['success']);
+
+            }
+        }
+    }
+
     public function testUpdateEveryTypes()
     {
         $client = new Client(self::$endpoint);

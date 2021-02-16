@@ -25,7 +25,10 @@ test-create-and-update-line-item:
 	@docker-compose run --rm phpunit tests --filter ::testCreateAndUpdateLineItem
 
 test-create-every-types: clean
-	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testCreateEveryTypes
+
+test-revise-every-types: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testReviseEveryTypes
 
 test-update-every-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testUpdateEveryTypes
