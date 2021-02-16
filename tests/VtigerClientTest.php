@@ -109,17 +109,47 @@ final class VtigerClientTest extends TestCase
         }
     }
 
-    public function testDescribeWithDepth()
+    public function testDescribeWithDepth1()
     {
         $client = new Client(self::$endpoint);
         $client->login(self::$username, self::$accessKey);
 
-        for ($depth = 1; $depth <= 3; $depth++) {
-            $stubFile = __DIR__.'/fixtures/describeFaqWithDepth'.$depth.'.json';
-            $expected = json_decode(file_get_contents($stubFile), true);
-            $actual = $client->describe('Faq', $depth);
-            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
-            $this->assertEquals($expected, $actual);
+        $depth = 1;
+        $stubFile = __DIR__.'/fixtures/describeFieldsContactsWithDepth'.$depth.'.json';
+        $describe = $client->describe('Contacts', $depth);
+        $expected = json_decode(file_get_contents($stubFile), true);
+        $actual = [];
+        foreach ($describe['result']['fields'] as $field) {
+            //echo "$field[name]\n";
+            $actual[] = $field['name'];
+        }
+        sort($actual);
+        //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+        $this->assertEquals($expected, $actual);
+    }
+
+    public function testDescribeWithAllDepth()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        foreach (['Contacts', 'Quotes'] as $module) {
+            for ($depth = 1; $depth <= 3; $depth++) {
+                $stubFile = __DIR__.'/fixtures/describe'.$module.'WithDepth'.$depth.'.json';
+                $stubFieldsFile = __DIR__.'/fixtures/describeFields'.$module.'WithDepth'.$depth.'.json';
+                $expected = json_decode(file_get_contents($stubFile), true);
+                $expectedFields = json_decode(file_get_contents($stubFieldsFile), true);
+                $actual = $client->describe($module, $depth);
+                $actualFields = [];
+                foreach ($actual['result']['fields'] as $field) {
+                    $actualFields[] = $field['name'];
+                }
+                sort($actualFields);
+                file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+                file_put_contents($stubFieldsFile, json_encode($actualFields, JSON_PRETTY_PRINT));
+                $this->assertEquals($expected, $actual);
+                $this->assertEquals($expectedFields, $actualFields);
+            }
         }
     }
 

@@ -34,7 +34,6 @@ class DepthManager
         $this->client = $client;
     }
 
-
     /**
      * Describe element type using depth.
      *
@@ -71,12 +70,14 @@ class DepthManager
         $relatedFields = [];
         foreach ($fields as $index => $field) {
             if ($field['type']['name'] == 'owner') {
+                $field['type']['refersTo'] = ['Users'];
                 $fields[$index]['type']['refersTo'] = ['Users'];
             }
             if (empty($field['type']['refersTo']) || isset($field['depth'])) {
                 continue;
             }
             $fields[$index]['depth'] = $depth;
+
             foreach ($field['type']['refersTo'] as $relatedElementType) {
                 $response = $this->client->describe($relatedElementType);
                 if (empty($response['result']['fields'])) {
@@ -147,10 +148,14 @@ class DepthManager
     }
 
     /**
+     * Increace number of fields for sync operation.
+     *
      * @param $elementType
      * @param $timestamp
      * @param $syncType
      * @param $maxDepth
+     *
+     * @return mixed
      */
     public function sync($elementType, $timestamp, $syncType, $maxDepth)
     {
