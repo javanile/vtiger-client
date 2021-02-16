@@ -104,7 +104,7 @@ final class VtigerClientTest extends TestCase
             $stubFile = __DIR__.'/fixtures/describe'.$type.'.json';
             $expected = json_decode(file_get_contents($stubFile), true);
             $actual = $client->describe($type);
-            file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
             $this->assertEquals($expected, $actual);
         }
     }
@@ -145,8 +145,8 @@ final class VtigerClientTest extends TestCase
                     $actualFields[] = $field['name'];
                 }
                 sort($actualFields);
-                file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
-                file_put_contents($stubFieldsFile, json_encode($actualFields, JSON_PRETTY_PRINT));
+                //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+                //file_put_contents($stubFieldsFile, json_encode($actualFields, JSON_PRETTY_PRINT));
                 $this->assertEquals($expected, $actual);
                 $this->assertEquals($expectedFields, $actualFields);
             }
@@ -312,7 +312,7 @@ final class VtigerClientTest extends TestCase
                     var_dump($type);
                     var_dump($reviseElement);
                     var_dump($resultRevise);
-                    file_put_contents(__DIR__.'/log.log', $resultRevise['error']['message']);
+                    //file_put_contents(__DIR__.'/log.log', $resultRevise['error']['message']);
                 }
                 $this->assertTrue($resultRevise['success']);
 
@@ -355,7 +355,7 @@ final class VtigerClientTest extends TestCase
                     var_dump($type);
                     var_dump($newElement);
                     var_dump($resultUpdate);
-                    file_put_contents(__DIR__.'/log.log', $resultUpdate['error']['message']);
+                    //file_put_contents(__DIR__.'/log.log', $resultUpdate['error']['message']);
                 }
                 $this->assertTrue($resultUpdate['success']);
             }
