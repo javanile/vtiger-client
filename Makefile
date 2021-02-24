@@ -15,6 +15,9 @@ up:
 down:
 	@docker-compose down -v
 
+debugger:
+	@docker-compose run --rm vtiger php tests/bin/debugger.php
+
 ## -------
 ## Testing
 ## -------

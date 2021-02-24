@@ -8,3 +8,5 @@ npm-debug.log
 phpunit.xml
 coverage.xml
 vtiger.json
+.env
+.pwd.var
