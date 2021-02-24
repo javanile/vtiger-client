@@ -8,9 +8,13 @@ $client = new \Javanile\VtigerClient\VtigerClient($env['vt_url']);
 
 $client->login($env['vt_username'], $env['vt_accesskey']);
 
-$retrieve = $client->retrieve('11x38995');
+#$describe = $client->describe('Accounts', 1);
+#file_put_contents(__DIR__.'/describe.log', json_encode($describe, JSON_PRETTY_PRINT));
 
-var_dump($retrieve);
+$retrieve = $client->retrieve('11x38995', 1);
+file_put_contents(__DIR__.'/retrieve.log', json_encode($retrieve, JSON_PRETTY_PRINT));
 
+#$listType = $client->listTypes();
+#file_put_contents(__DIR__.'/listTypes.json', json_encode($listType, JSON_PRETTY_PRINT));
 
 

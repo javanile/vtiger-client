@@ -20,6 +20,11 @@ use GuzzleHttp\Exception\GuzzleException;
 class TypesManager
 {
     /**
+     *
+     */
+    protected $client;
+
+    /**
      * @var
      */
     protected $types;
@@ -42,8 +47,16 @@ class TypesManager
     /**
      *
      */
-    public function __construct($args)
+    protected $idPrefixResolver;
+
+    /**
+     * @param $args
+     * @param $client
+     */
+    public function __construct($args, $client)
     {
+        $this->client = $client;
+
         $this->typesPriority = [
             'Accounts' => 10,
             'Currency' => 100,
@@ -73,16 +86,16 @@ class TypesManager
         $types = isset($listTypesResult['types']) ? $listTypesResult['types'] : null;
 
         if (is_array($types)) {
-            $idPrefix = 1;
             $this->typesTable = [];
             $this->typesResolver = [];
             foreach ($types as $type) {
-                if (isset($listTypesResult['information'][$type])) {
-                    $listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
-                    $this->typesTable[$type] = $listTypesResult['information'][$type];
+                if (empty($listTypesResult['information'][$type])) {
+                    continue;
                 }
+                $idPrefix = $this->getIdPrefixByType($type);
                 $this->typesResolver[$idPrefix] = $type;
-                $idPrefix++;
+                $listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
+                $this->typesTable[$type] = $listTypesResult['information'][$type];
             }
             $this->types = $this->sort($types);
         }
@@ -145,5 +158,21 @@ class TypesManager
         }
 
         return $this->typesPriority[$type];
+    }
+
+    /**
+     * @param $type
+     */
+    public function getIdPrefixByType($type)
+    {
+        if (isset($this->idPrefixResolver[$type])) {
+            return $this->idPrefixResolver[$type];
+        }
+
+        $describe = $this->client->describe($type);
+        $idPrefix = $describe['result']['idPrefix'];
+        $this->idPrefixResolver[$type] = $idPrefix;
+
+        return $idPrefix;
     }
 }

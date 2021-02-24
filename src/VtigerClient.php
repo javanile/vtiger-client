@@ -90,7 +90,7 @@ class VtigerClient extends HttpClient
 
         parent::__construct($args);
 
-        $this->typesManager = new TypesManager($args);
+        $this->typesManager = new TypesManager($args, $this);
         $this->operationMapper = new OperationMapper($args);
         $this->elementSanitizer = new ElementSanitizer($args);
         $this->elementValidator = new ElementValidator($args, $this->getLogger());
