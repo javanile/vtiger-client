@@ -43,7 +43,11 @@ class HttpClient
     {
         $this->endpoint = $args['endpoint'].'/webservice.php';
 
-        $this->client = new Client();
+        if (isset($args['verify'])) {
+            $args['guzzle']['verify'] = $args['verify'];
+        }
+
+        $this->client = new Client(isset($args['guzzle']) ? $args['guzzle'] : []);
 
         $this->logger = new Logger($args);
     }
