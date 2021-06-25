@@ -52,6 +52,9 @@ test-describe-with-all-depth: clean
 test-retrieve-with-depth: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testRetrieveWithDepth
 
+test-retrieve-not-found: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testRetrieveNotFound
+
 test-sync-with-depth: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testSyncWithDepth
 

@@ -362,6 +362,21 @@ final class VtigerClientTest extends TestCase
         }
     }
 
+    /*
+    public function testRetrieveNotFound()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        //$describe = $client->describe('Contacts');
+        //var_dump($describe);
+
+        $actual = $client->retrieve('12x30000');
+
+        var_dump($actual);
+    }
+    */
+
     public function testRetrieveWithDepth()
     {
         $client = new Client(self::$endpoint);
