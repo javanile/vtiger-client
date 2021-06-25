@@ -93,6 +93,9 @@ class TypesManager
                     continue;
                 }
                 $idPrefix = $this->getIdPrefixByType($type);
+                if (empty($idPrefix)) {
+                    continue;
+                }
                 $this->typesResolver[$idPrefix] = $type;
                 $listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
                 $this->typesTable[$type] = $listTypesResult['information'][$type];
@@ -170,6 +173,10 @@ class TypesManager
         }
 
         $describe = $this->client->describe($type);
+        if (empty($describe['success'])) {
+            return;
+        }
+        
         $idPrefix = $describe['result']['idPrefix'];
         $this->idPrefixResolver[$type] = $idPrefix;
 
