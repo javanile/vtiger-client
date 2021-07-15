@@ -377,6 +377,29 @@ final class VtigerClientTest extends TestCase
     }
     */
 
+    public function testRetrieveWithDepthZero()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
+
+        $faq = $client->create('Faq', [
+            'question' => 'Test',
+            'faq_answer' => 'Test',
+            'faqstatus' => 'New',
+            'product_id' => $product['id'],
+        ])['result'];
+
+        $actual = $client->retrieve($faq['id'], 0);
+
+        var_dump($actual);
+        die();
+    }
+
     public function testRetrieveWithDepthOne()
     {
         $client = new Client(self::$endpoint);

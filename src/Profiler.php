@@ -14,7 +14,7 @@
 
 namespace Javanile\VtigerClient;
 
-class Profiler extends Debugger
+class Profiler extends SystemDriver
 {
     /**
      *
@@ -66,7 +66,7 @@ class Profiler extends Debugger
         }
 
         touch($this->lockFile);
-        if (file_exists($this->file)) {
+        if (file_exists($this->path)) {
             $past = (array)json_decode(file_get_contents($this->file), true);
             if (isset($past[$this->tag][$method]['count'])) {
                 $this->profiler[$this->tag][$method]['count'] += $past[$this->tag][$method]['count'];
@@ -92,7 +92,7 @@ class Profiler extends Debugger
         if ($this->profiler[$this->tag][$method]['last'] < $this->profiler[$this->tag][$method]['min']) {
             $this->profiler[$this->tag][$method]['min'] = $this->profiler[$this->tag][$method]['last'];
         }
-        file_put_contents($this->file, json_encode($this->profiler, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
+        file_put_contents($this->path, json_encode($this->profiler, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
         unlink($this->lockFile);
 
         return $return;

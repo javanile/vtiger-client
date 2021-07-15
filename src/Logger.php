@@ -14,7 +14,7 @@
 
 namespace Javanile\VtigerClient;
 
-class Logger extends Debugger
+class Logger extends SystemDriver
 {
     /**
      * @var string
@@ -44,7 +44,7 @@ class Logger extends Debugger
         $line .= ' '.json_encode($object, JSON_UNESCAPED_SLASHES);
         $line .= "\n";
 
-        file_put_contents($this->file, $line, FILE_APPEND);
+        file_put_contents($this->path, $line, FILE_APPEND);
     }
 
     /**
@@ -63,7 +63,7 @@ class Logger extends Debugger
             $line .= ' '.json_encode($response, JSON_UNESCAPED_SLASHES);
             $line .= "\n";
 
-            file_put_contents($this->file, $line, FILE_APPEND);
+            file_put_contents($this->path, $line, FILE_APPEND);
         }
 
         return $response;

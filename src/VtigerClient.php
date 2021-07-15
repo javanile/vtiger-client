@@ -336,12 +336,12 @@ class VtigerClient extends HttpClient
      *
      * @return mixed
      */
-    public function retrieve($id, $depth = 0)
+    public function retrieve($id, $depth = 0, $elementType = null)
     {
         $this->profiler->begin(__METHOD__);
 
         if ($depth > 0) {
-            return $this->profiler->end(__METHOD__, $this->depthManager->retrieve($id, $depth));
+            return $this->profiler->end(__METHOD__, $this->depthManager->retrieve($id, $depth, $elementType));
         }
 
         return $this->profiler->end(__METHOD__, $this->get([

@@ -118,13 +118,15 @@ class DepthManager
      *
      * @return mixed
      */
-    public function retrieve($id, $maxDepth)
+    public function retrieve($id, $maxDepth, $type = null)
     {
         $retrieve = $this->client->retrieve($id);
 
-        $type = $this->client->getTypeByElementId($id);
         if (empty($type)) {
-            return $retrieve;
+            $type = $this->client->getTypeByElementId($id);
+            if (empty($type)) {
+                return $retrieve;
+            }
         }
 
         $describe = $this->client->describe($type, $maxDepth);
