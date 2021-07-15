@@ -14,7 +14,7 @@
 
 namespace Javanile\VtigerClient;
 
-class Debugger
+class SystemDriver
 {
     /**
      *
@@ -29,7 +29,7 @@ class Debugger
     /**
      * @var array|false|string
      */
-    protected $file;
+    protected $path;
 
     /**
      * @var array|false|string

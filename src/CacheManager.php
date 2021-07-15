@@ -17,7 +17,7 @@ namespace Javanile\VtigerClient;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class CacheManager
+class Cache extends SystmeDriver
 {
     /**
      *
