@@ -7926,6 +7926,39 @@
                 "default": "12.500"
             },
             {
+                "name": "productid__tax4",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "productid__tax5 (UPDATED)",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
+                "name": "productid__tax6",
+                "label": "",
+                "type": {
+                    "name": "double"
+                },
+                "nullable": "1",
+                "editable": "1",
+                "mandatory": "",
+                "default": "0.000"
+            },
+            {
                 "name": "productid__currency1",
                 "label": "Euro EUR",
                 "type": {
