@@ -50,6 +50,11 @@ class TypesManager
     protected $idPrefixResolver;
 
     /**
+     *
+     */
+    protected $listTypesResult;
+
+    /**
      * @param $args
      * @param $client
      */
@@ -83,7 +88,15 @@ class TypesManager
      */
     public function setTypes($listTypesResult)
     {
-        $types = isset($listTypesResult['types']) ? $listTypesResult['types'] : null;
+        $this->listTypesResult = $listTypesResult;
+    }
+
+    /**
+     *
+     */
+    protected function buildTypes()
+    {
+        $types = isset($this->listTypesResult['types']) ? $this->listTypesResult['types'] : null;
 
         if (is_array($types)) {
             $this->typesTable = [];
@@ -109,6 +122,10 @@ class TypesManager
      */
     public function getTypes()
     {
+        if ($this->types === null && isset($this->listTypesResult)) {
+            $this->buildTypes();
+        }
+
         return $this->types;
     }
 

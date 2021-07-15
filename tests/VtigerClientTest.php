@@ -401,7 +401,9 @@ final class VtigerClientTest extends TestCase
             $expected['result']['id'] = $actual['result']['id'];
             $expected['result']['faq_no'] = $actual['result']['faq_no'];
             $expected['result']['product_id'] = $actual['result']['product_id'];
-            $expected['result']['product_id__id'] = $actual['result']['product_id__id'];
+            if (isset($actual['result']['product_id__id'])) {
+                $expected['result']['product_id__id'] = $actual['result']['product_id__id'];
+            }
             $expected['result']['product_id__createdtime'] = $actual['result']['product_id__createdtime'];
             $expected['result']['product_id__modifiedtime'] = $actual['result']['product_id__modifiedtime'];
             $expected['result']['product_id__product_no'] = $actual['result']['product_id__product_no'];
