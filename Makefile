@@ -2,6 +2,7 @@
 
 clean:
 	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-client.log
+	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-client.json
 
 install:
 	@docker-compose run --rm composer install
@@ -28,7 +29,7 @@ test: down up
 test-create-purchase-order:
 	@docker-compose run --rm phpunit tests --filter ::testCreatePurchaseOrder
 
-test-create-and-update-line-item:
+test-create-and-update-line-item: clean
 	@docker-compose run --rm phpunit tests --filter ::testCreateAndUpdateLineItem
 
 test-create-every-types: clean

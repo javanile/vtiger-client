@@ -48,7 +48,7 @@ class Profiler extends Debugger
             ];
         }
 
-        $this->profiler[$method]['begin'] = microtime(true);
+        $this->profiler[$this->tag][$method]['begin'] = microtime(true);
     }
 
     /**
@@ -60,33 +60,32 @@ class Profiler extends Debugger
             return $return;
         }
 
-        $time = time();
-        while (file_exists($this->lockFile)) {
-            if ((time() - $time) > 300) {
-                throw new \Exception("Problem with lock file '{$this->lockFile}', seems it exists for a long time.");
-            }
+        $until = time() + 5;
+        while (file_exists($this->lockFile) && time() < $until) {
             usleep(100000);
         }
 
         touch($this->lockFile);
-        $past = (array) json_decode(file_get_contents($this->file), true);
-        if (isset($past[$this->tag][$method]['count'])) {
-            $this->profiler[$this->tag][$method]['count'] += $past[$this->tag][$method]['count'];
-        }
-        if (isset($past[$this->tag][$method]['total'])) {
-            $this->profiler[$this->tag][$method]['total'] += $past[$this->tag][$method]['total'];
-        }
-        if (isset($past[$this->tag][$method]['max'])) {
-            $this->profiler[$this->tag][$method]['max'] += $past[$this->tag][$method]['max'];
-        }
-        if (isset($past[$this->tag][$method]['min'])) {
-            $this->profiler[$this->tag][$method]['min'] += $past[$this->tag][$method]['min'];
+        if (file_exists($this->file)) {
+            $past = (array)json_decode(file_get_contents($this->file), true);
+            if (isset($past[$this->tag][$method]['count'])) {
+                $this->profiler[$this->tag][$method]['count'] += $past[$this->tag][$method]['count'];
+            }
+            if (isset($past[$this->tag][$method]['total'])) {
+                $this->profiler[$this->tag][$method]['total'] += $past[$this->tag][$method]['total'];
+            }
+            if (isset($past[$this->tag][$method]['max'])) {
+                $this->profiler[$this->tag][$method]['max'] += $past[$this->tag][$method]['max'];
+            }
+            if (isset($past[$this->tag][$method]['min'])) {
+                $this->profiler[$this->tag][$method]['min'] += $past[$this->tag][$method]['min'];
+            }
         }
         $this->profiler[$this->tag][$method]['end'] = microtime(true);
         $this->profiler[$this->tag][$method]['count']++;
-        $this->profiler[$this->tag][$method]['last'] = $this->profiler[$this->tag][$method]['end'] - $this->profiler[$this->tag][$method]['begin'];
-        $this->profiler[$this->tag][$method]['total'] += $this->profiler[$this->tag][$method]['last'];
-        $this->profiler[$this->tag][$method]['average'] = $this->profiler[$this->tag][$method]['total'] / $this->profiler[$this->tag][$method]['count'];
+        $this->profiler[$this->tag][$method]['last'] = round($this->profiler[$this->tag][$method]['end'] - $this->profiler[$this->tag][$method]['begin'], 3);
+        $this->profiler[$this->tag][$method]['total'] += round($this->profiler[$this->tag][$method]['last'], 3);
+        $this->profiler[$this->tag][$method]['average'] = round($this->profiler[$this->tag][$method]['total'] / $this->profiler[$this->tag][$method]['count'], 3);
         if ($this->profiler[$this->tag][$method]['last'] > $this->profiler[$this->tag][$method]['max']) {
             $this->profiler[$this->tag][$method]['max'] = $this->profiler[$this->tag][$method]['last'];
         }
