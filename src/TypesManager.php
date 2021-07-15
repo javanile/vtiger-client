@@ -137,17 +137,11 @@ class TypesManager
      *
      * @return mixed|null
      */
-    public function getTypeByElementId($id)
+    public function getTypeByIdPrefix($idPrefix)
     {
-        if (!Functions::isElementId($id)) {
-            return null;
-        }
-
         if ($this->typesResolver === null) {
             $this->buildTypes();
         }
-
-        $idPrefix = Functions::getTypeIdPrefix($id);
 
         return isset($this->typesResolver[$idPrefix]) ? $this->typesResolver[$idPrefix] : null;
     }

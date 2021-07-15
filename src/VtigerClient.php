@@ -238,16 +238,34 @@ class VtigerClient extends HttpClient
 
     /**
      * Get list name of types.
+     *
+     * @throws \Exception
      */
     public function getTypeByElementId($id)
     {
+        if (empty($id)) {
+            throw new \Exception("Empty or null element id.");
+        }
+
+        if (!Functions::isElementId($id)) {
+            throw new \Exception("Invalid element id '{$id}'.");
+        }
+
         $this->profiler->begin(__METHOD__);
 
         if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
         }
 
-        $type = $this->typesManager->getTypeByElementId($id);
+        $idPrefix = Functions::getTypeIdPrefix($id);
+
+        if ($this->cacheManager->has(__METHOD__, $idPrefix)) {
+            return $this->profiler->end(__METHOD__, $idPrefix);
+        }
+
+        $type = $this->typesManager->getTypeByIdPrefix($idPrefix);
+
+        $this->cacheManager->set(__METHOD__, $idPrefix, 3600);
 
         return $this->profiler->end(__METHOD__, $type);
     }
