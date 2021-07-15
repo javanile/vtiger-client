@@ -377,6 +377,7 @@ final class VtigerClientTest extends TestCase
     }
     */
 
+    /*
     public function testRetrieveWithDepthZero()
     {
         $client = new Client(self::$endpoint);
@@ -395,10 +396,8 @@ final class VtigerClientTest extends TestCase
         ])['result'];
 
         $actual = $client->retrieve($faq['id'], 0);
-
-        var_dump($actual);
-        die();
     }
+    */
 
     public function testRetrieveWithDepthOne()
     {
