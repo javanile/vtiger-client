@@ -22,7 +22,7 @@ debugger:
 ## -------
 ## Testing
 ## -------
-test: down up
+test: clean down up
 	@while [ -f .vtiger.lock ]; do sleep 2; done
 	@docker-compose run --rm phpunit tests
 
@@ -61,6 +61,9 @@ test-sync-with-depth: clean
 
 test-operation-mapper: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter OperationMapperTest
+
+test-list-types: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testListTypes
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure

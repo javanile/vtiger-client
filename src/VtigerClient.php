@@ -153,6 +153,8 @@ class VtigerClient extends HttpClient
      */
     public function login($username = null, $accessKey = null)
     {
+        $this->profiler->begin(__METHOD__);
+
         if ($username !== null) {
             $this->username = $username;
             $this->profiler->setTag($this->username, $this->endpoint);
@@ -184,7 +186,7 @@ class VtigerClient extends HttpClient
             $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
         }
 
-        return $json;
+        return $this->profiler->end(__METHOD__, $json);
     }
 
     /**
@@ -200,6 +202,8 @@ class VtigerClient extends HttpClient
      */
     public function listTypes()
     {
+        $this->profiler->begin(__METHOD__);
+
         $response = $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('listtypes'),
@@ -207,11 +211,13 @@ class VtigerClient extends HttpClient
             ],
         ]);
 
-        if ($response['success']) {
+        if (isset($response['success']) && $response['success']) {
+            sort($response['result']['types']);
+            ksort($response['result']['information']);
             $this->typesManager->setTypes($response['result']);
         }
 
-        return $response;
+        return $this->profiler->end(__METHOD__, $response);
     }
 
     /**
@@ -219,11 +225,15 @@ class VtigerClient extends HttpClient
      */
     public function getTypes()
     {
+        $this->profiler->begin(__METHOD__);
+
         if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
         }
 
-        return $this->typesManager->getTypes();
+        $types = $this->typesManager->getTypes();
+
+        return $this->profiler->end(__METHOD__, $types);
     }
 
     /**
@@ -231,11 +241,15 @@ class VtigerClient extends HttpClient
      */
     public function getTypeByElementId($id)
     {
+        $this->profiler->begin(__METHOD__);
+
         if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
         }
 
-        return $this->typesManager->getTypeByElementId($id);
+        $type = $this->typesManager->getTypeByElementId($id);
+
+        return $this->profiler->end(__METHOD__, $type);
     }
 
     /**
@@ -248,23 +262,25 @@ class VtigerClient extends HttpClient
      */
     public function describe($elementType, $depth = 0)
     {
+        $this->profiler->begin(__METHOD__);
+
         $validate = $this->elementValidator->describe($elementType);
 
         if (!$validate['success']) {
-            return $validate;
+            return $this->end(__METHOD__, $validate);
         }
 
         if ($depth > 0) {
-            return $this->depthManager->describe($elementType, $depth);
+            return $this->end(__METHOD__, $this->depthManager->describe($elementType, $depth));
         }
 
-        return $this->get([
+        return $this->profiler->end(__METHOD__, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('describe'),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -275,21 +291,23 @@ class VtigerClient extends HttpClient
      */
     public function create($elementType, $element)
     {
+        $this->profiler->begin(__METHOD__);
+
         $element = $this->elementSanitizer->create($elementType, $element);
         $validate = $this->elementValidator->create($elementType, $element);
 
         if (empty($validate['success'])) {
-            return $validate;
+            return $this->profiler->end(__METHOD__, $validate);
         }
 
-        return $this->post([
+        return $this->profiler->end(__METHOD__, $this->post([
             'form_params' => [
                 'operation'   => $this->operationMapper->get('create'),
                 'element'     => json_encode($element),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -302,17 +320,19 @@ class VtigerClient extends HttpClient
      */
     public function retrieve($id, $depth = 0)
     {
+        $this->profiler->begin(__METHOD__);
+
         if ($depth > 0) {
-            return $this->depthManager->retrieve($id, $depth);
+            return $this->profiler->end(__METHOD__, $this->depthManager->retrieve($id, $depth));
         }
 
-        return $this->get([
+        return $this->profiler->end(__METHOD__, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
                 'sessionName' => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -323,21 +343,23 @@ class VtigerClient extends HttpClient
      */
     public function update($elementType, $element)
     {
+        $this->profiler->begin(__METHOD__);
+
         $element = $this->elementSanitizer->update($elementType, $element);
         $validate = $this->elementValidator->update($elementType, $element);
 
         if (empty($validate['success'])) {
-            return $validate;
+            return $this->profiler->end(__METHOD__, $validate);
         }
 
-        return $this->post([
+        return $this->profiler->end(__METHOD__, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -348,6 +370,8 @@ class VtigerClient extends HttpClient
      */
     public function revise($elementType, $element)
     {
+        $this->profiler->begin(__METHOD__);
+
         /*
         $element = $this->elementSanitizer->update($elementType, $element);
         $validate = $this->elementValidator->update($elementType, $element);
@@ -357,14 +381,14 @@ class VtigerClient extends HttpClient
         }
         */
 
-        return $this->post([
+        return $this->profiler->end(__METHOD__, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('revise'),
                 'element'       => json_encode($element),
                 'elementType'   => $elementType,
                 'sessionName'   => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -375,13 +399,15 @@ class VtigerClient extends HttpClient
      */
     public function delete($id)
     {
-        return $this->post([
+        $this->profiler->begin(__METHOD__);
+
+        return $this->profiler->end(__METHOD__, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('delete'),
                 'id'            => $id,
                 'sessionName'   => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -391,13 +417,15 @@ class VtigerClient extends HttpClient
      */
     public function query($query)
     {
-        return $this->get([
+        $this->profiler->begin(__METHOD__);
+
+        return $this->profiler->end(__METHOD__, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('query'),
                 'query'       => trim(trim($query), ';').';',
                 'sessionName' => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -413,14 +441,16 @@ class VtigerClient extends HttpClient
      */
     public function sync($elementType, $timestamp, $syncType = 'application', $depth = 0)
     {
+        $this->profiler->begin(__METHOD__);
+
         if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
-            return [
+            return $this->profiler->end(__METHOD__, [
                 'success' => false,
                 'error'   => [
                     'code'    => 'WRONG_SYNCTYPE',
                     'message' => '$syncType must be on of "user", "userandgroup" or "application"',
                 ],
-            ];
+            ]);
         }
 
         if ($timestamp instanceof \DateTime) {
@@ -428,20 +458,20 @@ class VtigerClient extends HttpClient
         }
 
         if (!is_numeric($timestamp)) {
-            return [
+            return $this->profiler->end(__METHOD__, [
                 'success' => false,
                 'error'   => [
                     'code'    => 'WRONG_TIMESTAMP',
                     'message' => '$timestamp must be a valid unix time or a instance of DateTime',
                 ],
-            ];
+            ]);
         }
 
         if ($depth > 0) {
-            return $this->depthManager->sync($elementType, $timestamp, $syncType, $depth);
+            return $this->profiler->end(__METHOD__, $this->depthManager->sync($elementType, $timestamp, $syncType, $depth));
         }
 
-        return $this->get([
+        return $this->profiler->end(__METHOD__, $this->get([
             'query' => [
                 'operation'     => $this->operationMapper->get('sync'),
                 'elementType'   => $elementType,
@@ -449,7 +479,7 @@ class VtigerClient extends HttpClient
                 'syncType'      => $syncType,
                 'sessionName'   => $this->sessionName,
             ],
-        ]);
+        ]));
     }
 
     /**
@@ -461,9 +491,11 @@ class VtigerClient extends HttpClient
      */
     public function upload($element)
     {
+        $this->profiler->begin(__METHOD__);
+
         $file = $element['filename'];
 
-        return $this->post([
+        return $this->profiler->end(__METHOD__, $this->post([
             'multipart' => [
                 ['name' => 'operation', 'contents' => 'create'],
                 ['name' => 'elementType', 'contents' => 'Documents'],
@@ -471,7 +503,7 @@ class VtigerClient extends HttpClient
                 ['name' => 'sessionName', 'contents' => $this->sessionName],
                 ['name' => 'filename', 'contents' => file_get_contents($file), 'filename' => $file],
             ]
-        ]);
+        ]));
     }
 
     /**
@@ -479,6 +511,8 @@ class VtigerClient extends HttpClient
      */
     public function listUsers()
     {
-        return $this->query('SELECT * FROM Users;');
+        $this->profiler->begin(__METHOD__);
+
+        return $this->profiler->end(__METHOD__, $this->query('SELECT * FROM Users;'));
     }
 }

@@ -90,7 +90,7 @@ final class VtigerClientTest extends TestCase
         $expected =  json_decode(file_get_contents(__DIR__.'/fixtures/listTypes.json'), true);
 
         $actual = $client->listTypes();
-        #file_put_contents(__DIR__.'/fixtures/listTypes.json', json_encode($actual, JSON_PRETTY_PRINT));
+        //file_put_contents(__DIR__.'/fixtures/listTypes.json', json_encode($actual, JSON_PRETTY_PRINT));
 
         $this->assertEquals($expected, $actual);
     }

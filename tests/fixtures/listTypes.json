@@ -2,187 +2,72 @@
     "success": true,
     "result": {
         "types": [
-            "Campaigns",
-            "Vendors",
-            "Faq",
-            "Quotes",
-            "PurchaseOrder",
-            "SalesOrder",
-            "Invoice",
-            "PriceBooks",
-            "Calendar",
-            "Leads",
             "Accounts",
-            "Contacts",
-            "Potentials",
-            "Products",
-            "Documents",
-            "Emails",
-            "HelpDesk",
-            "Events",
-            "Users",
-            "PBXManager",
-            "ServiceContracts",
-            "Services",
-            "ModComments",
-            "SMSNotifier",
             "Assets",
-            "ProjectMilestone",
-            "ProjectTask",
-            "Project",
-            "Groups",
+            "Calendar",
+            "Campaigns",
+            "CompanyDetails",
+            "Contacts",
             "Currency",
             "DocumentFolders",
-            "CompanyDetails",
+            "Documents",
+            "Emails",
+            "Events",
+            "Faq",
+            "Groups",
+            "HelpDesk",
+            "Invoice",
+            "Leads",
             "LineItem",
+            "ModComments",
+            "PBXManager",
+            "Potentials",
+            "PriceBooks",
+            "ProductTaxes",
+            "Products",
+            "Project",
+            "ProjectMilestone",
+            "ProjectTask",
+            "PurchaseOrder",
+            "Quotes",
+            "SMSNotifier",
+            "SalesOrder",
+            "ServiceContracts",
+            "Services",
             "Tax",
-            "ProductTaxes"
+            "Users",
+            "Vendors"
         ],
         "information": {
-            "Campaigns": {
-                "isEntity": true,
-                "label": "Campaigns",
-                "singular": "Campaign"
-            },
-            "Vendors": {
-                "isEntity": true,
-                "label": "Vendors",
-                "singular": "Vendor"
-            },
-            "Faq": {
-                "isEntity": true,
-                "label": "FAQ",
-                "singular": "FAQ"
-            },
-            "Quotes": {
-                "isEntity": true,
-                "label": "Quotes",
-                "singular": "Quote"
-            },
-            "PurchaseOrder": {
-                "isEntity": true,
-                "label": "Purchase Orders",
-                "singular": "Purchase Order"
-            },
-            "SalesOrder": {
-                "isEntity": true,
-                "label": "Sales Orders",
-                "singular": "Sales Order"
-            },
-            "Invoice": {
-                "isEntity": true,
-                "label": "Invoices",
-                "singular": "Invoice"
-            },
-            "PriceBooks": {
-                "isEntity": true,
-                "label": "Price Books",
-                "singular": "Price Book"
-            },
-            "Calendar": {
-                "isEntity": true,
-                "label": "Calendar",
-                "singular": "Task"
-            },
-            "Leads": {
-                "isEntity": true,
-                "label": "Leads",
-                "singular": "Lead"
-            },
             "Accounts": {
                 "isEntity": true,
                 "label": "Organizations",
                 "singular": "Organization"
-            },
-            "Contacts": {
-                "isEntity": true,
-                "label": "Contacts",
-                "singular": "Contact"
-            },
-            "Potentials": {
-                "isEntity": true,
-                "label": "Opportunities",
-                "singular": "Opportunity"
-            },
-            "Products": {
-                "isEntity": true,
-                "label": "Products",
-                "singular": "Product"
-            },
-            "Documents": {
-                "isEntity": true,
-                "label": "Documents",
-                "singular": "Document"
-            },
-            "Emails": {
-                "isEntity": true,
-                "label": "Emails",
-                "singular": "Email"
-            },
-            "HelpDesk": {
-                "isEntity": true,
-                "label": "Tickets",
-                "singular": "Ticket"
-            },
-            "Events": {
-                "isEntity": true,
-                "label": "Events",
-                "singular": "Event"
-            },
-            "Users": {
-                "isEntity": true,
-                "label": "Users",
-                "singular": "User"
-            },
-            "PBXManager": {
-                "isEntity": true,
-                "label": "PBX Manager",
-                "singular": "Call Record"
-            },
-            "ServiceContracts": {
-                "isEntity": true,
-                "label": "Service Contracts",
-                "singular": "Service Contract"
-            },
-            "Services": {
-                "isEntity": true,
-                "label": "Services",
-                "singular": "Service"
-            },
-            "ModComments": {
-                "isEntity": true,
-                "label": "Comments",
-                "singular": "Comment"
-            },
-            "SMSNotifier": {
-                "isEntity": true,
-                "label": "SMS Notifier",
-                "singular": "SMS Notifier"
             },
             "Assets": {
                 "isEntity": true,
                 "label": "Assets",
                 "singular": "Asset"
             },
-            "ProjectMilestone": {
+            "Calendar": {
                 "isEntity": true,
-                "label": "Project Milestones",
-                "singular": "Project Milestone"
+                "label": "Calendar",
+                "singular": "Task"
             },
-            "ProjectTask": {
+            "Campaigns": {
                 "isEntity": true,
-                "label": "Project Tasks",
-                "singular": "Project Task"
+                "label": "Campaigns",
+                "singular": "Campaign"
             },
-            "Project": {
-                "isEntity": true,
-                "label": "Projects",
-                "singular": "Project"
-            },
-            "Groups": {
+            "CompanyDetails": {
                 "isEntity": false,
-                "label": "Groups",
-                "singular": "Groups"
+                "label": "CompanyDetails",
+                "singular": "CompanyDetails"
+            },
+            "Contacts": {
+                "isEntity": true,
+                "label": "Contacts",
+                "singular": "Contact"
             },
             "Currency": {
                 "isEntity": false,
@@ -194,25 +79,140 @@
                 "label": "DocumentFolders",
                 "singular": "DocumentFolders"
             },
-            "CompanyDetails": {
+            "Documents": {
+                "isEntity": true,
+                "label": "Documents",
+                "singular": "Document"
+            },
+            "Emails": {
+                "isEntity": true,
+                "label": "Emails",
+                "singular": "Email"
+            },
+            "Events": {
+                "isEntity": true,
+                "label": "Events",
+                "singular": "Event"
+            },
+            "Faq": {
+                "isEntity": true,
+                "label": "FAQ",
+                "singular": "FAQ"
+            },
+            "Groups": {
                 "isEntity": false,
-                "label": "CompanyDetails",
-                "singular": "CompanyDetails"
+                "label": "Groups",
+                "singular": "Groups"
+            },
+            "HelpDesk": {
+                "isEntity": true,
+                "label": "Tickets",
+                "singular": "Ticket"
+            },
+            "Invoice": {
+                "isEntity": true,
+                "label": "Invoices",
+                "singular": "Invoice"
+            },
+            "Leads": {
+                "isEntity": true,
+                "label": "Leads",
+                "singular": "Lead"
             },
             "LineItem": {
                 "isEntity": false,
                 "label": "LineItem",
                 "singular": "LineItem"
             },
-            "Tax": {
-                "isEntity": false,
-                "label": "Tax",
-                "singular": "Tax"
+            "ModComments": {
+                "isEntity": true,
+                "label": "Comments",
+                "singular": "Comment"
+            },
+            "PBXManager": {
+                "isEntity": true,
+                "label": "PBX Manager",
+                "singular": "Call Record"
+            },
+            "Potentials": {
+                "isEntity": true,
+                "label": "Opportunities",
+                "singular": "Opportunity"
+            },
+            "PriceBooks": {
+                "isEntity": true,
+                "label": "Price Books",
+                "singular": "Price Book"
             },
             "ProductTaxes": {
                 "isEntity": false,
                 "label": "ProductTaxes",
                 "singular": "ProductTaxes"
+            },
+            "Products": {
+                "isEntity": true,
+                "label": "Products",
+                "singular": "Product"
+            },
+            "Project": {
+                "isEntity": true,
+                "label": "Projects",
+                "singular": "Project"
+            },
+            "ProjectMilestone": {
+                "isEntity": true,
+                "label": "Project Milestones",
+                "singular": "Project Milestone"
+            },
+            "ProjectTask": {
+                "isEntity": true,
+                "label": "Project Tasks",
+                "singular": "Project Task"
+            },
+            "PurchaseOrder": {
+                "isEntity": true,
+                "label": "Purchase Orders",
+                "singular": "Purchase Order"
+            },
+            "Quotes": {
+                "isEntity": true,
+                "label": "Quotes",
+                "singular": "Quote"
+            },
+            "SMSNotifier": {
+                "isEntity": true,
+                "label": "SMS Notifier",
+                "singular": "SMS Notifier"
+            },
+            "SalesOrder": {
+                "isEntity": true,
+                "label": "Sales Orders",
+                "singular": "Sales Order"
+            },
+            "ServiceContracts": {
+                "isEntity": true,
+                "label": "Service Contracts",
+                "singular": "Service Contract"
+            },
+            "Services": {
+                "isEntity": true,
+                "label": "Services",
+                "singular": "Service"
+            },
+            "Tax": {
+                "isEntity": false,
+                "label": "Tax",
+                "singular": "Tax"
+            },
+            "Users": {
+                "isEntity": true,
+                "label": "Users",
+                "singular": "User"
+            },
+            "Vendors": {
+                "isEntity": true,
+                "label": "Vendors",
+                "singular": "Vendor"
             }
         }
     }
