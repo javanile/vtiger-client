@@ -3,7 +3,7 @@
 namespace Javanile\VtigerClient\Tests;
 
 use Javanile\VtigerClient\ElementValidator;
-use Javanile\VtigerClient\Logger;
+use Javanile\VtigerClient\System\Logger;
 use Javanile\VtigerClient\VtigerClient as Client;
 
 final class ElementValidatorTest extends TestCase

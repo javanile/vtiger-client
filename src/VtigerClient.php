@@ -16,6 +16,8 @@ namespace Javanile\VtigerClient;
 
 use Javanile\VtigerClient\System\HttpClient;
 use Javanile\VtigerClient\System\Functions;
+use Javanile\VtigerClient\System\Profiler;
+use Javanile\VtigerClient\System\Cache;
 
 class VtigerClient extends HttpClient
 {

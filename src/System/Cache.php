@@ -17,11 +17,15 @@ namespace Javanile\VtigerClient\System;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\GuzzleException;
 
-class Cache extends SystmemDriver
+class Cache extends SystemDriver
 {
     /**
      *
      */
-    protected $cache;
+    protected $env = 'VT_CLIENT_CACHE';
 
+    /**
+     *
+     */
+    protected $cache;
 }

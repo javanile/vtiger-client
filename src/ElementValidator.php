@@ -14,6 +14,8 @@
 
 namespace Javanile\VtigerClient;
 
+use Javanile\VtigerClient\System\Response;
+
 class ElementValidator
 {
     /**

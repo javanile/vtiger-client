@@ -67,7 +67,7 @@ class Profiler extends SystemDriver
 
         touch($this->lockFile);
         if (file_exists($this->path)) {
-            $past = (array)json_decode(file_get_contents($this->file), true);
+            $past = (array)json_decode(file_get_contents($this->path), true);
             if (isset($past[$this->tag][$method]['count'])) {
                 $this->profiler[$this->tag][$method]['count'] += $past[$this->tag][$method]['count'];
             }

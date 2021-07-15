@@ -22,9 +22,11 @@ debugger:
 ## -------
 ## Testing
 ## -------
-test: clean down up
+test: clean down up test-all
+
+test-all: up
 	@while [ -f .vtiger.lock ]; do sleep 2; done
-	@docker-compose run --rm phpunit tests
+	@docker-compose run --rm phpunit tests --stop-on-failure
 
 test-create-purchase-order:
 	@docker-compose run --rm phpunit tests --filter ::testCreatePurchaseOrder

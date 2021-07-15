@@ -48,9 +48,9 @@ class SystemDriver
      */
     public function __construct($args)
     {
-        $this->file = getenv($this->env);
-        $this->lockFile = $this->file.'.lock';
-        $this->active = (bool)$this->file;
+        $this->path = getenv($this->env);
+        $this->lockFile =  $this->path.'.lock';
+        $this->active = (bool)$this->path;
         $this->tag = $this->setTag(isset($args['username']) ? $args['username'] : null, $args['endpoint']);
     }
 
