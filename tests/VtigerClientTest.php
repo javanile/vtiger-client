@@ -145,8 +145,8 @@ final class VtigerClientTest extends TestCase
                     $actualFields[] = $field['name'];
                 }
                 sort($actualFields);
-                file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
-                file_put_contents($stubFieldsFile, json_encode($actualFields, JSON_PRETTY_PRINT));
+                //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+                //file_put_contents($stubFieldsFile, json_encode($actualFields, JSON_PRETTY_PRINT));
                 $this->assertEquals($expected, $actual);
                 $this->assertEquals($expectedFields, $actualFields);
             }
