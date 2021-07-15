@@ -267,11 +267,11 @@ class VtigerClient extends HttpClient
         $validate = $this->elementValidator->describe($elementType);
 
         if (!$validate['success']) {
-            return $this->end(__METHOD__, $validate);
+            return $this->profiler->end(__METHOD__, $validate);
         }
 
         if ($depth > 0) {
-            return $this->end(__METHOD__, $this->depthManager->describe($elementType, $depth));
+            return $this->profiler->end(__METHOD__, $this->depthManager->describe($elementType, $depth));
         }
 
         return $this->profiler->end(__METHOD__, $this->get([
