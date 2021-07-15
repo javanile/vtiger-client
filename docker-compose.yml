@@ -47,8 +47,8 @@ services:
     environment:
       - VT_ENDPOINT=http://vtiger
       - VT_USERNAME=admin
-      - VT_CLIENT_LOG_FILE=/app/volumes/logs/vtiger-client.log
-      - VT_CLIENT_PROFILING_FILE=/app/volumes/logs/vtiger-client.json
+      - VT_CLIENT_LOG_FILE=/app/tests/logs/vtiger-client.log
+      - VT_CLIENT_PROFILING_FILE=/app/tests/logs/vtiger-client.json
       - MYSQL_HOST=mysql
       - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=secret

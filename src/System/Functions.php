@@ -12,10 +12,7 @@
  * @license    MIT
  */
 
-namespace Javanile\VtigerClient;
-
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+namespace Javanile\VtigerClient\System;
 
 class Functions
 {

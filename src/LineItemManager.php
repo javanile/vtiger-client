@@ -14,9 +14,6 @@
 
 namespace Javanile\VtigerClient;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
-
 class LineItemManager
 {
     /**

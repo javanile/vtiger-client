@@ -2,6 +2,7 @@
 vendor/
 node_modules/
 volumes/
+tests/logs/
 debug/
 debug.zip
 npm-debug.log
@@ -10,3 +11,4 @@ coverage.xml
 vtiger.json
 .env
 .pwd.var
+!.gitkeep

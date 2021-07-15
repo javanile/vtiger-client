@@ -12,7 +12,7 @@
  * @license    MIT
  */
 
-namespace Javanile\VtigerClient;
+namespace Javanile\VtigerClient\System;
 
 class Profiler extends SystemDriver
 {

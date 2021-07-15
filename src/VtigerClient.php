@@ -14,8 +14,8 @@
 
 namespace Javanile\VtigerClient;
 
-use GuzzleHttp\Client;
-use GuzzleHttp\Exception\GuzzleException;
+use Javanile\VtigerClient\System\HttpClient;
+use Javanile\VtigerClient\System\Functions;
 
 class VtigerClient extends HttpClient
 {
@@ -80,6 +80,11 @@ class VtigerClient extends HttpClient
     protected $profiler;
 
     /**
+     *
+     */
+    protected $cache;
+
+    /**
      * Constructor.
      *
      * @param mixed $args
@@ -102,6 +107,7 @@ class VtigerClient extends HttpClient
         $this->lineItemManager = new LineItemManager($this);
         $this->depthManager = new DepthManager($this);
         $this->profiler = new Profiler($args);
+        $this->cache = new Cache($args);
     }
 
     /**
