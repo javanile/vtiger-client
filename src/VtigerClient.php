@@ -75,6 +75,11 @@ class VtigerClient extends HttpClient
     protected $depthManager;
 
     /**
+     *
+     */
+    protected $profiler;
+
+    /**
      * Constructor.
      *
      * @param mixed $args
@@ -96,6 +101,7 @@ class VtigerClient extends HttpClient
         $this->elementValidator = new ElementValidator($args, $this->getLogger());
         $this->lineItemManager = new LineItemManager($this);
         $this->depthManager = new DepthManager($this);
+        $this->profiler = new Profiler($args);
     }
 
     /**
@@ -104,11 +110,16 @@ class VtigerClient extends HttpClient
      * @param null|mixed $username
      *
      * @return array|mixed
+     *
+     * @throws \Exception
      */
     public function getChallenge($username = null)
     {
+        $this->profiler->begin(__METHOD__);
+
         if ($username !== null) {
             $this->username = $username;
+            $this->profiler->setTag($this->username, $this->endpoint);
             $this->logger->setTag($this->username, $this->endpoint);
         }
 
@@ -121,7 +132,7 @@ class VtigerClient extends HttpClient
 
         $this->token = isset($json['result']['token']) ? $json['result']['token'] : null;
 
-        return $json;
+        return $this->profiler->end(__METHOD__, $json);
     }
 
     /**
@@ -144,6 +155,7 @@ class VtigerClient extends HttpClient
     {
         if ($username !== null) {
             $this->username = $username;
+            $this->profiler->setTag($this->username, $this->endpoint);
             $this->logger->setTag($this->username, $this->endpoint);
         }
 

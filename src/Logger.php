@@ -14,35 +14,12 @@
 
 namespace Javanile\VtigerClient;
 
-class Logger
+class Logger extends Debugger
 {
     /**
-     *
+     * @var string
      */
-    protected $tag;
-
-    /**
-     * @var array|false|string
-     */
-    protected $file;
-
-    /**
-     * @var bool
-     */
-    protected $active;
-
-    /**
-     * Logger constructor.
-     *
-     * @param $args
-     */
-    public function __construct($args)
-    {
-        $this->file = getenv('VT_CLIENT_LOG_FILE');
-        $this->active = $this->file ? true : false;
-
-        $this->setTag(isset($args['username']) ? $args['username'] : null, $args['endpoint']);
-    }
+    protected $env = 'VT_CLIENT_LOG_FILE';
 
     /**
      * @param $object
@@ -90,16 +67,5 @@ class Logger
         }
 
         return $response;
-    }
-
-    /**
-     * @param $username
-     * @param $endpoint
-     */
-    public function setTag($username, $endpoint)
-    {
-        $host = parse_url($endpoint, PHP_URL_HOST);
-
-        $this->tag = $username ? $username.'@'.$host : $host;
     }
 }
