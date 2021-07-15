@@ -267,13 +267,13 @@ class VtigerClient extends HttpClient
 
         $idPrefix = Functions::getTypeIdPrefix($id);
 
-        if ($this->cacheManager->has(__METHOD__, $idPrefix)) {
-            return $this->profiler->end(__METHOD__, $idPrefix);
-        }
+        //if ($this->cache->has(__METHOD__, $idPrefix)) {
+        //    return $this->profiler->end(__METHOD__, $idPrefix);
+        //}
 
         $type = $this->typesManager->getTypeByIdPrefix($idPrefix);
 
-        $this->cacheManager->set(__METHOD__, $idPrefix, 3600);
+        //$this->cache->set(__METHOD__, $idPrefix, 3600);
 
         return $this->profiler->end(__METHOD__, $type);
     }

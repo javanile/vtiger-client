@@ -134,7 +134,7 @@ final class VtigerClientTest extends TestCase
         $client->login(self::$username, self::$accessKey);
 
         foreach (['Contacts', 'Quotes'] as $module) {
-            for ($depth = 1; $depth <= 2; $depth++) {
+            for ($depth = 1; $depth <= 1; $depth++) {
                 $stubFile = __DIR__.'/fixtures/describe'.$module.'WithDepth'.$depth.'.json';
                 $stubFieldsFile = __DIR__.'/fixtures/describeFields'.$module.'WithDepth'.$depth.'.json';
                 $expected = json_decode(file_get_contents($stubFile), true);
