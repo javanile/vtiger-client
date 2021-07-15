@@ -405,9 +405,15 @@ final class VtigerClientTest extends TestCase
             $expected['result']['product_id__createdtime'] = $actual['result']['product_id__createdtime'];
             $expected['result']['product_id__modifiedtime'] = $actual['result']['product_id__modifiedtime'];
             $expected['result']['product_id__product_no'] = $actual['result']['product_id__product_no'];
-            //$expected['result']['modifiedby__accesskey'] = $actual['result']['modifiedby__accesskey'];
+            $expected['result']['modifiedby__accesskey'] = $actual['result']['modifiedby__accesskey'];
             $expected['result']['createdtime'] = $actual['result']['createdtime'];
             $expected['result']['modifiedtime'] = $actual['result']['modifiedtime'];
+            if (isset($expected['result']['product_id__modifiedby__accesskey'])) {
+                $expected['result']['product_id__modifiedby__accesskey'] = $actual['result']['product_id__modifiedby__accesskey'];
+            }
+            if (isset($expected['result']['product_id__assigned_user_id__accesskey'])) {
+                $expected['result']['product_id__assigned_user_id__accesskey'] = $actual['result']['product_id__assigned_user_id__accesskey'];
+            }
             //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
             $this->assertEquals($expected, $actual);
         }
