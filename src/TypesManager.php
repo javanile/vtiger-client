@@ -98,23 +98,26 @@ class TypesManager
     {
         $types = isset($this->listTypesResult['types']) ? $this->listTypesResult['types'] : null;
 
-        if (is_array($types)) {
-            $this->typesTable = [];
-            $this->typesResolver = [];
-            foreach ($types as $type) {
-                if (empty($listTypesResult['information'][$type])) {
-                    continue;
-                }
-                $idPrefix = $this->getIdPrefixByType($type);
-                if (empty($idPrefix)) {
-                    continue;
-                }
-                $this->typesResolver[$idPrefix] = $type;
-                $listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
-                $this->typesTable[$type] = $listTypesResult['information'][$type];
-            }
-            $this->types = $this->sort($types);
+        if (!is_array($types) || !$types) {
+            return;
         }
+
+        $this->typesTable = [];
+        $this->typesResolver = [];
+
+        foreach ($types as $type) {
+            if (empty($this->listTypesResult['information'][$type])) {
+                continue;
+            }
+            $idPrefix = $this->getIdPrefixByType($type);
+            if (empty($idPrefix)) {
+                continue;
+            }
+            $this->typesResolver[$idPrefix] = $type;
+            $this->listTypesResult['information'][$type]['idPrefix'] = $idPrefix;
+            $this->typesTable[$type] = $this->listTypesResult['information'][$type];
+        }
+        $this->types = $this->sort($types);
     }
 
     /**
@@ -138,6 +141,10 @@ class TypesManager
     {
         if (!Functions::isElementId($id)) {
             return null;
+        }
+
+        if ($this->typesResolver === null) {
+            $this->buildTypes();
         }
 
         $idPrefix = Functions::getTypeIdPrefix($id);

@@ -377,6 +377,28 @@ final class VtigerClientTest extends TestCase
     }
     */
 
+    public function testRetrieveWithDepthOne()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
+
+        $faq = $client->create('Faq', [
+            'question' => 'Test',
+            'faq_answer' => 'Test',
+            'faqstatus' => 'New',
+            'product_id' => $product['id'],
+        ])['result'];
+
+        $actual = $client->retrieve($faq['id'], 1);
+
+        $this->assertEquals($product['id'], $actual['result']['product_id__id']);
+    }
+
     public function testRetrieveWithDepth()
     {
         $client = new Client(self::$endpoint);
@@ -401,9 +423,7 @@ final class VtigerClientTest extends TestCase
             $expected['result']['id'] = $actual['result']['id'];
             $expected['result']['faq_no'] = $actual['result']['faq_no'];
             $expected['result']['product_id'] = $actual['result']['product_id'];
-            if (isset($actual['result']['product_id__id'])) {
-                $expected['result']['product_id__id'] = $actual['result']['product_id__id'];
-            }
+            $expected['result']['product_id__id'] = $actual['result']['product_id__id'];
             $expected['result']['product_id__createdtime'] = $actual['result']['product_id__createdtime'];
             $expected['result']['product_id__modifiedtime'] = $actual['result']['product_id__modifiedtime'];
             $expected['result']['product_id__product_no'] = $actual['result']['product_id__product_no'];
