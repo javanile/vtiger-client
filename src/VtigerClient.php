@@ -123,7 +123,7 @@ class VtigerClient extends HttpClient
      */
     public function getChallenge($username = null)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if ($username !== null) {
             $this->username = $username;
@@ -140,7 +140,7 @@ class VtigerClient extends HttpClient
 
         $this->token = isset($json['result']['token']) ? $json['result']['token'] : null;
 
-        return $this->profiler->end(__METHOD__, $json);
+        return $this->profiler->end(__METHOD__, $time, $json);
     }
 
     /**
@@ -161,7 +161,7 @@ class VtigerClient extends HttpClient
      */
     public function login($username = null, $accessKey = null)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if ($username !== null) {
             $this->username = $username;
@@ -194,7 +194,7 @@ class VtigerClient extends HttpClient
             $this->elementSanitizer->setDefaultAssignedUserId($this->userId);
         }
 
-        return $this->profiler->end(__METHOD__, $json);
+        return $this->profiler->end(__METHOD__, $time, $json);
     }
 
     /**
@@ -210,7 +210,7 @@ class VtigerClient extends HttpClient
      */
     public function listTypes()
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         $response = $this->get([
             'query' => [
@@ -225,7 +225,7 @@ class VtigerClient extends HttpClient
             $this->typesManager->setTypes($response['result']);
         }
 
-        return $this->profiler->end(__METHOD__, $response);
+        return $this->profiler->end(__METHOD__, $time, $response);
     }
 
     /**
@@ -233,7 +233,7 @@ class VtigerClient extends HttpClient
      */
     public function getTypes()
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
@@ -241,7 +241,7 @@ class VtigerClient extends HttpClient
 
         $types = $this->typesManager->getTypes();
 
-        return $this->profiler->end(__METHOD__, $types);
+        return $this->profiler->end(__METHOD__, $time, $types);
     }
 
     /**
@@ -259,7 +259,7 @@ class VtigerClient extends HttpClient
             throw new \Exception("Invalid element id '{$id}'.");
         }
 
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if (!$this->typesManager->hasTypes()) {
             $this->listTypes();
@@ -275,7 +275,7 @@ class VtigerClient extends HttpClient
 
         //$this->cache->set(__METHOD__, $idPrefix, 3600);
 
-        return $this->profiler->end(__METHOD__, $type);
+        return $this->profiler->end(__METHOD__, $time, $type);
     }
 
     /**
@@ -288,19 +288,19 @@ class VtigerClient extends HttpClient
      */
     public function describe($elementType, $depth = 0)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         $validate = $this->elementValidator->describe($elementType);
 
         if (!$validate['success']) {
-            return $this->profiler->end(__METHOD__, $validate);
+            return $this->profiler->end(__METHOD__, $time, $validate);
         }
 
         if ($depth > 0) {
-            return $this->profiler->end(__METHOD__, $this->depthManager->describe($elementType, $depth));
+            return $this->profiler->end(__METHOD__, $time, $this->depthManager->describe($elementType, $depth));
         }
 
-        return $this->profiler->end(__METHOD__, $this->get([
+        return $this->profiler->end(__METHOD__, $time, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('describe'),
                 'elementType' => $elementType,
@@ -317,16 +317,16 @@ class VtigerClient extends HttpClient
      */
     public function create($elementType, $element)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         $element = $this->elementSanitizer->create($elementType, $element);
         $validate = $this->elementValidator->create($elementType, $element);
 
         if (empty($validate['success'])) {
-            return $this->profiler->end(__METHOD__, $validate);
+            return $this->profiler->end(__METHOD__, $time, $validate);
         }
 
-        return $this->profiler->end(__METHOD__, $this->post([
+        return $this->profiler->end(__METHOD__, $time, $this->post([
             'form_params' => [
                 'operation'   => $this->operationMapper->get('create'),
                 'element'     => json_encode($element),
@@ -346,13 +346,13 @@ class VtigerClient extends HttpClient
      */
     public function retrieve($id, $depth = 0, $elementType = null)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if ($depth > 0) {
-            return $this->profiler->end(__METHOD__, $this->depthManager->retrieve($id, $depth, $elementType));
+            return $this->profiler->end(__METHOD__, $time, $this->depthManager->retrieve($id, $depth, $elementType));
         }
 
-        return $this->profiler->end(__METHOD__, $this->get([
+        return $this->profiler->end(__METHOD__, $time, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('retrieve'),
                 'id'          => $id,
@@ -369,16 +369,16 @@ class VtigerClient extends HttpClient
      */
     public function update($elementType, $element)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         $element = $this->elementSanitizer->update($elementType, $element);
         $validate = $this->elementValidator->update($elementType, $element);
 
         if (empty($validate['success'])) {
-            return $this->profiler->end(__METHOD__, $validate);
+            return $this->profiler->end(__METHOD__, $time, $validate);
         }
 
-        return $this->profiler->end(__METHOD__, $this->post([
+        return $this->profiler->end(__METHOD__, $time, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('update'),
                 'element'       => json_encode($element),
@@ -396,7 +396,7 @@ class VtigerClient extends HttpClient
      */
     public function revise($elementType, $element)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         /*
         $element = $this->elementSanitizer->update($elementType, $element);
@@ -407,7 +407,7 @@ class VtigerClient extends HttpClient
         }
         */
 
-        return $this->profiler->end(__METHOD__, $this->post([
+        return $this->profiler->end(__METHOD__, $time, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('revise'),
                 'element'       => json_encode($element),
@@ -425,9 +425,9 @@ class VtigerClient extends HttpClient
      */
     public function delete($id)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
-        return $this->profiler->end(__METHOD__, $this->post([
+        return $this->profiler->end(__METHOD__, $time, $this->post([
             'form_params' => [
                 'operation'     => $this->operationMapper->get('delete'),
                 'id'            => $id,
@@ -443,9 +443,9 @@ class VtigerClient extends HttpClient
      */
     public function query($query)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
-        return $this->profiler->end(__METHOD__, $this->get([
+        return $this->profiler->end(__METHOD__, $time, $this->get([
             'query' => [
                 'operation'   => $this->operationMapper->get('query'),
                 'query'       => trim(trim($query), ';').';',
@@ -467,10 +467,10 @@ class VtigerClient extends HttpClient
      */
     public function sync($elementType, $timestamp, $syncType = 'application', $depth = 0)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         if (!in_array($syncType, ['user', 'userandgroup', 'application'])) {
-            return $this->profiler->end(__METHOD__, [
+            return $this->profiler->end(__METHOD__, $time, [
                 'success' => false,
                 'error'   => [
                     'code'    => 'WRONG_SYNCTYPE',
@@ -484,7 +484,7 @@ class VtigerClient extends HttpClient
         }
 
         if (!is_numeric($timestamp)) {
-            return $this->profiler->end(__METHOD__, [
+            return $this->profiler->end(__METHOD__, $time, [
                 'success' => false,
                 'error'   => [
                     'code'    => 'WRONG_TIMESTAMP',
@@ -494,10 +494,10 @@ class VtigerClient extends HttpClient
         }
 
         if ($depth > 0) {
-            return $this->profiler->end(__METHOD__, $this->depthManager->sync($elementType, $timestamp, $syncType, $depth));
+            return $this->profiler->end(__METHOD__, $time, $this->depthManager->sync($elementType, $timestamp, $syncType, $depth));
         }
 
-        return $this->profiler->end(__METHOD__, $this->get([
+        return $this->profiler->end(__METHOD__, $time, $this->get([
             'query' => [
                 'operation'     => $this->operationMapper->get('sync'),
                 'elementType'   => $elementType,
@@ -517,11 +517,11 @@ class VtigerClient extends HttpClient
      */
     public function upload($element)
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
         $file = $element['filename'];
 
-        return $this->profiler->end(__METHOD__, $this->post([
+        return $this->profiler->end(__METHOD__, $time, $this->post([
             'multipart' => [
                 ['name' => 'operation', 'contents' => 'create'],
                 ['name' => 'elementType', 'contents' => 'Documents'],
@@ -537,8 +537,8 @@ class VtigerClient extends HttpClient
      */
     public function listUsers()
     {
-        $this->profiler->begin(__METHOD__);
+        $time = $this->profiler->begin(__METHOD__);
 
-        return $this->profiler->end(__METHOD__, $this->query('SELECT * FROM Users;'));
+        return $this->profiler->end(__METHOD__, $time, $this->query('SELECT * FROM Users;'));
     }
 }
