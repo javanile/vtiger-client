@@ -13,6 +13,9 @@ update:
 up:
 	@docker-compose up -d
 
+start:
+	@docker-compose up -d
+
 down:
 	@docker-compose down -v
 
@@ -72,6 +75,9 @@ test-operation-mapper: clean
 
 test-list-types: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testListTypes
+
+test-query-with-join: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testQueryWithJoin
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure

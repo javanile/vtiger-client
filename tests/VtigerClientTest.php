@@ -553,4 +553,27 @@ final class VtigerClientTest extends TestCase
             $this->assertEquals($expected, $actual);
         }
     }
+
+    /*
+    public function testQueryWithJoin()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        $product = $client->create('Products', [
+            'productname' => 'Test Product',
+            'discontinued' => 1,
+        ])['result'];
+
+        $faq = $client->create('Faq', [
+            'faqstatus' => 'draft',
+            'question' => 'this is a FAQ 1',
+            'faq_answer' => 'this is a FAQ answer',
+            'assigned_user_id' => 1,
+            'product_id' => $product['id'],
+        ])['result'];
+
+        $actual = $client->query('SELECT id FROM Faq LIMIT 1');
+    }
+    */
 }
