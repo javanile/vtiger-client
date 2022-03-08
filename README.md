@@ -8,7 +8,7 @@
 
 > **LOOKING FOR FAST DEMO! Visit --> [https://github.com/javanile/vtiger-demo]() <--**
 
-## Get started
+## Get Started
 
 ```bash
 composer require javanile/vtiger-client
@@ -25,6 +25,23 @@ $client->login('<<username>>', '<<accessKey>>');
 $cliet->create('Leads', [
    'email' => '<<lead@email>>' 
 ]);
+```
+
+### Command-line usage
+
+#### Intall
+
+```shell
+curl -sLo vtc https://github.com/javanile/vtiger-client/releases/download/0.0.28/vtc.phar
+chmod +x vtc
+sudo mv vtc /usr/local/bin/ 
+vtc
+```
+
+#### Usage
+
+```shell
+vtc query "SELECT * FROM Contacts"
 ```
 
 ## Test
