@@ -14,3 +14,4 @@ vtiger.json
 vtiger.config.json
 !.gitkeep
 tmp/
+contrib/box.phar

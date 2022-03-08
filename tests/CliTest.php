@@ -36,20 +36,19 @@ final class CliTest extends TestCase
 
     public function testPing()
     {
-        $output = `cd tmp && php ../bin/vtc ping`;
-        $this->assertEquals(10, $output);
+        $output = json_decode(`cd tmp && php ../bin/vtc ping`, true);
+        $this->assertTrue($output['success']);
     }
 
-    /*
     public function testQuery()
     {
-        $output = `php ./bin/vtc query "SELECT * FROM Contacts LIMIT 1, 1"`;
-        $this->assertEquals(10, $output);
+        $output = json_decode(`cd tmp && php ../bin/vtc query "SELECT * FROM Contacts LIMIT 1"`, true);
+        $this->assertTrue($output['success']);
     }
 
     public function testSyntaxError()
     {
-        $output = `php ./bin/vtc unknown`;
-        $this->assertEquals(10, $output);
-    }*/
+        $output = trim(`php ./bin/vtc unknown`);
+        $this->assertEquals('Syntax error.', $output);
+    }
 }

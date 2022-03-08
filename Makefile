@@ -23,6 +23,18 @@ debugger:
 	@docker-compose run --rm vtiger php tests/bin/debugger.php
 
 ## -------
+## Contrib
+## -------
+
+build-phar:
+	@[ -d vendor ] && mv vendor vendor.tmp || true
+	@[ -f composer.lock ] && mv composer.lock composer.lock.tmp || true
+	@docker-compose run --rm composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+	@docker-compose run --rm box build
+	@[ -f composer.lock.tmp ] && mv composer.lock.tmp composer.lock || true
+	@[ -d vendor.tmp ] && mv vendor.tmp vendor || true
+
+## -------
 ## Testing
 ## -------
 test: clean down up test-all
