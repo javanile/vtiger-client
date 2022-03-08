@@ -75,4 +75,15 @@ class Functions
 
         return $encrypted_password;
     }
+
+    /**
+     * @param $data
+     * @return false|string
+     */
+    public static function jsonEncode($data)
+    {
+        $rawJson = json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES).PHP_EOL;
+
+        return $rawJson;
+    }
 }

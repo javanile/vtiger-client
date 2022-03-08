@@ -7,7 +7,12 @@ if (file_exists(__DIR__.'/../../../autoload.php')) {
     require __DIR__.'/../vendor/autoload.php';
 }
 
+use Javanile\VtigerClient\VtigerClient;
+use Javanile\VtigerClient\System\Functions;
+
 $command = strtolower(trim($argv[1]));
+$configFile = getcwd().'/vtiger.config.json';
+$config = file_exists($configFile) ? json_decode(file_get_contents($configFile), true) : [];
 
 /**
  * Default
@@ -32,7 +37,6 @@ EOF;
  * Init
  */
 if ($command == 'init') {
-    $configFile = getcwd().'/vtiger.config.json';
     $configJson = json_encode([
         'vtiger_url' => 'https://demo.vtiger.com/vtigercrm/',
         'username' => 'admin',
@@ -41,7 +45,7 @@ if ($command == 'init') {
     if (!file_exists($configFile)) {
         $size = file_put_contents($configFile, $configJson);
         if (empty($size)) {
-            echo "Problem on creating file '$configFile'.".PHP_EOL;
+            echo "[ERROR!] Problem on creating file '$configFile'.".PHP_EOL;
             echo "You must create it manually with the following content:\n$configJson\n\n".PHP_EOL;
         }
     } else {
@@ -53,5 +57,11 @@ if ($command == 'init') {
     exit(0);
 }
 
-var_dump($command);
-
+/**
+ * Ping
+ */
+if ($command == 'ping') {
+    $client = new VtigerClient($config['vtiger_url']);
+    $response = $client->login($config['username'], $config['access_key']);
+    echo Functions::jsonEncode($response);
+}

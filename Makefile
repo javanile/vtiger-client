@@ -81,7 +81,7 @@ test-query-with-join: clean
 
 test-cli:
 	#@docker-compose run --rm phpunit tests --stop-on-failure --filter CliTest::
-	@docker-compose run --rm vtiger php ./bin/vtc init
+	@docker-compose run --rm vtiger php ./bin/vtc ping
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure
