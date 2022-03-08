@@ -25,8 +25,13 @@ final class CliTest extends TestCase
 
     public function testInit()
     {
-        $output = `cd tmp && php ../bin/vtc init`;
-        $this->assertEquals(10, $output);
+        $configFile = 'tmp/vtiger.config.json';
+        if (file_exists($configFile)) {
+            unlink($configFile);
+        }
+        $output = trim(`cd tmp && php ../bin/vtc init | head -1`);
+        $this->assertEquals("File '{$this->cwd}/tmp/vtiger.config.json' was created.", $output);
+        $this->assertFileExists($configFile);
     }
 
     public function testPing()
@@ -35,6 +40,7 @@ final class CliTest extends TestCase
         $this->assertEquals(10, $output);
     }
 
+    /*
     public function testQuery()
     {
         $output = `php ./bin/vtc query "SELECT * FROM Contacts LIMIT 1, 1"`;
@@ -45,5 +51,5 @@ final class CliTest extends TestCase
     {
         $output = `php ./bin/vtc unknown`;
         $this->assertEquals(10, $output);
-    }
+    }*/
 }
