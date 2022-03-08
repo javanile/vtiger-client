@@ -36,6 +36,7 @@ List of available commands
   
 Documentation can be found at https://github.com/javanile/vtiger-client
 EOF;
+    echo PHP_EOL;
     exit(1);
 }
 
