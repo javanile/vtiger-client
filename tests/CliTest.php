@@ -7,21 +7,43 @@ use Javanile\VtigerClient\VtigerClient as Client;
 
 final class CliTest extends TestCase
 {
+    protected $cwd;
+
+    public function setUp()
+    {
+        $this->cwd = getcwd();
+        if (!is_dir($this->cwd.'/tmp')) {
+            mkdir($this->cwd.'/tmp', 0777, true);
+        }
+    }
+
     public function testNoArgs()
     {
-        $output = `php ./bin/vtc`;
-        $this->assertEquals(10, $output);
+        $output = trim(`cd tmp && php ../bin/vtc | head -1`);
+        $this->assertEquals('Usage: vtc [COMMAND] [ARG]...', $output);
     }
 
     public function testInit()
     {
-        $output = `php ./bin/vtc init`;
+        $output = `cd tmp && php ../bin/vtc init`;
         $this->assertEquals(10, $output);
     }
 
     public function testPing()
     {
-        $output = `php ./bin/vtc ping`;
+        $output = `cd tmp && php ../bin/vtc ping`;
+        $this->assertEquals(10, $output);
+    }
+
+    public function testQuery()
+    {
+        $output = `php ./bin/vtc query "SELECT * FROM Contacts LIMIT 1, 1"`;
+        $this->assertEquals(10, $output);
+    }
+
+    public function testSyntaxError()
+    {
+        $output = `php ./bin/vtc unknown`;
         $this->assertEquals(10, $output);
     }
 }

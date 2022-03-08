@@ -13,3 +13,4 @@ vtiger.json
 .pwd.var
 vtiger.config.json
 !.gitkeep
+tmp/
