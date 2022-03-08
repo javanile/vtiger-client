@@ -11,4 +11,5 @@ coverage.xml
 vtiger.json
 .env
 .pwd.var
+vtiger.config.json
 !.gitkeep

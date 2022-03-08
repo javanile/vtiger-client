@@ -79,5 +79,10 @@ test-list-types: clean
 test-query-with-join: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testQueryWithJoin
 
+test-cli:
+	#@docker-compose run --rm phpunit tests --stop-on-failure --filter CliTest::
+	@docker-compose run --rm vtiger php ./bin/vtc init
+
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure
+

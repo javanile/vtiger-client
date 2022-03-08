@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+
+if (file_exists(__DIR__.'/../../../autoload.php')) {
+    require __DIR__.'/../../../autoload.php';
+} else {
+    require __DIR__.'/../vendor/autoload.php';
+}
+
+$command = strtolower(trim($argv[1]));
+
+/**
+ * Default
+ */
+if (empty($command)) {
+    echo <<<EOF
+Usage: vtc [COMMAND] [ARG]...
+
+Connect and exchange data over Vtiger Webservices
+
+List of available commands
+  init              Create the file: vtiger.config.json
+  ping              Test the connection to the Vtiger CRM instance
+  query "QUERY"     Execute webservice query
+  
+Documentation can be found at https://github.com/javanile/vtiger-client
+EOF;
+    exit(1);
+}
+
+/**
+ * Init
+ */
+if ($command == 'init') {
+    $configFile = getcwd().'/vtiger.config.json';
+    $configJson = json_encode([
+        'vtiger_url' => 'https://demo.vtiger.com/vtigercrm/',
+        'username' => 'admin',
+        'access_key' => 'PcC1w0COZDYbqBi',
+    ], JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT);
+    if (!file_exists($configFile)) {
+        $size = file_put_contents($configFile, $configJson);
+        if (empty($size)) {
+            echo "Problem on creating file '$configFile'.".PHP_EOL;
+            echo "You must create it manually with the following content:\n$configJson\n\n".PHP_EOL;
+        }
+    } else {
+        echo "The file '$configFile' already exists.".PHP_EOL;
+    }
+    chmod($configFile, 0777);
+    echo 'Change manually the values of "vtiger_url", "username" and "access_key"'.PHP_EOL;
+    echo 'Than type the following command: \'vtc ping\' to test connection.'.PHP_EOL;
+    exit(0);
+}
+
+var_dump($command);
+
