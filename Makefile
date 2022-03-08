@@ -26,9 +26,9 @@ debugger:
 build-phar:
 	@[ -d vendor ] && mv vendor vendor.tmp || true
 	@[ -f composer.lock ] && mv composer.lock composer.lock.tmp || true
-	@docker-compose run --rm vtiger composer install --no-ansi --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+	@docker-compose run --rm -u $$(id -u) vtiger composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
 	@docker-compose run --rm box compile
-	@[ -f composer.lock.tmp ] && mv composer.lock.tmp composer.lock || true
+	@[ -f composer.lock.tmp ] && mv -f composer.lock.tmp composer.lock || true
 	@[ -d vendor.tmp ] && mv vendor.tmp vendor || true
 
 ## -------
@@ -36,7 +36,7 @@ build-phar:
 ## -------
 
 dev-clean:
-	@docker-compose run --rm -u $$(id -u) vtiger rm -fr debug tmp vendor vendor.tmp
+	@docker-compose run --rm vtiger rm -fr debug tmp vendor vendor.tmp
 
 dev-install:
 	@docker-compose run --rm -u $$(id -u) vtiger composer install

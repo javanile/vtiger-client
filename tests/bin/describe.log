@@ -1,0 +1,7 @@
+{
+    "success": false,
+    "error": {
+        "code": "AUTHENTICATION_REQUIRED",
+        "message": "Authencation required"
+    }
+}
