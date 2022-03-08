@@ -19,11 +19,13 @@ down:
 debugger:
 	@docker-compose run --rm vtiger php tests/bin/debugger.php
 
-## -------
-## Contrib
-## -------
+## -----
+## Build
+## -----
 
-build-phar:
+build: bin/vtc.phar
+
+bin/vtc.phar:
 	@[ -d vendor ] && mv vendor vendor.tmp || true
 	@[ -f composer.lock ] && mv composer.lock composer.lock.tmp || true
 	@docker-compose run --rm -u $$(id -u) vtiger composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
