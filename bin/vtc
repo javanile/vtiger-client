@@ -56,7 +56,6 @@ if ($command == 'init') {
     } else {
         echo "The file '$configFile' already exists.".PHP_EOL;
     }
-    chmod($configFile, 0777);
     echo 'Change manually the values of "vtiger_url", "username" and "access_key"'.PHP_EOL;
     echo 'Than type the following command: \'vtc ping\' to test connection.'.PHP_EOL;
     exit(0);
