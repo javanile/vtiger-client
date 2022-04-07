@@ -12,7 +12,7 @@ final class HttpClientTest extends TestCase
             'success' => false,
             'error' => [
                 'code' => 'GUZZLE_ERROR',
-                'message' => 'cURL error 6: Could not resolve host: broken_uri (see https://curl.haxx.se/libcurl/c/libcurl-errors.html)',
+                'message' => 'cURL error 6: Could not resolve host: broken_uri (see https://curl.haxx.se/libcurl/c/libcurl-errors.html) for broken_uri/webservice.php?operation=getchallenge',
             ]
         ];
 

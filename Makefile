@@ -44,7 +44,7 @@ dev-install:
 	@docker-compose run --rm -u $$(id -u) vtiger composer install
 
 dev-update:
-	@docker-compose run --rm -u $$(id -u) vtiger composer update
+	@docker-compose run --rm -u $$(id -u) vtiger composer update --ignore-platform-reqs
 
 ## -------
 ## Testing

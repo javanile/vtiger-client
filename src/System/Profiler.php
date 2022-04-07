@@ -78,7 +78,7 @@ class Profiler extends SystemDriver
         if ($profiler[$this->tag][$method]['last'] < $profiler[$this->tag][$method]['min']) {
             $profiler[$this->tag][$method]['min'] = $profiler[$this->tag][$method]['last'];
         }
-        if ($accuracy < $profiler[$this->tag][$method]['accuracy']) {
+        if (empty($profiler[$this->tag][$method]['accuracy']) || $accuracy < $profiler[$this->tag][$method]['accuracy']) {
             $profiler[$this->tag][$method]['accuracy'] = $accuracy;
         }
         file_put_contents($this->path, json_encode($profiler, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES));
