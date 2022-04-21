@@ -83,4 +83,17 @@ if ($command == 'query') {
     exit(0);
 }
 
+/**
+ * Ping
+ */
+if ($command == 'describe') {
+    $client = new VtigerClient($config['vtiger_url']);
+    $client->login($config['username'], $config['access_key']);
+    $module = $argv[2];
+    $depth = $argv[3] ?? 0;
+    $response = $client->describe($module, $depth);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
 echo 'Syntax error.'.PHP_EOL;
