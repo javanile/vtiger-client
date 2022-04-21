@@ -97,4 +97,21 @@ if ($command == 'describe') {
     exit(0);
 }
 
+/**
+ * Create
+ */
+if ($command == 'create') {
+    $client = new VtigerClient($config['vtiger_url']);
+    $client->login($config['username'], $config['access_key']);
+    $module = $argv[2];
+    if ($argv[3][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
+    } else {
+        $element = json_decode($argv[3], true);
+    }
+    $response = $client->create($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
 echo 'Syntax error.'.PHP_EOL;
