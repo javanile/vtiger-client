@@ -30,9 +30,10 @@ Usage: vtc [COMMAND] [ARG]...
 Connect and exchange data over Vtiger Webservices
 
 List of available commands
-  init              Create the file: vtiger.config.json
-  ping              Test the connection to the Vtiger CRM instance
-  query "QUERY"     Execute webservice query
+  init                      Create the file: vtiger.config.json
+  ping                      Test the connection to the Vtiger CRM instance
+  query "QUERY"             Execute webservice query
+  describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
   
 Documentation can be found at https://github.com/javanile/vtiger-client
 EOF;
