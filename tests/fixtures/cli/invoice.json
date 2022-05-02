@@ -1,0 +1,19 @@
+{
+  "subject": "Fattura prova",
+  "account_id": "11x46",
+  "productid": "14x125",
+  "bill_street": "Test",
+  "ship_street": "Test",
+  "LineItems": [
+    {
+      "productid": "14x125",
+      "listprice": 1,
+      "quantity": 1
+    },
+    {
+      "productid": "14x131",
+      "listprice": 1,
+      "quantity": 1
+    }
+  ]
+}
