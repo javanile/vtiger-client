@@ -150,6 +150,20 @@ class ElementSanitizer
     }
 
     /**
+     * @param $elementType
+     * @param $element
+     *
+     * @return mixed
+     */
+    public function revise($elementType, $element)
+    {
+        $element = $this->sanitizeEmptyElement($element);
+        $element = $this->sanitizeInventoryElement('revise', $elementType, $element);
+
+        return $element;
+    }
+
+    /**
      * @param $crmid
      * @param mixed $id
      *

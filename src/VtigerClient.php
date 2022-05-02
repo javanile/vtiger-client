@@ -398,8 +398,8 @@ class VtigerClient extends HttpClient
     {
         $time = $this->profiler->begin(__METHOD__);
 
+        $element = $this->elementSanitizer->revise($elementType, $element);
         /*
-        $element = $this->elementSanitizer->update($elementType, $element);
         $validate = $this->elementValidator->update($elementType, $element);
 
         if (empty($validate['success'])) {

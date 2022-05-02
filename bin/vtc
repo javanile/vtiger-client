@@ -114,4 +114,53 @@ if ($command == 'create') {
     exit(0);
 }
 
+/**
+ * Create Custom
+ */
+if (substr($command, 0, 7) == 'create:') {
+    $operation = substr($command, 7);
+    $client = new VtigerClient([
+        'endpoint' => $config['vtiger_url'],
+        'operationsMap' => [
+            'create' => $operation,
+        ]
+    ]);
+    $client->login($config['username'], $config['access_key']);
+    $module = $argv[2];
+    if (isset($argv[3]) && $argv[3][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
+    } else {
+        $element = json_decode($argv[3], true);
+    }
+    $response = $client->create($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+
+/**
+ * Create
+ */
+if ($command == 'revise') {
+    $client = new VtigerClient($config['vtiger_url']);
+    $client->login($config['username'], $config['access_key']);
+    $module = $argv[2];
+    if (isset($argv[3]) && $argv[3][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
+    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
+        $element['id'] = $argv[3];
+    } elseif (isset($argv[5])) {
+        $element = [
+            'id' => $argv[3],
+            $argv[4] => $argv[5],
+        ];
+    } else {
+        die("Missing arguments.\n");
+    }
+    $response = $client->revise($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
 echo 'Syntax error.'.PHP_EOL;
