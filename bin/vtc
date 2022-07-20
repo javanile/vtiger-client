@@ -142,8 +142,6 @@ if ($command == 'retrieve') {
  * Create
  */
 if ($command == 'create') {
-    $client = new VtigerClient($config['vtiger_url']);
-    $client->login($config['username'], $config['access_key']);
     $module = $argv[2];
     if ($argv[3][0] == '@') {
         $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
@@ -156,7 +154,25 @@ if ($command == 'create') {
 }
 
 /**
- * Create
+ * Update
+ */
+if ($command == 'update') {
+    $module = $argv[2];
+    if ($argv[3][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
+    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
+        $element['id'] = $argv[3];
+    } else {
+        $element = json_decode($argv[3], true);
+    }
+    $response = $client->update($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+/**
+ * Revise
  */
 if ($command == 'revise') {
     $client = new VtigerClient($config['vtiger_url']);
@@ -176,24 +192,6 @@ if ($command == 'revise') {
         die("Missing arguments.\n");
     }
     $response = $client->revise($module, $element);
-    echo Functions::jsonEncode($response);
-    exit(0);
-}
-
-/**
- * Update
- */
-if ($command == 'update') {
-    $module = $argv[2];
-    if ($argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
-        $element['id'] = $argv[3];
-    } else {
-        $element = json_decode($argv[3], true);
-    }
-    $response = $client->update($module, $element);
     echo Functions::jsonEncode($response);
     exit(0);
 }
