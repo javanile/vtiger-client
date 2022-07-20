@@ -40,6 +40,10 @@ List of available commands
   ping                      Test the connection to the Vtiger CRM instance
   query "QUERY"             Execute webservice query
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
+  retrieve CRMID            Retrieve an element by CRMID with 'x' (eg. 12x1020)             
+  create MODULE
+  update
+  revise
   
 Documentation can be found at https://github.com/javanile/vtiger-client
 EOF;
