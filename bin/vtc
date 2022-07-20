@@ -35,7 +35,8 @@ Connect and exchange data over Vtiger Webservices
 
 List of available commands
   init                      Create the file: vtiger.config.json
-  config                    Print-out the absolute path of config file
+  config:dir                Print-out the directory of config file
+  config:file               Print-out the absolute path of config file
   ping                      Test the connection to the Vtiger CRM instance
   query "QUERY"             Execute webservice query
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
@@ -73,7 +74,10 @@ if ($command == 'init') {
 /**
  * Config
  */
-if ($command == 'config') {
+if ($command == 'config:dir') {
+    echo $configDir.PHP_EOL;
+    exit(0);
+} else if ($command == 'config:file') {
     echo $configFile.PHP_EOL;
     exit(0);
 }
@@ -89,11 +93,23 @@ if ($command == 'ping') {
 }
 
 /**
+ * Client
+ */
+$operationsMap = [];
+if (preg_match('/([a-z]+):([a-z]+)/i', $command, $matches)) {
+    $command = $matches[1];
+    $operationsMap[$command] = $matches[2];
+}
+$client = new VtigerClient([
+    'endpoint' => $config['vtiger_url'],
+    'operationsMap' => $operationsMap
+]);
+$client->login($config['username'], $config['access_key']);
+
+/**
  * Query
  */
 if ($command == 'query') {
-    $client = new VtigerClient($config['vtiger_url']);
-    $client->login($config['username'], $config['access_key']);
     $query = $argv[2];
     $response = $client->query($query);
     echo Functions::jsonEncode($response);
@@ -104,8 +120,6 @@ if ($command == 'query') {
  * Describe
  */
 if ($command == 'describe') {
-    $client = new VtigerClient($config['vtiger_url']);
-    $client->login($config['username'], $config['access_key']);
     $module = $argv[2];
     $depth = $argv[3] ?? 0;
     $response = $client->describe($module, $depth);
@@ -117,27 +131,6 @@ if ($command == 'describe') {
  * Retrieve
  */
 if ($command == 'retrieve') {
-    $client = new VtigerClient($config['vtiger_url']);
-    $client->login($config['username'], $config['access_key']);
-    $elementId = $argv[2];
-    $depth = isset($argv[3]) && $argv[3] ? intval($argv[3]) : 0;
-    $response = $client->retrieve($elementId, $depth);
-    echo Functions::jsonEncode($response);
-    exit(0);
-}
-
-/**
- * Retrieve Custom
- */
-if (substr($command, 0, 9) == 'retrieve:') {
-    $operation = substr($command, 9);
-    $client = new VtigerClient([
-        'endpoint' => $config['vtiger_url'],
-        'operationsMap' => [
-            'retrieve' => $operation,
-        ]
-    ]);
-    $client->login($config['username'], $config['access_key']);
     $elementId = $argv[2];
     $depth = isset($argv[3]) && $argv[3] ? intval($argv[3]) : 0;
     $response = $client->retrieve($elementId, $depth);
@@ -163,76 +156,6 @@ if ($command == 'create') {
 }
 
 /**
- * Create Custom
- */
-if (substr($command, 0, 7) == 'create:') {
-    $operation = substr($command, 7);
-    $client = new VtigerClient([
-        'endpoint' => $config['vtiger_url'],
-        'operationsMap' => [
-            'create' => $operation,
-        ]
-    ]);
-    $client->login($config['username'], $config['access_key']);
-    $module = $argv[2];
-    if (isset($argv[3]) && $argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } else {
-        $element = json_decode($argv[3], true);
-    }
-    $response = $client->create($module, $element);
-    echo Functions::jsonEncode($response);
-    exit(0);
-}
-
-/**
- * Update
- */
-if ($command == 'update') {
-    $client = new VtigerClient($config['vtiger_url']);
-    $client->login($config['username'], $config['access_key']);
-    $module = $argv[2];
-    if ($argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
-        $element['id'] = $argv[3];
-    } else {
-        $element = json_decode($argv[3], true);
-    }
-    $response = $client->update($module, $element);
-    echo Functions::jsonEncode($response);
-    exit(0);
-}
-
-/**
- * Update Custom
- */
-if (substr($command, 0, 7) == 'update:') {
-    $operation = substr($command, 7);
-    $client = new VtigerClient([
-        'endpoint' => $config['vtiger_url'],
-        'operationsMap' => [
-            'update' => $operation,
-        ]
-    ]);
-    $client->login($config['username'], $config['access_key']);
-    $module = $argv[2];
-    if (isset($argv[3]) && $argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
-        $element['id'] = $argv[3];
-    } else {
-        $element = json_decode($argv[3], true);
-    }
-    $response = $client->update($module, $element);
-    echo Functions::jsonEncode($response);
-    exit(0);
-}
-
-
-/**
  * Create
  */
 if ($command == 'revise') {
@@ -253,6 +176,24 @@ if ($command == 'revise') {
         die("Missing arguments.\n");
     }
     $response = $client->revise($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+/**
+ * Update
+ */
+if ($command == 'update') {
+    $module = $argv[2];
+    if ($argv[3][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
+    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
+        $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
+        $element['id'] = $argv[3];
+    } else {
+        $element = json_decode($argv[3], true);
+    }
+    $response = $client->update($module, $element);
     echo Functions::jsonEncode($response);
     exit(0);
 }
