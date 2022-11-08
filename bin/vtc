@@ -100,7 +100,7 @@ if ($command == 'ping') {
  * Client
  */
 $operationsMap = [];
-if (preg_match('/([a-z]+):([a-z]+)/i', $command, $matches)) {
+if (preg_match('/([a-z]+):([a-z_]+)/i', $command, $matches)) {
     $command = $matches[1];
     $operationsMap[$command] = $matches[2];
 }

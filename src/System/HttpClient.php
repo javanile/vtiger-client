@@ -104,6 +104,7 @@ class HttpClient
      */
     protected function request($method, $request)
     {
+        var_dump($request);
         try {
             $response = $this->client->request($method, $this->endpoint, $request);
         } catch (GuzzleException $error) {
