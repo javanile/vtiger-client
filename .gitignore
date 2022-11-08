@@ -15,3 +15,4 @@ vtiger.config.json
 !.gitkeep
 tmp/
 contrib/box.phar
+*.inotifywait

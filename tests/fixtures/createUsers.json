@@ -1,0 +1,19 @@
+{
+    "success": true,
+    "result": {
+        "product_id": "",
+        "faq_no": "FAQ2",
+        "faqcategories": "",
+        "faqstatus": "draft",
+        "question": "this is a FAQ",
+        "faq_answer": "this is a FAQ answer",
+        "createdtime": "2019-07-31 10:41:16",
+        "modifiedtime": "2019-07-31 10:41:16",
+        "modifiedby": "19x1",
+        "source": "WEBSERVICE",
+        "starred": "0",
+        "tags": "",
+        "id": "3x19",
+        "label": "this is a FAQ"
+    }
+}

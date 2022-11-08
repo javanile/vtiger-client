@@ -46,6 +46,9 @@ dev-install:
 dev-update:
 	@docker-compose run --rm -u $$(id -u) vtiger composer update
 
+dev-debug:
+	@docker-compose exec vtiger debug --polling
+
 ## -------
 ## Testing
 ## -------
@@ -105,6 +108,9 @@ test-query-with-join: clean
 
 test-cli:
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter CliTest::
+
+test-users: up
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter UsersTest::
 
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure
