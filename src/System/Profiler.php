@@ -19,18 +19,42 @@ class Profiler extends SystemDriver
     /**
      *
      */
-    protected $env = 'VT_CLIENT_PROFILING_FILE';
+    protected $env = [
+        'VT_CLIENT_PROFILE' => 'file'
+    ];
+
+    /**
+     *
+     */
+    protected $args = [
+        'profile' => 'file'
+    ];
+
+    /**
+     * @var array|false|string
+     */
+    protected $lockFile;
+
+    /**
+     * Logger constructor.
+     *
+     * @param $args
+     */
+    public function __construct($args)
+    {
+        parent::__construct($args);
+
+        $this->lockFile =  $this->path.'.lock';
+    }
 
     /**
      *
      */
     public function begin($method)
     {
-        if (empty($this->active)) {
-            return;
+        if ($this->active) {
+            return microtime(true);
         }
-
-        return microtime(true);
     }
 
     /**

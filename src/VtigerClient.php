@@ -185,10 +185,9 @@ class VtigerClient extends HttpClient
             ],
         ]);
 
-        $this->sessionName = isset($json['result']['sessionName'])
-            ? $json['result']['sessionName'] : null;
+        $this->sessionName = $json['result']['sessionName'] ?? null;
 
-        $this->userId = isset($json['result']['userId']) ? $json['result']['userId'] : null;
+        $this->userId = $json['result']['userId'] ?? null;
 
         if ($this->userId) {
             $this->elementSanitizer->setDefaultAssignedUserId($this->userId);

@@ -19,7 +19,7 @@ class SystemDriver
     /**
      *
      */
-    protected $env = 'VT_DEBUGGER_FILE';
+    protected $env;
 
     /**
      *
@@ -30,11 +30,6 @@ class SystemDriver
      * @var array|false|string
      */
     protected $path;
-
-    /**
-     * @var array|false|string
-     */
-    protected $lockFile;
 
     /**
      * @var bool
@@ -49,14 +44,10 @@ class SystemDriver
     public function __construct($args)
     {
         $this->path = getenv($this->env);
-        $this->lockFile =  $this->path.'.lock';
         $this->active = (bool)$this->path;
-        $this->tag = $this->setTag(isset($args['username']) ? $args['username'] : null, $args['endpoint']);
+        $this->tag = $this->setTag($args['username'] ?? null, $args['endpoint']);
     }
 
-    /**
-     *
-     */
     /**
      * @param $username
      * @param $endpoint

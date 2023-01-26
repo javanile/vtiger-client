@@ -27,6 +27,15 @@ class TestCase extends PHPUnitTestCase
         self::$accessKey = $db->query($sql)->fetchObject()->accesskey;
     }
 
+    public static function defaultArgs($override = [])
+    {
+        return array_merge([
+            'endpoint' => self::$endpoint,
+            'username' => self::$username,
+            'accessKey' => self::$accessKey,
+        ], $override);
+    }
+
     public static function defaultValues($type, $createdElements)
     {
         switch ($type) {

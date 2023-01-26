@@ -17,9 +17,24 @@ namespace Javanile\VtigerClient\System;
 class Logger extends SystemDriver
 {
     /**
-     * @var string
+     * @var array
      */
-    protected $env = 'VT_CLIENT_LOG_FILE';
+    protected $env = [
+        'VT_CLIENT_LOG' => 'file',
+        'VT_CLIENT_DEBUG' => 'active',
+    ];
+
+    /**
+     * @var array
+     */
+    protected $args = [
+        'debug' => 'active',
+    ];
+
+    /**
+     *
+     */
+    protected $file = 'vtigercrm.log';
 
     /**
      * @param $object
@@ -56,7 +71,7 @@ class Logger extends SystemDriver
      */
     public function request($method, $request, $response)
     {
-        if ($this->active) {
+        if ($this->active || empty($response['success'])) {
             $line = date('Y-m-d H:i:s').' '.$this->tag.' ';
             $line .= empty($response['success']) ? '[ERROR]' : '[INFO]';
             $line .= ' '.$method.' '.json_encode($request, JSON_UNESCAPED_SLASHES);

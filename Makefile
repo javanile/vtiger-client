@@ -52,6 +52,7 @@ dev-debug:
 ## -------
 ## Testing
 ## -------
+
 test: clean down up test-all
 
 test-all: up
