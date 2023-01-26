@@ -5,6 +5,7 @@ volumes/
 tests/logs/
 debug/
 debug.zip
+debug.inotifywait
 npm-debug.log
 phpunit.xml
 coverage.xml
