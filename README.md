@@ -32,7 +32,7 @@ $cliet->create('Leads', [
 #### Intall
 
 ```shell
-curl -sLo vtc https://github.com/javanile/vtiger-client/releases/download/0.0.28/vtc.phar
+curl -sLo vtc https://github.com/javanile/vtiger-client/releases/download/0.1.0/vtc.phar
 chmod +x vtc
 sudo mv vtc /usr/local/bin/ 
 vtc
