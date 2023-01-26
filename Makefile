@@ -76,6 +76,9 @@ test-update-every-types: clean
 test-describe: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribe
 
+test-describe-cache: clean
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribeCache
+
 test-describe-with-depth-1: clean
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter ::testDescribeWithDepth1
 

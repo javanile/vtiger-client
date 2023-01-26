@@ -153,6 +153,19 @@ final class VtigerClientTest extends TestCase
         }
     }
 
+    public function testDescribeCache()
+    {
+        $client = new Client(self::$endpoint);
+        $client->login(self::$username, self::$accessKey);
+
+        foreach (['Accounts', 'Faq'] as $type) {
+            $expected = json_decode(file_get_contents($stubFile), true);
+            $actual = $client->describe($type);
+            //file_put_contents($stubFile, json_encode($actual, JSON_PRETTY_PRINT));
+            $this->assertEquals($expected, $actual);
+        }
+    }
+
     public function testCreate()
     {
         $client = new Client(self::$endpoint);
