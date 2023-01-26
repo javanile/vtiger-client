@@ -9,6 +9,8 @@ services:
       - MYSQL_HOST=mysql
       - MYSQL_DATABASE=vtiger
       - MYSQL_ROOT_PASSWORD=secret
+      - XDEBUG_CONFIG='remote_enable=1'
+      - PHP_IDE_CONFIG='serverName=localhost'
     ports:
       - "48080:80"
     volumes:
@@ -19,7 +21,7 @@ services:
     links:
       - mysql
       - adminer
-      #- xdebug
+      - xdebug
 
   mysql:
     image: mysql:5.5
@@ -62,10 +64,10 @@ services:
     links:
       - vtiger
 
-  #xdebug:
-  #  image: javanile/xdebug
-  #  cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
-  #  restart: on-failure
+  xdebug:
+    image: javanile/xdebug
+    cap_add: [ 'NET_ADMIN', 'NET_RAW' ]
+    restart: on-failure
 
 volumes:
   mysql:
