@@ -19,6 +19,11 @@ down:
 debugger:
 	@docker-compose run --rm vtiger php tests/bin/debugger.php
 
+bind:
+	@sudo rm -fr /usr/local/bin/vtc
+	@sudo ln bin/vtc.phar /usr/local/bin/vtc
+	@sudo chmod +x /usr/local/bin/vtc
+
 ## -----
 ## Build
 ## -----
