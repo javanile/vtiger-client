@@ -43,9 +43,12 @@ class SystemDriver
      */
     public function __construct($args)
     {
-        $this->path = getenv($this->env);
+        foreach ($this->env as $env => $attribute) {
+            $this->{$attribute} = getenv($env);
+        }
+
         $this->active = (bool)$this->path;
-        $this->tag = $this->setTag($args['username'] ?? null, $args['endpoint']);
+        $this->tag = $this->setTag($args['username'] ?? 'unknown', $args['endpoint'] ?? 'unknown');
     }
 
     /**

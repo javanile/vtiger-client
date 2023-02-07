@@ -17,14 +17,14 @@ namespace Javanile\VtigerClient\System;
 class Cache extends SystemDriver
 {
     /**
-     *
+     * Set Cache env.
      */
     protected $env = [
         'VT_CLIENT_CACHE' => 'path'
     ];
 
     /**
-     *
+     * Set Cache args.
      */
     protected $args = [
         'cache' => 'active',
@@ -35,6 +35,20 @@ class Cache extends SystemDriver
      *
      */
     protected $cache = [];
+
+    /**
+     * Cache constructor.
+     *
+     * @param $args
+     */
+    public function __construct($args)
+    {
+        parent::__construct($args);
+
+        if (empty($this->path)) {
+            $this->path = sys_get_temp_dir().'/vtiger-client-cache';
+        }
+    }
 
     /**
      *
@@ -88,7 +102,7 @@ class Cache extends SystemDriver
      */
     public function saveItem($key, $value, $ttl)
     {
-        $cacheFile = self::file($key);
+        $cacheFile = $this->getItemFile($key);
         $cacheDir = dirname($cacheFile);
 
         if (!is_dir($cacheDir)) {
@@ -114,7 +128,7 @@ class Cache extends SystemDriver
      */
     protected function getItemFile($key)
     {
-        $cacheDir = get_global_var('cache_dir');
+        $cacheDir = $this->path;
         $cacheHash = md5($key);
 
         return rtrim($cacheDir, '/').'/'.$this->tag.'/'.$cacheHash[0].'/'.$cacheHash.'.json';

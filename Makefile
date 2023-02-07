@@ -121,5 +121,9 @@ test-cli:
 test-users: up
 	@docker-compose run --rm phpunit tests --stop-on-failure --filter UsersTest::
 
+test-cache:
+	@docker-compose run --rm phpunit tests --stop-on-failure --filter CacheTest::
+
 test-stop-on-failure:
 	@docker-compose run --rm phpunit tests --stop-on-failure
+

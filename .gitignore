@@ -3,6 +3,7 @@ vendor/
 node_modules/
 volumes/
 tests/logs/
+tests/temp/
 debug/
 debug.zip
 debug.inotifywait
