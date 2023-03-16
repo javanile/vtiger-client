@@ -299,6 +299,7 @@ class VtigerClient extends HttpClient
             return $this->profiler->end(__METHOD__, $time, $this->depthManager->describe($elementType, $depth));
         }
 
+        /*
         if ($this->cache->hasItem('describe:'.$elementType)) {
             $describe = $this->cache->getItem('describe:'.$elementType);
         } else {
@@ -308,8 +309,17 @@ class VtigerClient extends HttpClient
                     'elementType' => $elementType,
                     'sessionName' => $this->sessionName,
                 ],
-            ]));
+            ]), 5);
         }
+        */
+
+        $describe = $this->get([
+            'query' => [
+                'operation'   => $this->operationMapper->get('describe'),
+                'elementType' => $elementType,
+                'sessionName' => $this->sessionName,
+            ],
+        ]);
 
         return $this->profiler->end(__METHOD__, $time, $describe);
     }
