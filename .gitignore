@@ -18,3 +18,5 @@ vtiger.config.json
 tmp/
 contrib/box.phar
 *.inotifywait
+NOTES.md
+

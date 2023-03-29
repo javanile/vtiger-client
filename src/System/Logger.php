@@ -71,7 +71,7 @@ class Logger extends SystemDriver
      */
     public function request($method, $request, $response)
     {
-        if ($this->active || empty($response['success'])) {
+        if ($this->path && ($this->active || empty($response['success']))) {
             $line = date('Y-m-d H:i:s').' '.$this->tag.' ';
             $line .= empty($response['success']) ? '[ERROR]' : '[INFO]';
             $line .= ' '.$method.' '.json_encode($request, JSON_UNESCAPED_SLASHES);
