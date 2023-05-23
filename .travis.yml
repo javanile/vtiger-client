@@ -11,16 +11,16 @@ before_install:
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
-  - sudo mv docker-compose /usr/local/bin
-  - docker-compose --version
+  - sudo mv docker compose /usr/local/bin
+  - docker compose --version
 
 before_script:
-  - docker-compose up -d vtiger
+  - docker compose up -d vtiger
   - sleep 10
-  - docker-compose run --rm composer install --no-interaction --prefer-source
+  - docker compose run --rm composer install --no-interaction --prefer-source
 
 script:
-  - docker-compose run --rm phpunit tests
+  - docker compose run --rm phpunit tests
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
