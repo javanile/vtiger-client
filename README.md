@@ -1,3 +1,15 @@
+<div align="center">
+
+
+<a href="https://www.javanile.org/hackathon/">
+<img src="https://raw.githubusercontent.com/javanile/hackathon/refs/heads/main/assets/images/devops-hackathon-banner.svg" />
+</a>
+
+
+</div>
+
+---
+
 # vtiger-client
 
 [![StyleCI](https://github.styleci.io/repos/103863537/shield?branch=master)](https://github.styleci.io/repos/103863537)
