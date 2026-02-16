@@ -400,7 +400,7 @@
 
 <!-- ===== CRM VARIABLE ===== -->
 <section id="crm-variable">
-  <h2>The Multiple CRM</h2>
+  <h2>Multiple CRM</h2>
   <p class="section-sub">The <code>CRM</code> environment variable is the most powerful feature of vtc. It lets you manage <strong>multiple Vtiger instances</strong> from the same terminal without switching directories.</p>
 
   <h3>How it works</h3>
@@ -832,6 +832,7 @@ echo <span class="s">"CRM connection verified"</span></code></pre>
     cpBtn.setAttribute('aria-label', 'Copy to clipboard');
     cpBtn.addEventListener('click', function() {
       var text = pre.querySelector('code').textContent;
+      text = text.replace(/^\$ /gm, '').trim();
       navigator.clipboard.writeText(text);
       cpBtn.innerHTML = checkSvg;
       cpBtn.classList.add('ok');
