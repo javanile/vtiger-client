@@ -318,6 +318,7 @@ class VtigerClient extends HttpClient
                 'operation'   => $this->operationMapper->get('describe'),
                 'elementType' => $elementType,
                 'sessionName' => $this->sessionName,
+                'vtc_debug'   => 1,
             ],
         ]);
 

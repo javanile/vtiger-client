@@ -1,6 +1,6 @@
 #!make
 
-clean:
+clean-logs:
 	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-client.log
 	@docker-compose run --rm vtiger rm -f /var/lib/vtiger/logs/vtiger-client.json
 
@@ -19,24 +19,30 @@ down:
 debugger:
 	@docker-compose run --rm vtiger php tests/bin/debugger.php
 
-bind:
-	@sudo rm -fr /usr/local/bin/vtc
-	@sudo ln bin/vtc.phar /usr/local/bin/vtc
-	@sudo chmod +x /usr/local/bin/vtc
 
 ## -----
 ## Build
 ## -----
+
+clean:
+	@rm -fr bin/vtc.phar
 
 build: bin/vtc.phar
 
 bin/vtc.phar:
 	@[ -d vendor ] && mv vendor vendor.tmp || true
 	@[ -f composer.lock ] && mv composer.lock composer.lock.tmp || true
-	@docker-compose run --rm -u $$(id -u) vtiger composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
-	@docker-compose run --rm box compile
+	@docker compose run --rm -u $$(id -u) vtiger composer install --no-dev --no-interaction --no-progress --no-scripts --optimize-autoloader
+	@docker compose run --rm box compile
 	@[ -f composer.lock.tmp ] && mv -f composer.lock.tmp composer.lock || true
 	@[ -d vendor.tmp ] && mv vendor.tmp vendor || true
+
+bind:
+	@sudo rm -fr /usr/local/bin/vtc
+	@sudo ln bin/vtc.phar /usr/local/bin/vtc
+	@sudo chmod +x /usr/local/bin/vtc
+
+install: clean build bind
 
 ## -------
 ## Develop

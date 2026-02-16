@@ -39,6 +39,7 @@ List of available commands
   config:file               Print-out the absolute path of config file
   ping                      Test the connection to the Vtiger CRM instance  
   query "QUERY"             Execute webservice query
+  listtypes                 List all available types
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
   retrieve CRMID            Retrieve an element by CRMID with 'x' (eg. 12x1020)             
   create MODULE
@@ -90,7 +91,7 @@ if ($command == 'config:dir') {
  * Ping
  */
 if ($command == 'ping') {
-    $client = new VtigerClient($config['vtiger_url']);
+    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'verify' => false]);
     $response = $client->login($config['username'], $config['access_key']);
     echo Functions::jsonEncode($response);
     exit(0);
@@ -106,6 +107,7 @@ if (preg_match('/([a-z]+):([a-z_]+)/i', $command, $matches)) {
 }
 $client = new VtigerClient([
     'endpoint' => $config['vtiger_url'],
+    'verify' => false,
     'operationsMap' => $operationsMap
 ]);
 $client->login($config['username'], $config['access_key']);
@@ -116,6 +118,15 @@ $client->login($config['username'], $config['access_key']);
 if ($command == 'query') {
     $query = $argv[2];
     $response = $client->query($query);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+/**
+ * Query
+ */
+if ($command == 'listtypes') {
+    $response = $client->listTypes();
     echo Functions::jsonEncode($response);
     exit(0);
 }
