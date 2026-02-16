@@ -1,13 +1,13 @@
 #!/usr/bin/env php
 <?php
 
+error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
+
 if (file_exists(__DIR__.'/../../../autoload.php')) {
     include_once __DIR__.'/../../../autoload.php';
 } else {
     include_once __DIR__.'/../vendor/autoload.php';
 }
-
-error_reporting(E_ALL & ~E_NOTICE & ~E_DEPRECATED);
 
 use Javanile\VtigerClient\VtigerClient;
 use Javanile\VtigerClient\System\Functions;
