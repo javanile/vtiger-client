@@ -79,14 +79,32 @@
   .nav-links a:hover, .nav-links a.active {
     color: var(--heading); background: rgba(255,255,255,0.05);
   }
-  .nav-gh {
+  .nav-support {
     margin-left: auto; flex-shrink: 0;
+    color: #fff; text-decoration: none;
+    font-size: 12px; font-weight: 700;
+    padding: 6px 14px; border-radius: 6px;
+    background: var(--accent); transition: all 0.15s;
+  }
+  .nav-support:hover { background: var(--accent-light); }
+  .nav-gh {
+    flex-shrink: 0;
     color: var(--text-muted); text-decoration: none;
     font-size: 13px; font-weight: 500;
     padding: 6px 14px; border-radius: 6px;
     border: 1px solid var(--border); transition: all 0.15s;
   }
   .nav-gh:hover { border-color: var(--border-hover); color: var(--heading); }
+
+  /* ===== CTA BUTTON ===== */
+  .cta-btn {
+    display: inline-block; text-decoration: none;
+    background: var(--accent); color: #fff;
+    font-size: 15px; font-weight: 700;
+    padding: 14px 32px; border-radius: 10px;
+    transition: background 0.15s;
+  }
+  .cta-btn:hover { background: var(--accent-light); }
   .hamburger {
     display: none; background: none; border: none;
     color: var(--text); font-size: 22px; cursor: pointer;
@@ -267,10 +285,32 @@
   /* ===== FOOTER ===== */
   footer {
     border-top: 1px solid var(--border);
-    padding: 36px 24px; text-align: center;
+    background: var(--bg-card);
+    padding: 64px 24px 36px;
     color: var(--text-muted); font-size: 13px;
   }
-  footer a { color: var(--accent-light); text-decoration: none; }
+  .footer-inner {
+    max-width: 1140px; margin: 0 auto;
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 40px; margin-bottom: 48px;
+  }
+  .footer-col h5 {
+    font-size: 12px; font-weight: 700; text-transform: uppercase;
+    letter-spacing: 1px; color: var(--heading); margin-bottom: 16px;
+  }
+  .footer-col ul { list-style: none; }
+  .footer-col li { margin-bottom: 10px; }
+  .footer-col a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; transition: color 0.15s;
+  }
+  .footer-col a:hover { color: var(--accent-light); }
+  .footer-bottom {
+    max-width: 1140px; margin: 0 auto;
+    border-top: 1px solid var(--border);
+    padding-top: 24px; text-align: center;
+  }
+  .footer-bottom a { color: var(--accent-light); text-decoration: none; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 768px) {
@@ -305,6 +345,7 @@
       <a href="#recipes">Recipes</a>
       <a href="#config">Config</a>
     </div>
+    <a href="#support" class="nav-support">Get Support</a>
     <a href="https://github.com/javanile/vtiger-client" class="nav-gh" target="_blank">GitHub</a>
     <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
   </div>
@@ -314,7 +355,7 @@
 <div class="hero" id="top">
   <div class="hero-badge"><span class="dot"></span> Open Source CLI for Vtiger CRM</div>
   <h1>Manage your <em>Vtiger CRM</em><br>from the terminal</h1>
-  <p class="subtitle">A lightweight command-line tool to query, create, update and sync data across multiple Vtiger CRM instances. One binary, zero overhead.</p>
+  <p class="subtitle">A command-line tool to query, create, update and sync data across multiple Vtiger CRM instances. One binary, zero overhead.</p>
   <div class="hero-install">
     <span><span class="prompt">$&nbsp;</span><span class="txt">curl get.javanile.org/vtc | sh</span></span>
     <button class="copy-btn" onclick="navigator.clipboard.writeText('curl get.javanile.org/vtc | sh');this.innerHTML=checkSvg;setTimeout(()=>this.innerHTML=copySvg,1500)"></button>
@@ -681,11 +722,69 @@ echo <span class="s">"CRM connection verified"</span></code></pre>
   </div>
 </section>
 
+<!-- ===== SUPPORT ===== -->
+<section id="support">
+  <h2>Need Help?</h2>
+  <p class="section-sub">We are here to help you. If you have questions, found a bug, or need assistance with vtc, the best way to get support is by opening an issue on our GitHub repository.</p>
+  <p>Our team actively monitors issues and will respond as soon as possible. When opening an issue, please include:</p>
+  <ul style="color:var(--text-muted); margin: 12px 0 28px 20px; line-height: 2;">
+    <li>A clear description of your problem or question</li>
+    <li>The vtc command you ran and the output you received</li>
+    <li>Your PHP version and operating system</li>
+  </ul>
+  <a href="https://github.com/javanile/vtiger-client/issues/new" target="_blank" class="cta-btn">Open an Issue on GitHub</a>
+</section>
+
 </div>
 
 <!-- ===== FOOTER ===== -->
 <footer>
-  <p><strong>vtc</strong> &middot; MIT License &middot; Made by <a href="https://github.com/javanile">Javanile</a> &middot; <a href="https://github.com/javanile/vtiger-client">View on GitHub</a></p>
+  <div class="footer-inner">
+    <div class="footer-col">
+      <h5>vtc</h5>
+      <ul>
+        <li><a href="#quickstart">Quick Start</a></li>
+        <li><a href="#crm-variable">Multiple CRM</a></li>
+        <li><a href="#commands">Command Reference</a></li>
+        <li><a href="#recipes">Recipes</a></li>
+        <li><a href="#config">Configuration</a></li>
+        <li><a href="#support">Get Support</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Vtiger Resources</h5>
+      <ul>
+        <li><a href="https://www.vtiger.com/" target="_blank">Vtiger Official Website</a></li>
+        <li><a href="https://www.vtiger.com/docs/" target="_blank">Vtiger Documentation</a></li>
+        <li><a href="https://community.vtiger.com/" target="_blank">Vtiger Community Forum</a></li>
+        <li><a href="https://www.vtiger.com/vtiger-crm-pricing/" target="_blank">Vtiger CRM Pricing</a></li>
+        <li><a href="https://www.vtiger.com/blog/" target="_blank">Vtiger Blog</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Vtiger Development</h5>
+      <ul>
+        <li><a href="https://community.vtiger.com/help/vtigercrm/developers/third-party-app-integration.html" target="_blank">Webservices API Guide</a></li>
+        <li><a href="https://community.vtiger.com/help/vtigercrm/developers/" target="_blank">Developer Documentation</a></li>
+        <li><a href="https://sourceforge.net/projects/vtigercrm/" target="_blank">Vtiger on SourceForge</a></li>
+        <li><a href="https://code.vtiger.com/" target="_blank">Vtiger Code Repository</a></li>
+        <li><a href="https://demo.vtiger.com/" target="_blank">Vtiger Online Demo</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Project</h5>
+      <ul>
+        <li><a href="https://github.com/javanile/vtiger-client" target="_blank">GitHub Repository</a></li>
+        <li><a href="https://github.com/javanile/vtiger-client/issues" target="_blank">Issues &amp; Bug Reports</a></li>
+        <li><a href="https://github.com/javanile/vtiger-client/releases" target="_blank">Releases &amp; Changelog</a></li>
+        <li><a href="https://packagist.org/packages/javanile/vtiger-client" target="_blank">Packagist</a></li>
+        <li><a href="https://github.com/javanile" target="_blank">Javanile Open Source</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p><strong>vtc</strong> &middot; MIT License &middot; Made by <a href="https://github.com/javanile">Javanile</a></p>
+  </div>
 </footer>
 
 <!-- ===== JS ===== -->
