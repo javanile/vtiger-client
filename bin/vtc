@@ -27,9 +27,9 @@ $configFile = $configDir.'/vtiger.config.json';
 $config = file_exists($configFile) ? json_decode(file_get_contents($configFile), true) : $defaultConfig;
 
 /**
- * Default
+ * Help
  */
-if (empty($command)) {
+if (empty($command) || $command == '--help' || $command == 'help') {
     echo <<<EOF
 Usage: vtc [COMMAND] [ARG]...
 
@@ -43,13 +43,10 @@ List of available commands
   query "QUERY"             Execute webservice query
   listtypes                 List all available types
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
-  retrieve CRMID            Retrieve an element by CRMID with 'x' (eg. 12x1020)
+  retrieve CRMID [DEPTH]    Retrieve an element by CRMID with 'x' (eg. 12x1020)
   create MODULE ELEMENT     Create a new record (JSON or @file.json)
   update MODULE ELEMENT     Update an existing record
   revise MODULE ELEMENT     Partially update a record
-
-Options
-  --help                    Show detailed help and usage guide
 
 Environment
   CRM=<name>               Target a named CRM instance (~/.vtc/<name>/)
@@ -57,124 +54,7 @@ Environment
 Documentation can be found at https://github.com/javanile/vtiger-client
 EOF;
     echo PHP_EOL;
-    exit(1);
-}
-
-/**
- * Help
- */
-if ($command == '--help' || $command == 'help') {
-    echo <<<'HELP'
-vtc - Vtiger CRM Command Line Client
-
-USAGE
-  vtc [COMMAND] [ARG]...
-  CRM=<name> vtc [COMMAND] [ARG]...
-
-GETTING STARTED
-  1. Initialize a config file:
-     $ vtc init
-
-  2. Edit the config with your CRM credentials:
-     $ nano $(vtc config:file)
-
-  3. Test the connection:
-     $ vtc ping
-
-COMMANDS
-  init
-      Creates vtiger.config.json with default values.
-      When CRM is set, the file is created in ~/.vtc/<name>/.
-
-  ping
-      Tests the connection by performing challenge + login.
-
-  config:dir
-      Prints the directory where the config file is located.
-
-  config:file
-      Prints the absolute path to the config file.
-      Tip: nano $(vtc config:file)
-
-  query "QUERY"
-      Executes a Vtiger Webservice query (SQL-like syntax).
-      $ vtc query "SELECT * FROM Contacts LIMIT 10"
-      $ vtc query "SELECT firstname, lastname FROM Contacts WHERE lastname = 'Sharma'"
-
-  listtypes
-      Lists all available modules (entity types) in the CRM.
-
-  describe MODULE [DEPTH]
-      Describes the structure of a module: fields, types, mandatory flags.
-      DEPTH resolves referenced modules recursively (0 = no resolution).
-      $ vtc describe Contacts
-      $ vtc describe Contacts 1
-
-  retrieve CRMID [DEPTH]
-      Retrieves a single record by its CRMID (format: NUMBERxNUMBER).
-      $ vtc retrieve 12x1020
-      $ vtc retrieve 12x1020 1
-
-  create MODULE ELEMENT
-      Creates a new record. ELEMENT can be inline JSON or @file.json.
-      $ vtc create Contacts '{"firstname":"Ravi","lastname":"Kumar"}'
-      $ vtc create Contacts @contact.json
-
-  update MODULE ELEMENT
-      Updates an existing record. The "id" field must be in ELEMENT.
-      $ vtc update Contacts '{"id":"12x1020","phone":"+91 22 12345678"}'
-      $ vtc update Contacts 12x1020 @data.json
-
-  revise MODULE ELEMENT
-      Partially updates a record (only specified fields change).
-      $ vtc revise Contacts @revision.json
-      $ vtc revise Contacts 12x1020 phone "+91 22 9999999"
-      $ vtc revise Contacts 12x1020 @partial.json
-
-THE CRM VARIABLE
-  The CRM environment variable lets you manage multiple Vtiger instances
-  from the same terminal. When set, vtc reads config from:
-    ~/.vtc/<name>/vtiger.config.json
-
-  Setup multiple instances:
-    $ CRM=production vtc init
-    $ CRM=staging vtc init
-    $ nano $(CRM=production vtc config:file)
-    $ nano $(CRM=staging vtc config:file)
-
-  Use in commands:
-    $ CRM=production vtc ping
-    $ CRM=staging vtc query "SELECT * FROM Leads"
-
-  Export for the session:
-    $ export CRM=production
-    $ vtc ping
-    $ vtc query "SELECT * FROM Contacts"
-    $ unset CRM
-
-  Shell aliases (add to ~/.bashrc):
-    alias vtc-prod='CRM=production vtc'
-    alias vtc-stag='CRM=staging vtc'
-
-CONFIG FILE
-  vtiger.config.json contains three fields:
-    vtiger_url   - Full URL of the Vtiger CRM (with trailing slash)
-    username     - Webservice username
-    access_key   - Access Key (from Vtiger > My Preferences)
-
-  Example:
-    {
-        "vtiger_url": "https://crm.example.com/vtigercrm/",
-        "username": "admin",
-        "access_key": "your-access-key"
-    }
-
-MORE INFO
-  https://github.com/javanile/vtiger-client
-
-HELP;
-    echo PHP_EOL;
-    exit(0);
+    exit(empty($command) ? 1 : 0);
 }
 
 /**
