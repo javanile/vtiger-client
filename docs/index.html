@@ -131,11 +131,23 @@
   .hero-install .copy-btn {
     background: none; border: 1px solid var(--border);
     color: var(--text-muted); cursor: pointer;
-    padding: 4px 10px; border-radius: 5px; font-size: 11px;
-    font-family: 'Inter', sans-serif; font-weight: 500;
-    transition: all 0.15s;
+    padding: 6px 8px; border-radius: 5px; font-size: 14px;
+    line-height: 1; transition: all 0.15s;
   }
   .hero-install .copy-btn:hover { color: var(--heading); border-color: var(--border-hover); }
+
+  /* ===== COPY BUTTONS ON PRE ===== */
+  pre { position: relative; }
+  pre .cp {
+    position: absolute; top: 8px; right: 8px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    color: var(--text-muted); cursor: pointer;
+    padding: 4px 6px; border-radius: 5px; font-size: 13px;
+    line-height: 1; opacity: 0; transition: opacity 0.15s;
+  }
+  pre:hover .cp { opacity: 1; }
+  pre .cp:hover { color: var(--heading); border-color: var(--border-hover); }
+  pre .cp.ok { color: var(--green); }
 
   /* ===== LAYOUT ===== */
   .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
@@ -278,7 +290,6 @@
   <div class="nav-inner">
     <a href="#top" class="logo">vtc<sub>cli</sub></a>
     <div class="nav-links" id="navLinks">
-      <a href="#install">Install</a>
       <a href="#quickstart">Quick Start</a>
       <a href="#crm-variable">CRM Variable</a>
       <a href="#commands">Commands</a>
@@ -297,46 +308,16 @@
   <p class="subtitle">A lightweight command-line tool to query, create, update and sync data across multiple Vtiger CRM instances. One binary, zero overhead.</p>
   <div class="hero-install">
     <span><span class="prompt">$&nbsp;</span><span class="txt">curl get.javanile.org/vtc | sh</span></span>
-    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl get.javanile.org/vtc | sh');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl get.javanile.org/vtc | sh');this.innerHTML='&#10003;';setTimeout(()=>this.innerHTML='&#128203;',1500)">&#128203;</button>
   </div>
 </div>
 
 <div class="container">
 
-<!-- ===== INSTALL ===== -->
-<section id="install">
-  <h2>Installation</h2>
-  <p class="section-sub">Get vtc running in under a minute. Pick the method that suits your setup.</p>
-
-  <div class="grid grid-3">
-    <div class="card">
-      <span class="icon">&#128230;</span>
-      <h4>Composer (Recommended)</h4>
-      <p>Install globally via Composer and start using right away.</p>
-      <pre><code><span class="p">$</span> <span class="x">composer</span> global require javanile/vtiger-client</code></pre>
-    </div>
-    <div class="card">
-      <span class="icon">&#11015;&#65039;</span>
-      <h4>Direct Download</h4>
-      <p>Download the phar binary and place it in your PATH.</p>
-      <pre><code><span class="p">$</span> <span class="x">curl</span> -L -o /usr/local/bin/vtc \
-  <span class="s">https://github.com/javanile/vtiger-client/releases/latest/download/vtc.phar</span>
-<span class="p">$</span> <span class="x">chmod</span> +x /usr/local/bin/vtc</code></pre>
-    </div>
-    <div class="card">
-      <span class="icon">&#128296;</span>
-      <h4>Build from Source</h4>
-      <p>Clone the repo and compile with make.</p>
-      <pre><code><span class="p">$</span> <span class="x">git</span> clone https://github.com/javanile/vtiger-client.git
-<span class="p">$</span> <span class="x">cd</span> vtiger-client
-<span class="p">$</span> <span class="x">make</span> install</code></pre>
-    </div>
-  </div>
-</section>
-
 <!-- ===== QUICK START ===== -->
 <section id="quickstart">
   <h2>Quick Start</h2>
+  <p class="section-sub">We recommend installing vtc using the command shown above. For manual installation or building from source, follow the instructions on the <a href="https://github.com/javanile/vtiger-client" style="color:var(--accent-light)">GitHub repository</a>.</p>
   <p class="section-sub">Connect to your Vtiger CRM in three simple steps.</p>
 
   <div class="steps">
@@ -698,12 +679,15 @@ echo <span class="s">"CRM connection verified"</span></code></pre>
 <!-- ===== JS ===== -->
 <script>
 (function() {
+  // Hamburger menu
   var btn = document.getElementById('hamburger');
   var links = document.getElementById('navLinks');
   btn.addEventListener('click', function() { links.classList.toggle('open'); });
   links.querySelectorAll('a').forEach(function(a) {
     a.addEventListener('click', function() { links.classList.remove('open'); });
   });
+
+  // Active nav on scroll
   var sections = document.querySelectorAll('section[id]');
   var navAs = links.querySelectorAll('a');
   window.addEventListener('scroll', function() {
@@ -718,6 +702,22 @@ echo <span class="s">"CRM connection verified"</span></code></pre>
         }
       }
     });
+  });
+
+  // Copy buttons on all pre blocks
+  document.querySelectorAll('pre').forEach(function(pre) {
+    var cpBtn = document.createElement('button');
+    cpBtn.className = 'cp';
+    cpBtn.innerHTML = '&#128203;';
+    cpBtn.setAttribute('aria-label', 'Copy to clipboard');
+    cpBtn.addEventListener('click', function() {
+      var text = pre.querySelector('code').textContent;
+      navigator.clipboard.writeText(text);
+      cpBtn.innerHTML = '&#10003;';
+      cpBtn.classList.add('ok');
+      setTimeout(function() { cpBtn.innerHTML = '&#128203;'; cpBtn.classList.remove('ok'); }, 1500);
+    });
+    pre.appendChild(cpBtn);
   });
 })();
 </script>

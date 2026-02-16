@@ -21,6 +21,10 @@ $defaultConfig = [
 $crm = trim(strval(getenv('CRM')));
 $home = $_SERVER['HOME'];
 $command = strtolower(trim(@$argv[1]));
+if ($command == 'list' && strtolower(trim(@$argv[2])) == 'types') {
+    $command = 'list types';
+    array_splice($argv, 2, 1);
+}
 $envPrefix = $crm ? 'CRM='.$crm.' ' : '';
 $configDir = $crm ? $home.'/.vtc/'.$crm : getcwd();
 $configFile = $configDir.'/vtiger.config.json';
@@ -41,7 +45,7 @@ List of available commands
   config:file               Print-out the absolute path of config file
   ping                      Test the connection to the Vtiger CRM instance
   query "QUERY"             Execute webservice query
-  listtypes                 List all available types
+  list-types                List all available types
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
   retrieve CRMID [DEPTH]    Retrieve an element by CRMID with 'x' (eg. 12x1020)
   create MODULE ELEMENT     Create a new record (JSON or @file.json)
@@ -130,7 +134,7 @@ if ($command == 'query') {
 /**
  * Query
  */
-if ($command == 'listtypes') {
+if (in_array($command, ['listtypes', 'list-types', 'list:types', 'list types'])) {
     $response = $client->listTypes();
     echo Functions::jsonEncode($response);
     exit(0);
