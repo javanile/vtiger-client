@@ -232,15 +232,12 @@ function parseElement($args, $offset = 3) {
     if ($arg[0] === '@') {
         return json_decode(file_get_contents(substr($arg, 1)), true);
     }
-    // key=value pairs: if the first arg contains '=', treat all remaining args as pairs
-    if (strpos($arg, '=') !== false) {
+    // key=value pairs: only if the key looks like a valid field name (letters, digits, underscore)
+    if (preg_match('/^[a-zA-Z_][a-zA-Z0-9_]*=/', $arg)) {
         $element = [];
         for ($i = $offset; $i < count($args); $i++) {
-            $pos = strpos($args[$i], '=');
-            if ($pos !== false) {
-                $key = substr($args[$i], 0, $pos);
-                $value = substr($args[$i], $pos + 1);
-                $element[$key] = $value;
+            if (preg_match('/^([a-zA-Z_][a-zA-Z0-9_]*)=(.*)$/', $args[$i], $kv)) {
+                $element[$kv[1]] = $kv[2];
             }
         }
         return $element;
