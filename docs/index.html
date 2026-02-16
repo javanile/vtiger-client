@@ -59,7 +59,15 @@
     color: var(--accent); text-decoration: none;
     margin-right: 36px; letter-spacing: -1px;
   }
-  .logo sub { font-size: 10px; color: var(--text-muted); font-weight: 500; letter-spacing: 0; vertical-align: baseline; margin-left: 6px; }
+  .logo .badge {
+    display: inline-block; font-size: 9px; font-weight: 700;
+    font-family: 'Inter', sans-serif;
+    text-transform: uppercase; letter-spacing: 0.8px;
+    color: #fff; background: var(--green);
+    padding: 3px 7px 2px; border-radius: 4px;
+    margin-left: 6px; vertical-align: super;
+    line-height: 1;
+  }
   .nav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
   .nav-links::-webkit-scrollbar { display: none; }
   .nav-links a {
@@ -122,7 +130,7 @@
   .hero-install {
     display: inline-flex; align-items: center; gap: 16px;
     background: var(--bg-code); border: 1px solid var(--border);
-    border-radius: 12px; padding: 16px 28px;
+    border-radius: 12px; padding: 16px 16px;
     font-family: 'JetBrains Mono', monospace;
     font-size: 14px;
   }
@@ -131,10 +139,11 @@
   .hero-install .copy-btn {
     background: none; border: 1px solid var(--border);
     color: var(--text-muted); cursor: pointer;
-    padding: 6px 8px; border-radius: 5px; font-size: 14px;
-    line-height: 1; transition: all 0.15s;
+    padding: 5px 7px; border-radius: 5px;
+    line-height: 0; transition: all 0.15s; display: inline-flex;
   }
   .hero-install .copy-btn:hover { color: var(--heading); border-color: var(--border-hover); }
+  .hero-install .copy-btn svg, pre .cp svg { width: 14px; height: 14px; }
 
   /* ===== COPY BUTTONS ON PRE ===== */
   pre { position: relative; }
@@ -142,8 +151,8 @@
     position: absolute; top: 8px; right: 8px;
     background: var(--bg-card); border: 1px solid var(--border);
     color: var(--text-muted); cursor: pointer;
-    padding: 4px 6px; border-radius: 5px; font-size: 13px;
-    line-height: 1; opacity: 0; transition: opacity 0.15s;
+    padding: 5px 7px; border-radius: 5px;
+    line-height: 0; opacity: 0; transition: opacity 0.15s; display: inline-flex;
   }
   pre:hover .cp { opacity: 1; }
   pre .cp:hover { color: var(--heading); border-color: var(--border-hover); }
@@ -161,7 +170,7 @@
     font-size: 18px; font-weight: 700; color: var(--heading);
     margin: 36px 0 10px;
   }
-  .section-sub { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; max-width: 640px; }
+  .section-sub { color: var(--text-muted); font-size: 15px; margin-bottom: 16px; max-width: 640px; }
 
   p { margin-bottom: 12px; }
 
@@ -288,10 +297,10 @@
 <!-- ===== NAV ===== -->
 <nav>
   <div class="nav-inner">
-    <a href="#top" class="logo">vtc<sub>cli</sub></a>
+    <a href="#top" class="logo">vtc<span class="badge">PRO</span></a>
     <div class="nav-links" id="navLinks">
       <a href="#quickstart">Quick Start</a>
-      <a href="#crm-variable">CRM Variable</a>
+      <a href="#crm-variable">Multiple CRM</a>
       <a href="#commands">Commands</a>
       <a href="#recipes">Recipes</a>
       <a href="#config">Config</a>
@@ -308,7 +317,7 @@
   <p class="subtitle">A lightweight command-line tool to query, create, update and sync data across multiple Vtiger CRM instances. One binary, zero overhead.</p>
   <div class="hero-install">
     <span><span class="prompt">$&nbsp;</span><span class="txt">curl get.javanile.org/vtc | sh</span></span>
-    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl get.javanile.org/vtc | sh');this.innerHTML='&#10003;';setTimeout(()=>this.innerHTML='&#128203;',1500)">&#128203;</button>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('curl get.javanile.org/vtc | sh');this.innerHTML=checkSvg;setTimeout(()=>this.innerHTML=copySvg,1500)"></button>
   </div>
 </div>
 
@@ -317,8 +326,11 @@
 <!-- ===== QUICK START ===== -->
 <section id="quickstart">
   <h2>Quick Start</h2>
-  <p class="section-sub">We recommend installing vtc using the command shown above. For manual installation or building from source, follow the instructions on the <a href="https://github.com/javanile/vtiger-client" style="color:var(--accent-light)">GitHub repository</a>.</p>
-  <p class="section-sub">Connect to your Vtiger CRM in three simple steps.</p>
+  <p class="section-sub">Install vtc with a single command. For manual installation or building from source, follow the instructions on the <a href="https://github.com/javanile/vtiger-client" style="color:var(--accent-light)">GitHub repository</a>.</p>
+
+  <pre><code><span class="p">$</span> <span class="x">curl</span> <span class="s">get.javanile.org/vtc</span> | <span class="x">sh</span></code></pre>
+
+  <p class="section-sub">Then connect to your Vtiger CRM in three simple steps.</p>
 
   <div class="steps">
     <div class="stp">
@@ -347,7 +359,7 @@
 
 <!-- ===== CRM VARIABLE ===== -->
 <section id="crm-variable">
-  <h2>The CRM Variable</h2>
+  <h2>The Multiple CRM</h2>
   <p class="section-sub">The <code>CRM</code> environment variable is the most powerful feature of vtc. It lets you manage <strong>multiple Vtiger instances</strong> from the same terminal without switching directories.</p>
 
   <h3>How it works</h3>
@@ -543,7 +555,7 @@
       <h4>Multi-CRM Health Check</h4>
       <p>Monitor all your CRM instances with a simple loop.</p>
       <pre><code><span class="k">#!/bin/bash</span>
-<span class="k">for</span> crm <span class="k">in</span> production staging client-mumbai; <span class="k">do</span>
+<span class="k">for</span> crm <span class="k">in</span> production staging; <span class="k">do</span>
   echo <span class="s">"=== $crm ==="</span>
   <span class="v">CRM</span>=$crm <span class="x">vtc</span> ping
   echo
@@ -704,18 +716,27 @@ echo <span class="s">"CRM connection verified"</span></code></pre>
     });
   });
 
+  // SVG icons for copy
+  var copySvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+  var checkSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>';
+  window.copySvg = copySvg;
+  window.checkSvg = checkSvg;
+
+  // Set hero copy button icon
+  document.querySelector('.hero-install .copy-btn').innerHTML = copySvg;
+
   // Copy buttons on all pre blocks
   document.querySelectorAll('pre').forEach(function(pre) {
     var cpBtn = document.createElement('button');
     cpBtn.className = 'cp';
-    cpBtn.innerHTML = '&#128203;';
+    cpBtn.innerHTML = copySvg;
     cpBtn.setAttribute('aria-label', 'Copy to clipboard');
     cpBtn.addEventListener('click', function() {
       var text = pre.querySelector('code').textContent;
       navigator.clipboard.writeText(text);
-      cpBtn.innerHTML = '&#10003;';
+      cpBtn.innerHTML = checkSvg;
       cpBtn.classList.add('ok');
-      setTimeout(function() { cpBtn.innerHTML = '&#128203;'; cpBtn.classList.remove('ok'); }, 1500);
+      setTimeout(function() { cpBtn.innerHTML = copySvg; cpBtn.classList.remove('ok'); }, 1500);
     });
     pre.appendChild(cpBtn);
   });
