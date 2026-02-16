@@ -217,15 +217,44 @@ if ($command == 'retrieve') {
 }
 
 /**
+ * Parse element from arguments.
+ * Supports: @file.json, inline JSON, or key=value pairs.
+ *   vtc create Contacts '{"firstname":"Ravi"}'
+ *   vtc create Contacts @contact.json
+ *   vtc create Contacts firstname=Ravi lastname=Kumar email=ravi@example.com
+ */
+function parseElement($args, $offset = 3) {
+    $arg = isset($args[$offset]) ? $args[$offset] : null;
+    if ($arg === null) {
+        return null;
+    }
+    // @file.json
+    if ($arg[0] === '@') {
+        return json_decode(file_get_contents(substr($arg, 1)), true);
+    }
+    // key=value pairs: if the first arg contains '=', treat all remaining args as pairs
+    if (strpos($arg, '=') !== false) {
+        $element = [];
+        for ($i = $offset; $i < count($args); $i++) {
+            $pos = strpos($args[$i], '=');
+            if ($pos !== false) {
+                $key = substr($args[$i], 0, $pos);
+                $value = substr($args[$i], $pos + 1);
+                $element[$key] = $value;
+            }
+        }
+        return $element;
+    }
+    // Inline JSON
+    return json_decode($arg, true);
+}
+
+/**
  * Create
  */
 if ($command == 'create') {
     $module = $argv[2];
-    if ($argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } else {
-        $element = json_decode($argv[3], true);
-    }
+    $element = parseElement($argv, 3);
     $response = $client->create($module, $element);
     echo Functions::jsonEncode($response);
     exit(0);
@@ -236,13 +265,14 @@ if ($command == 'create') {
  */
 if ($command == 'update') {
     $module = $argv[2];
-    if ($argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
+    if (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && $argv[4][0] === '@') {
         $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
         $element['id'] = $argv[3];
+    } elseif (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && strpos($argv[4], '=') !== false) {
+        $element = parseElement($argv, 4);
+        $element['id'] = $argv[3];
     } else {
-        $element = json_decode($argv[3], true);
+        $element = parseElement($argv, 3);
     }
     $response = $client->update($module, $element);
     echo Functions::jsonEncode($response);
@@ -256,10 +286,11 @@ if ($command == 'revise') {
     $client = new VtigerClient($config['vtiger_url']);
     $client->login($config['username'], $config['access_key']);
     $module = $argv[2];
-    if (isset($argv[3]) && $argv[3][0] == '@') {
-        $element = json_decode(file_get_contents(substr($argv[3], 1)), true);
-    } elseif (isset($argv[4]) && $argv[4][0] == '@') {
+    if (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && $argv[4][0] === '@') {
         $element = json_decode(file_get_contents(substr($argv[4], 1)), true);
+        $element['id'] = $argv[3];
+    } elseif (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && strpos($argv[4], '=') !== false) {
+        $element = parseElement($argv, 4);
         $element['id'] = $argv[3];
     } elseif (isset($argv[5])) {
         $element = [
@@ -267,6 +298,9 @@ if ($command == 'revise') {
             $argv[4] => $argv[5],
         ];
     } else {
+        $element = parseElement($argv, 3);
+    }
+    if ($element === null) {
         die("Missing arguments.\n");
     }
     $response = $client->revise($module, $element);
