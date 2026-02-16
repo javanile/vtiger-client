@@ -44,6 +44,12 @@ bind:
 
 install: clean build bind
 
+release: clean build
+	@git add .
+	@git commit -am "Release built at $$(date)" || true
+	@git push
+	@echo "Release built at bin/vtc.phar. Please review and push to repository."
+
 ## -------
 ## Quality
 ## -------
