@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>vtc - Vtiger CRM Command Line Tool</title>
+<meta name="description" content="vtc is a powerful CLI tool to manage multiple Vtiger CRM instances from your terminal. Query, create, update and sync CRM data effortlessly.">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
+
+  :root {
+    --bg: #0a0c10;
+    --bg-card: #12151c;
+    --bg-code: #161b25;
+    --border: #1e2533;
+    --border-hover: #2d3548;
+    --text: #b8bfc9;
+    --text-muted: #5e6a7a;
+    --heading: #e8ecf1;
+    --accent: #ff6b35;
+    --accent-light: #ff8c5a;
+    --accent-dim: rgba(255,107,53,0.1);
+    --accent-glow: rgba(255,107,53,0.08);
+    --blue: #4da6ff;
+    --green: #3dd68c;
+    --yellow: #fbbf24;
+    --cyan: #22d3ee;
+    --purple: #a78bfa;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection { background: var(--accent-dim); color: var(--accent-light); }
+
+  /* ===== NAV ===== */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(10,12,16,0.8);
+    backdrop-filter: blur(20px) saturate(180%);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-inner {
+    max-width: 1140px; margin: 0 auto;
+    display: flex; align-items: center;
+    padding: 0 24px; height: 60px; gap: 8px;
+  }
+  .logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 22px; font-weight: 800;
+    color: var(--accent); text-decoration: none;
+    margin-right: 36px; letter-spacing: -1px;
+  }
+  .logo sub { font-size: 10px; color: var(--text-muted); font-weight: 500; letter-spacing: 0; vertical-align: baseline; margin-left: 6px; }
+  .nav-links { display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-links a {
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 14px; border-radius: 6px;
+    white-space: nowrap; transition: all 0.15s;
+  }
+  .nav-links a:hover, .nav-links a.active {
+    color: var(--heading); background: rgba(255,255,255,0.05);
+  }
+  .nav-gh {
+    margin-left: auto; flex-shrink: 0;
+    color: var(--text-muted); text-decoration: none;
+    font-size: 13px; font-weight: 500;
+    padding: 6px 14px; border-radius: 6px;
+    border: 1px solid var(--border); transition: all 0.15s;
+  }
+  .nav-gh:hover { border-color: var(--border-hover); color: var(--heading); }
+  .hamburger {
+    display: none; background: none; border: none;
+    color: var(--text); font-size: 22px; cursor: pointer;
+    margin-left: auto; padding: 4px 0;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    padding: 150px 24px 90px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute; top: -120px; left: 50%; transform: translateX(-50%);
+    width: 800px; height: 500px;
+    background: radial-gradient(ellipse, var(--accent-glow) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--accent-dim); border: 1px solid rgba(255,107,53,0.2);
+    border-radius: 20px; padding: 5px 16px 5px 12px;
+    font-size: 12px; font-weight: 600; color: var(--accent-light);
+    margin-bottom: 28px;
+  }
+  .hero-badge .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .hero h1 {
+    font-size: clamp(38px, 6vw, 64px);
+    font-weight: 900; color: var(--heading);
+    letter-spacing: -2px; line-height: 1.1;
+    margin-bottom: 20px;
+  }
+  .hero h1 em { font-style: normal; color: var(--accent); }
+  .hero .subtitle {
+    font-size: 18px; color: var(--text-muted);
+    max-width: 580px; margin: 0 auto 40px;
+    line-height: 1.6;
+  }
+  .hero-install {
+    display: inline-flex; align-items: center; gap: 16px;
+    background: var(--bg-code); border: 1px solid var(--border);
+    border-radius: 12px; padding: 16px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+  }
+  .hero-install .prompt { color: var(--text-muted); }
+  .hero-install .txt { color: var(--green); }
+  .hero-install .copy-btn {
+    background: none; border: 1px solid var(--border);
+    color: var(--text-muted); cursor: pointer;
+    padding: 4px 10px; border-radius: 5px; font-size: 11px;
+    font-family: 'Inter', sans-serif; font-weight: 500;
+    transition: all 0.15s;
+  }
+  .hero-install .copy-btn:hover { color: var(--heading); border-color: var(--border-hover); }
+
+  /* ===== LAYOUT ===== */
+  .container { max-width: 1140px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 80px 0; border-top: 1px solid var(--border); }
+
+  h2 {
+    font-size: 28px; font-weight: 800; color: var(--heading);
+    letter-spacing: -0.5px; margin-bottom: 8px;
+  }
+  h3 {
+    font-size: 18px; font-weight: 700; color: var(--heading);
+    margin: 36px 0 10px;
+  }
+  .section-sub { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; max-width: 640px; }
+
+  p { margin-bottom: 12px; }
+
+  strong { color: var(--heading); font-weight: 600; }
+
+  /* ===== CODE ===== */
+  pre {
+    background: var(--bg-code); border: 1px solid var(--border);
+    border-radius: 10px; padding: 16px 20px;
+    overflow-x: auto; margin: 10px 0 18px;
+    font-size: 13px; line-height: 1.65;
+  }
+  pre code { font-family: 'JetBrains Mono', monospace; color: var(--text); }
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.88em; }
+  p code, li code, td code {
+    background: var(--bg-code); border: 1px solid var(--border);
+    padding: 2px 7px; border-radius: 5px;
+    font-size: 12.5px; color: var(--accent-light);
+  }
+  .c { color: var(--text-muted); }
+  .k { color: var(--purple); }
+  .s { color: var(--green); }
+  .v { color: var(--cyan); }
+  .x { color: var(--yellow); }
+  .f { color: var(--heading); }
+  .p { color: var(--text-muted); }
+
+  /* ===== GRID ===== */
+  .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; margin: 20px 0; }
+  .grid-3 { grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+
+  .card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .card:hover { border-color: var(--border-hover); transform: translateY(-2px); }
+  .card .icon { font-size: 28px; margin-bottom: 12px; display: block; }
+  .card h4 { font-size: 15px; font-weight: 700; color: var(--heading); margin-bottom: 6px; }
+  .card p { color: var(--text-muted); font-size: 13.5px; margin: 0; line-height: 1.5; }
+  .card pre { margin: 10px 0 0; font-size: 12.5px; }
+
+  /* ===== FLOW DIAGRAM ===== */
+  .flow {
+    background: var(--bg-code); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 28px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px; line-height: 2.2;
+    margin: 20px 0; overflow-x: auto;
+  }
+  .flow .lbl { color: var(--text-muted); display: inline-block; min-width: 220px; }
+  .flow .arr { color: var(--accent); }
+  .flow .pth { color: var(--green); }
+
+  /* ===== STEPS ===== */
+  .steps { counter-reset: step; margin: 24px 0; }
+  .stp {
+    position: relative; padding: 0 0 28px 52px;
+    border-left: 2px solid var(--border); margin-left: 15px;
+  }
+  .stp:last-child { border-left-color: transparent; padding-bottom: 0; }
+  .stp::before {
+    counter-increment: step; content: counter(step);
+    position: absolute; left: -16px; top: 0;
+    width: 30px; height: 30px;
+    background: var(--accent); color: #fff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-weight: 700; font-size: 13px;
+  }
+  .stp h4 { color: var(--heading); font-size: 15px; font-weight: 700; margin-bottom: 6px; }
+  .stp > p { color: var(--text-muted); font-size: 13.5px; margin-bottom: 6px; }
+
+  /* ===== COMMAND BLOCKS ===== */
+  .cmd-ref {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 24px 28px; margin: 16px 0;
+  }
+  .cmd-ref h4 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 16px; color: var(--heading); margin-bottom: 4px;
+  }
+  .cmd-ref .desc { color: var(--text-muted); font-size: 13.5px; margin-bottom: 14px; }
+
+  /* ===== TABLE ===== */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0 20px; font-size: 13.5px; }
+  th {
+    text-align: left; font-weight: 600; color: var(--text-muted);
+    font-size: 11px; text-transform: uppercase; letter-spacing: 0.8px;
+    padding: 8px 14px; border-bottom: 1px solid var(--border);
+  }
+  td { padding: 10px 14px; border-bottom: 1px solid var(--border); }
+  tr:last-child td { border-bottom: none; }
+
+  /* ===== FOOTER ===== */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 36px 24px; text-align: center;
+    color: var(--text-muted); font-size: 13px;
+  }
+  footer a { color: var(--accent-light); text-decoration: none; }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    .hamburger { display: block; }
+    .nav-links, .nav-gh {
+      display: none; position: absolute;
+      top: 60px; left: 0; right: 0;
+      background: rgba(10,12,16,0.97);
+      flex-direction: column; padding: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+    .nav-links.open { display: flex; }
+    .nav-links a { padding: 10px 16px; font-size: 14px; }
+    section { padding: 48px 0; }
+    h2 { font-size: 24px; }
+    .grid { grid-template-columns: 1fr; }
+    .stp { padding-left: 40px; }
+    .flow .lbl { min-width: 160px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===== NAV ===== -->
+<nav>
+  <div class="nav-inner">
+    <a href="#top" class="logo">vtc<sub>cli</sub></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#install">Install</a>
+      <a href="#quickstart">Quick Start</a>
+      <a href="#crm-variable">CRM Variable</a>
+      <a href="#commands">Commands</a>
+      <a href="#recipes">Recipes</a>
+      <a href="#config">Config</a>
+    </div>
+    <a href="https://github.com/javanile/vtiger-client" class="nav-gh" target="_blank">GitHub</a>
+    <button class="hamburger" id="hamburger" aria-label="Menu">&#9776;</button>
+  </div>
+</nav>
+
+<!-- ===== HERO ===== -->
+<div class="hero" id="top">
+  <div class="hero-badge"><span class="dot"></span> Open Source CLI for Vtiger CRM</div>
+  <h1>Manage your <em>Vtiger CRM</em><br>from the terminal</h1>
+  <p class="subtitle">A lightweight command-line tool to query, create, update and sync data across multiple Vtiger CRM instances. One binary, zero overhead.</p>
+  <div class="hero-install">
+    <span><span class="prompt">$&nbsp;</span><span class="txt">composer global require javanile/vtiger-client</span></span>
+    <button class="copy-btn" onclick="navigator.clipboard.writeText('composer global require javanile/vtiger-client');this.textContent='Copied!';setTimeout(()=>this.textContent='Copy',1500)">Copy</button>
+  </div>
+</div>
+
+<div class="container">
+
+<!-- ===== INSTALL ===== -->
+<section id="install">
+  <h2>Installation</h2>
+  <p class="section-sub">Get vtc running in under a minute. Pick the method that suits your setup.</p>
+
+  <div class="grid grid-3">
+    <div class="card">
+      <span class="icon">&#128230;</span>
+      <h4>Composer (Recommended)</h4>
+      <p>Install globally via Composer and start using right away.</p>
+      <pre><code><span class="p">$</span> <span class="x">composer</span> global require javanile/vtiger-client</code></pre>
+    </div>
+    <div class="card">
+      <span class="icon">&#11015;&#65039;</span>
+      <h4>Direct Download</h4>
+      <p>Download the phar binary and place it in your PATH.</p>
+      <pre><code><span class="p">$</span> <span class="x">curl</span> -L -o /usr/local/bin/vtc \
+  <span class="s">https://github.com/javanile/vtiger-client/releases/latest/download/vtc.phar</span>
+<span class="p">$</span> <span class="x">chmod</span> +x /usr/local/bin/vtc</code></pre>
+    </div>
+    <div class="card">
+      <span class="icon">&#128296;</span>
+      <h4>Build from Source</h4>
+      <p>Clone the repo and compile with make.</p>
+      <pre><code><span class="p">$</span> <span class="x">git</span> clone https://github.com/javanile/vtiger-client.git
+<span class="p">$</span> <span class="x">cd</span> vtiger-client
+<span class="p">$</span> <span class="x">make</span> install</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== QUICK START ===== -->
+<section id="quickstart">
+  <h2>Quick Start</h2>
+  <p class="section-sub">Connect to your Vtiger CRM in three simple steps.</p>
+
+  <div class="steps">
+    <div class="stp">
+      <h4>Initialize config</h4>
+      <p>This creates a <code>vtiger.config.json</code> file with default values.</p>
+      <pre><code><span class="p">$</span> <span class="x">vtc</span> init</code></pre>
+    </div>
+    <div class="stp">
+      <h4>Edit your credentials</h4>
+      <p>Set your CRM URL, username and access key.</p>
+      <pre><code><span class="p">$</span> <span class="x">nano</span> <span class="s">$(vtc config:file)</span></code></pre>
+      <pre><code>{
+    <span class="s">"vtiger_url"</span>:  <span class="s">"https://yourcrm.example.com/vtigercrm/"</span>,
+    <span class="s">"username"</span>:    <span class="s">"admin"</span>,
+    <span class="s">"access_key"</span>:  <span class="s">"your-access-key-here"</span>
+}</code></pre>
+    </div>
+    <div class="stp">
+      <h4>Test the connection</h4>
+      <p>If you see <code>"success": true</code>, you're connected.</p>
+      <pre><code><span class="p">$</span> <span class="x">vtc</span> ping
+<span class="c">{"success":true,"result":{"sessionName":"...","userId":"19x1"}}</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CRM VARIABLE ===== -->
+<section id="crm-variable">
+  <h2>The CRM Variable</h2>
+  <p class="section-sub">The <code>CRM</code> environment variable is the most powerful feature of vtc. It lets you manage <strong>multiple Vtiger instances</strong> from the same terminal without switching directories.</p>
+
+  <h3>How it works</h3>
+  <p>When you set the <code>CRM</code> variable, vtc reads configuration from <code>~/.vtc/&lt;name&gt;/vtiger.config.json</code> instead of the current directory.</p>
+
+  <div class="flow">
+    <span class="lbl">CRM not set</span> <span class="arr">&rarr;</span> <span class="pth">./vtiger.config.json</span><br>
+    <span class="lbl">CRM=production</span> <span class="arr">&rarr;</span> <span class="pth">~/.vtc/production/vtiger.config.json</span><br>
+    <span class="lbl">CRM=staging</span> <span class="arr">&rarr;</span> <span class="pth">~/.vtc/staging/vtiger.config.json</span><br>
+    <span class="lbl">CRM=client-mumbai</span> <span class="arr">&rarr;</span> <span class="pth">~/.vtc/client-mumbai/vtiger.config.json</span><br>
+    <span class="lbl">CRM=client-delhi</span> <span class="arr">&rarr;</span> <span class="pth">~/.vtc/client-delhi/vtiger.config.json</span>
+  </div>
+
+  <h3>Setting up multiple CRM instances</h3>
+
+  <div class="steps">
+    <div class="stp">
+      <h4>Initialize each instance</h4>
+      <p>Run <code>vtc init</code> with the <code>CRM</code> variable for each instance you want to manage.</p>
+      <pre><code><span class="p">$</span> <span class="v">CRM</span>=production    <span class="x">vtc</span> init
+<span class="p">$</span> <span class="v">CRM</span>=staging       <span class="x">vtc</span> init
+<span class="p">$</span> <span class="v">CRM</span>=client-mumbai <span class="x">vtc</span> init</code></pre>
+    </div>
+    <div class="stp">
+      <h4>Edit each config file</h4>
+      <p>Set the correct URL, username and access key for each CRM.</p>
+      <pre><code><span class="p">$</span> <span class="x">nano</span> <span class="s">$(CRM=production vtc config:file)</span>
+<span class="p">$</span> <span class="x">nano</span> <span class="s">$(CRM=staging vtc config:file)</span>
+<span class="p">$</span> <span class="x">nano</span> <span class="s">$(CRM=client-mumbai vtc config:file)</span></code></pre>
+    </div>
+    <div class="stp">
+      <h4>Test all connections</h4>
+      <pre><code><span class="p">$</span> <span class="v">CRM</span>=production    <span class="x">vtc</span> ping
+<span class="p">$</span> <span class="v">CRM</span>=staging       <span class="x">vtc</span> ping
+<span class="p">$</span> <span class="v">CRM</span>=client-mumbai <span class="x">vtc</span> ping</code></pre>
+    </div>
+  </div>
+
+  <h3>Using CRM in daily work</h3>
+  <p>Every vtc command respects the <code>CRM</code> variable. Just prefix it:</p>
+  <pre><code><span class="c"># Query contacts on production</span>
+<span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> query <span class="s">"SELECT * FROM Contacts LIMIT 10"</span>
+
+<span class="c"># Describe module on staging</span>
+<span class="p">$</span> <span class="v">CRM</span>=staging <span class="x">vtc</span> describe Accounts
+
+<span class="c"># Retrieve a record from client instance</span>
+<span class="p">$</span> <span class="v">CRM</span>=client-mumbai <span class="x">vtc</span> retrieve 12x1020</code></pre>
+
+  <h3>Export for the entire session</h3>
+  <p>If you're working on one instance for a while, export it once:</p>
+  <pre><code><span class="p">$</span> <span class="k">export</span> <span class="v">CRM</span>=production
+<span class="p">$</span> <span class="x">vtc</span> ping                              <span class="c"># uses production</span>
+<span class="p">$</span> <span class="x">vtc</span> query <span class="s">"SELECT * FROM Leads"</span>        <span class="c"># uses production</span>
+<span class="p">$</span> <span class="x">vtc</span> describe Contacts                  <span class="c"># uses production</span>
+
+<span class="c"># Switch back to local config:</span>
+<span class="p">$</span> <span class="k">unset</span> <span class="v">CRM</span></code></pre>
+
+  <h3>Shell aliases for quick access</h3>
+  <p>Add these to your <code>.bashrc</code> or <code>.zshrc</code> for faster workflows:</p>
+  <pre><code><span class="c"># Add to ~/.bashrc or ~/.zshrc</span>
+<span class="k">alias</span> <span class="f">vtc-prod</span>=<span class="s">'CRM=production vtc'</span>
+<span class="k">alias</span> <span class="f">vtc-stag</span>=<span class="s">'CRM=staging vtc'</span>
+<span class="k">alias</span> <span class="f">vtc-mum</span>=<span class="s">'CRM=client-mumbai vtc'</span></code></pre>
+  <p>Then use them directly:</p>
+  <pre><code><span class="p">$</span> <span class="x">vtc-prod</span> query <span class="s">"SELECT * FROM Accounts"</span>
+<span class="p">$</span> <span class="x">vtc-stag</span> describe Leads
+<span class="p">$</span> <span class="x">vtc-mum</span> ping</code></pre>
+</section>
+
+<!-- ===== COMMANDS ===== -->
+<section id="commands">
+  <h2>Command Reference</h2>
+  <p class="section-sub">Complete list of all available vtc commands with usage examples.</p>
+
+  <div class="cmd-ref">
+    <h4>vtc init</h4>
+    <p class="desc">Creates the <code>vtiger.config.json</code> configuration file with default values.</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> init                        <span class="c"># in current directory</span>
+<span class="p">$</span> <span class="v">CRM</span>=mycrm <span class="x">vtc</span> init              <span class="c"># in ~/.vtc/mycrm/</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc ping</h4>
+    <p class="desc">Tests the connection by performing a challenge + login against the CRM.</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> ping
+<span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> ping</code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc config:dir</h4>
+    <p class="desc">Prints the directory containing the config file.</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> config:dir
+<span class="c">/home/user/myproject</span>
+
+<span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> config:dir
+<span class="c">/home/user/.vtc/production</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc config:file</h4>
+    <p class="desc">Prints the full path to the config file. Useful for piping to an editor.</p>
+    <pre><code><span class="p">$</span> <span class="x">nano</span> <span class="s">$(vtc config:file)</span>
+<span class="p">$</span> <span class="x">nano</span> <span class="s">$(CRM=production vtc config:file)</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc query "QUERY"</h4>
+    <p class="desc">Executes a Vtiger Webservice query. SQL-like syntax with Vtiger limitations.</p>
+    <pre><code><span class="c"># Fetch all contacts</span>
+<span class="p">$</span> <span class="x">vtc</span> query <span class="s">"SELECT * FROM Contacts"</span>
+
+<span class="c"># With filters</span>
+<span class="p">$</span> <span class="x">vtc</span> query <span class="s">"SELECT firstname, lastname FROM Contacts WHERE lastname = 'Sharma'"</span>
+
+<span class="c"># With LIMIT</span>
+<span class="p">$</span> <span class="x">vtc</span> query <span class="s">"SELECT * FROM Leads LIMIT 20"</span>
+
+<span class="c"># Accounts by industry</span>
+<span class="p">$</span> <span class="x">vtc</span> query <span class="s">"SELECT accountname, phone FROM Accounts WHERE industry = 'IT Services'"</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc listtypes</h4>
+    <p class="desc">Lists all available modules (entity types) in the CRM.</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> listtypes</code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc describe MODULE [DEPTH]</h4>
+    <p class="desc">Describes the structure of a module: fields, types, mandatory flags, picklist values. The <code>DEPTH</code> parameter resolves referenced modules recursively.</p>
+    <pre><code><span class="c"># Basic module structure</span>
+<span class="p">$</span> <span class="x">vtc</span> describe Contacts
+
+<span class="c"># With reference resolution</span>
+<span class="p">$</span> <span class="x">vtc</span> describe Contacts <span class="f">1</span>
+<span class="p">$</span> <span class="x">vtc</span> describe Contacts <span class="f">2</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc retrieve CRMID [DEPTH]</h4>
+    <p class="desc">Fetches a single record by its CRMID (format: <code>NUMBERxNUMBER</code>, e.g. <code>12x1020</code>).</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> retrieve <span class="f">12x1020</span>
+<span class="p">$</span> <span class="x">vtc</span> retrieve <span class="f">12x1020</span> <span class="f">1</span>    <span class="c"># with depth</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc create MODULE ELEMENT</h4>
+    <p class="desc">Creates a new record. Pass data as inline JSON or from a file with <code>@</code> prefix.</p>
+    <pre><code><span class="c"># Inline JSON</span>
+<span class="p">$</span> <span class="x">vtc</span> create Contacts <span class="s">'{"firstname":"Ravi","lastname":"Kumar","email":"ravi@example.com"}'</span>
+
+<span class="c"># From JSON file</span>
+<span class="p">$</span> <span class="x">vtc</span> create Contacts <span class="f">@contact.json</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc update MODULE ELEMENT</h4>
+    <p class="desc">Updates an existing record. The <code>id</code> field must be present in the element.</p>
+    <pre><code><span class="c"># Inline JSON with id</span>
+<span class="p">$</span> <span class="x">vtc</span> update Contacts <span class="s">'{"id":"12x1020","phone":"+91 22 12345678"}'</span>
+
+<span class="c"># From file</span>
+<span class="p">$</span> <span class="x">vtc</span> update Contacts <span class="f">@update.json</span>
+
+<span class="c"># With separate id and file</span>
+<span class="p">$</span> <span class="x">vtc</span> update Contacts <span class="f">12x1020</span> <span class="f">@data.json</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc revise MODULE ELEMENT</h4>
+    <p class="desc">Partially updates a record. Only the specified fields are modified; other fields remain unchanged.</p>
+    <pre><code><span class="c"># From file</span>
+<span class="p">$</span> <span class="x">vtc</span> revise Contacts <span class="f">@revision.json</span>
+
+<span class="c"># Single field update</span>
+<span class="p">$</span> <span class="x">vtc</span> revise Contacts <span class="f">12x1020</span> phone <span class="s">"+91 22 9999999"</span>
+
+<span class="c"># With separate id and file</span>
+<span class="p">$</span> <span class="x">vtc</span> revise Contacts <span class="f">12x1020</span> <span class="f">@partial.json</span></code></pre>
+  </div>
+</section>
+
+<!-- ===== RECIPES ===== -->
+<section id="recipes">
+  <h2>Recipes &amp; Use Cases</h2>
+  <p class="section-sub">Practical examples for common workflows.</p>
+
+  <div class="grid">
+    <div class="card">
+      <span class="icon">&#128203;</span>
+      <h4>Multi-CRM Health Check</h4>
+      <p>Monitor all your CRM instances with a simple loop.</p>
+      <pre><code><span class="k">#!/bin/bash</span>
+<span class="k">for</span> crm <span class="k">in</span> production staging client-mumbai; <span class="k">do</span>
+  echo <span class="s">"=== $crm ==="</span>
+  <span class="v">CRM</span>=$crm <span class="x">vtc</span> ping
+  echo
+<span class="k">done</span></code></pre>
+    </div>
+
+    <div class="card">
+      <span class="icon">&#128190;</span>
+      <h4>Export Data to JSON</h4>
+      <p>Pull CRM data and save it for analysis or reporting.</p>
+      <pre><code><span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> query \
+  <span class="s">"SELECT * FROM Contacts"</span> \
+  > contacts.json
+
+<span class="c"># Pipe to jq for formatting</span>
+<span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> query \
+  <span class="s">"SELECT * FROM Leads"</span> \
+  | <span class="x">jq</span> <span class="s">'.result'</span></code></pre>
+    </div>
+
+    <div class="card">
+      <span class="icon">&#9202;</span>
+      <h4>Cron Automation</h4>
+      <p>Schedule periodic data pulls or sync checks.</p>
+      <pre><code><span class="c"># crontab -e</span>
+0 */6 * * * <span class="v">CRM</span>=production \
+  /usr/local/bin/<span class="x">vtc</span> query \
+  <span class="s">"SELECT * FROM Leads \
+  WHERE createdtime > '2024-01-01'"</span> \
+  >> /var/log/crm-leads.json</code></pre>
+    </div>
+
+    <div class="card">
+      <span class="icon">&#128640;</span>
+      <h4>CI/CD Pipeline</h4>
+      <p>Validate CRM connectivity before deployment steps.</p>
+      <pre><code><span class="c"># In your CI script</span>
+<span class="k">export</span> <span class="v">CRM</span>=test
+<span class="x">vtc</span> ping || exit 1
+<span class="x">vtc</span> listtypes
+echo <span class="s">"CRM connection verified"</span></code></pre>
+    </div>
+
+    <div class="card">
+      <span class="icon">&#128301;</span>
+      <h4>Bulk Create from File</h4>
+      <p>Prepare records in a JSON file and push them to CRM.</p>
+      <pre><code><span class="c"># Create contact.json with your data</span>
+<span class="p">$</span> <span class="v">CRM</span>=production <span class="x">vtc</span> create \
+  Contacts <span class="f">@contact.json</span>
+
+<span class="c"># Loop over multiple files</span>
+<span class="k">for</span> f <span class="k">in</span> records/*.json; <span class="k">do</span>
+  <span class="v">CRM</span>=production <span class="x">vtc</span> create Leads <span class="f">@$f</span>
+<span class="k">done</span></code></pre>
+    </div>
+
+    <div class="card">
+      <span class="icon">&#128270;</span>
+      <h4>Module Discovery</h4>
+      <p>Explore what modules and fields are available in a CRM.</p>
+      <pre><code><span class="c"># List all modules</span>
+<span class="p">$</span> <span class="x">vtc</span> listtypes | <span class="x">jq</span> <span class="s">'.result.types'</span>
+
+<span class="c"># Get field details</span>
+<span class="p">$</span> <span class="x">vtc</span> describe Accounts \
+  | <span class="x">jq</span> <span class="s">'.result.fields[].name'</span></code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- ===== CONFIG ===== -->
+<section id="config">
+  <h2>Configuration</h2>
+  <p class="section-sub">The <code>vtiger.config.json</code> file contains everything needed to connect to a Vtiger instance.</p>
+
+  <table>
+    <thead>
+      <tr><th>Parameter</th><th>Description</th><th>Example</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>vtiger_url</code></td>
+        <td>Full URL of the Vtiger CRM instance (with trailing slash)</td>
+        <td><code>https://crm.example.com/vtigercrm/</code></td>
+      </tr>
+      <tr>
+        <td><code>username</code></td>
+        <td>Webservice username</td>
+        <td><code>admin</code></td>
+      </tr>
+      <tr>
+        <td><code>access_key</code></td>
+        <td>Webservice access key from Vtiger UI</td>
+        <td><code>PcC1w0COZDYbqBi</code></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <pre><code>{
+    <span class="s">"vtiger_url"</span>:  <span class="s">"https://crm.example.com/vtigercrm/"</span>,
+    <span class="s">"username"</span>:    <span class="s">"admin"</span>,
+    <span class="s">"access_key"</span>:  <span class="s">"your-access-key-here"</span>
+}</code></pre>
+
+  <h3>Where to find the Access Key</h3>
+  <p>In Vtiger CRM, navigate to <strong>My Preferences</strong> (user icon at the top-right corner). Scroll down to the <strong>User Advanced Options</strong> section and copy the <strong>Access Key</strong> value.</p>
+
+  <h3>Requirements</h3>
+  <div class="grid grid-3">
+    <div class="card">
+      <h4>PHP >= 7.0</h4>
+      <p>PHP runtime with ext-json enabled</p>
+    </div>
+    <div class="card">
+      <h4>Network Access</h4>
+      <p>The CRM must be reachable via HTTPS from your machine</p>
+    </div>
+    <div class="card">
+      <h4>Webservice Enabled</h4>
+      <p>Vtiger Webservices must be active on the CRM instance</p>
+    </div>
+  </div>
+</section>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<footer>
+  <p><strong>vtc</strong> &middot; MIT License &middot; Made by <a href="https://github.com/javanile">Javanile</a> &middot; <a href="https://github.com/javanile/vtiger-client">View on GitHub</a></p>
+</footer>
+
+<!-- ===== JS ===== -->
+<script>
+(function() {
+  var btn = document.getElementById('hamburger');
+  var links = document.getElementById('navLinks');
+  btn.addEventListener('click', function() { links.classList.toggle('open'); });
+  links.querySelectorAll('a').forEach(function(a) {
+    a.addEventListener('click', function() { links.classList.remove('open'); });
+  });
+  var sections = document.querySelectorAll('section[id]');
+  var navAs = links.querySelectorAll('a');
+  window.addEventListener('scroll', function() {
+    var y = window.scrollY + 100;
+    sections.forEach(function(sec) {
+      var id = sec.getAttribute('id');
+      var link = links.querySelector('a[href="#' + id + '"]');
+      if (link) {
+        if (y >= sec.offsetTop && y < sec.offsetTop + sec.offsetHeight) {
+          navAs.forEach(function(a) { a.classList.remove('active'); });
+          link.classList.add('active');
+        }
+      }
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

@@ -67,6 +67,11 @@ dev-update:
 dev-debug:
 	@docker compose exec vtiger debug --polling
 
+dev-push:
+	@git add .
+	@git commit -am "Updated at $$(date)" || true
+	@git push
+
 ## -------
 ## Testing
 ## -------
