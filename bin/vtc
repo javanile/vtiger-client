@@ -25,6 +25,14 @@ if ($command == 'list' && strtolower(trim(@$argv[2])) == 'types') {
     $command = 'list types';
     array_splice($argv, 2, 1);
 }
+if ($command == 'crm' && strtolower(trim(@$argv[2])) == 'list') {
+    $command = 'crm list';
+    array_splice($argv, 2, 1);
+}
+if ($command == 'list' && strtolower(trim(@$argv[2])) == 'crm') {
+    $command = 'crm list';
+    array_splice($argv, 2, 1);
+}
 $envPrefix = $crm ? 'CRM='.$crm.' ' : '';
 $configDir = $crm ? $home.'/.vtc/'.$crm : getcwd();
 $configFile = $configDir.'/vtiger.config.json';
@@ -45,6 +53,7 @@ List of available commands
   config:file               Print-out the absolute path of config file
   ping                      Test the connection to the Vtiger CRM instance
   query "QUERY"             Execute webservice query
+  crm-list                  List all configured CRM instances
   list-types                List all available types
   describe MODULE [DEPTH]   Describe MODULE structure with DEPTH fields
   retrieve CRMID [DEPTH]    Retrieve an element by CRMID with 'x' (eg. 12x1020)
@@ -93,6 +102,51 @@ if ($command == 'config:dir') {
     exit(0);
 } else if ($command == 'config:file') {
     echo $configFile.PHP_EOL;
+    exit(0);
+}
+
+/**
+ * CRM List
+ */
+if (in_array($command, ['crm-list', 'crm:list', 'crm list', 'crmlist', 'list-crm', 'list:crm', 'listcrm'])) {
+    $vtcDir = $home.'/.vtc';
+    $rows = [];
+
+    // Local config (default)
+    $localConfig = getcwd().'/vtiger.config.json';
+    if (file_exists($localConfig)) {
+        $cfg = json_decode(file_get_contents($localConfig), true);
+        $rows[] = ['(local)', $cfg['vtiger_url'] ?? '-'];
+    }
+
+    // Named CRM instances
+    if (is_dir($vtcDir)) {
+        $dirs = scandir($vtcDir);
+        sort($dirs);
+        foreach ($dirs as $dir) {
+            if ($dir === '.' || $dir === '..') continue;
+            $cfgFile = $vtcDir.'/'.$dir.'/vtiger.config.json';
+            if (file_exists($cfgFile)) {
+                $cfg = json_decode(file_get_contents($cfgFile), true);
+                $rows[] = [$dir, $cfg['vtiger_url'] ?? '-'];
+            }
+        }
+    }
+
+    if (empty($rows)) {
+        echo 'No CRM instances configured. Run "vtc init" or "CRM=<name> vtc init" to create one.'.PHP_EOL;
+        exit(0);
+    }
+
+    // Calculate column widths
+    $w0 = max(array_map(function($r) { return strlen($r[0]); }, $rows));
+    $w0 = max($w0, 4);
+
+    echo str_pad('NAME', $w0 + 2).'URL'.PHP_EOL;
+    echo str_repeat('-', $w0 + 42).PHP_EOL;
+    foreach ($rows as $row) {
+        echo str_pad($row[0], $w0 + 2).$row[1].PHP_EOL;
+    }
     exit(0);
 }
 
