@@ -439,6 +439,10 @@
     </div>
   </div>
 
+  <h3>Listing all configured instances</h3>
+  <p>Use <code>vtc crm-list</code> to see all your configured CRM instances at a glance:</p>
+  <pre><code><span class="p">$</span> <span class="x">vtc</span> crm-list</code></pre>
+
   <h3>Using CRM in daily work</h3>
   <p>Every vtc command respects the <code>CRM</code> variable. Just prefix it:</p>
   <pre><code><span class="c"># Query contacts on production</span>
@@ -506,6 +510,17 @@
     <p class="desc">Prints the full path to the config file. Useful for piping to an editor.</p>
     <pre><code><span class="p">$</span> <span class="x">nano</span> <span class="s">$(vtc config:file)</span>
 <span class="p">$</span> <span class="x">nano</span> <span class="s">$(CRM=production vtc config:file)</span></code></pre>
+  </div>
+
+  <div class="cmd-ref">
+    <h4>vtc crm-list</h4>
+    <p class="desc">Lists all configured CRM instances with their name and URL. Also available as <code>crm:list</code>, <code>list-crm</code>, <code>list:crm</code>.</p>
+    <pre><code><span class="p">$</span> <span class="x">vtc</span> crm-list
+<span class="c">NAME          URL</span>
+<span class="c">------------------------------------------</span>
+<span class="c">(local)       https://demo.vtiger.com/vtigercrm/</span>
+<span class="c">production    https://crm.example.com/vtigercrm/</span>
+<span class="c">staging       https://staging.example.com/vtigercrm/</span></code></pre>
   </div>
 
   <div class="cmd-ref">
