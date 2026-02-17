@@ -20,6 +20,17 @@ $defaultConfig = [
 
 $crm = trim(strval(getenv('CRM')));
 $home = $_SERVER['HOME'];
+
+// Parse global flags (-x / --xdebug)
+$xdebug = false;
+foreach ($argv as $k => $v) {
+    if ($v === '-x' || $v === '--xdebug') {
+        $xdebug = true;
+        unset($argv[$k]);
+    }
+}
+$argv = array_values($argv);
+
 $command = strtolower(trim(@$argv[1]));
 if ($command == 'list' && strtolower(trim(@$argv[2])) == 'types') {
     $command = 'list types';
@@ -60,6 +71,9 @@ List of available commands
   create MODULE ELEMENT     Create a new record (JSON or @file.json)
   update MODULE ELEMENT     Update an existing record
   revise MODULE ELEMENT     Partially update a record
+
+Options
+  -x, --xdebug             Enable Xdebug session (XDEBUG_SESSION_START=PHPSTORM)
 
 Environment
   CRM=<name>               Target a named CRM instance (~/.vtc/<name>/)
@@ -154,7 +168,7 @@ if (in_array($command, ['crm-list', 'crm:list', 'crm list', 'crmlist', 'list-crm
  * Ping
  */
 if ($command == 'ping') {
-    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'verify' => false]);
+    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'verify' => false, 'xdebug' => $xdebug]);
     $response = $client->login($config['username'], $config['access_key']);
     echo Functions::jsonEncode($response);
     exit(0);
@@ -171,6 +185,7 @@ if (preg_match('/([a-z]+):([a-z_]+)/i', $command, $matches)) {
 $client = new VtigerClient([
     'endpoint' => $config['vtiger_url'],
     'verify' => false,
+    'xdebug' => $xdebug,
     'operationsMap' => $operationsMap
 ]);
 $client->login($config['username'], $config['access_key']);
@@ -280,7 +295,7 @@ if ($command == 'update') {
  * Revise
  */
 if ($command == 'revise') {
-    $client = new VtigerClient($config['vtiger_url']);
+    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'xdebug' => $xdebug]);
     $client->login($config['username'], $config['access_key']);
     $module = $argv[2];
     if (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && $argv[4][0] === '@') {
