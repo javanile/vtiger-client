@@ -21,11 +21,15 @@ $defaultConfig = [
 $crm = trim(strval(getenv('CRM')));
 $home = $_SERVER['HOME'];
 
-// Parse global flags (-x / --xdebug)
+// Parse global flags (-x / --xdebug, --debug-error)
 $xdebug = false;
+$debugError = false;
 foreach ($argv as $k => $v) {
     if ($v === '-x' || $v === '--xdebug') {
         $xdebug = true;
+        unset($argv[$k]);
+    } elseif ($v === '--debug-error') {
+        $debugError = true;
         unset($argv[$k]);
     }
 }
@@ -86,6 +90,7 @@ List of available commands
 
 Options
   -x, --xdebug             Enable Xdebug session (XDEBUG_SESSION_START=PHPSTORM)
+      --debug-error        Enable error debug (DEBUG_ERROR=yes)
 
 Environment
   CRM=<name>               Target a named CRM instance (~/.vtc/<name>/)
@@ -180,7 +185,7 @@ if (in_array($command, ['crm-list', 'crm:list', 'crm list', 'crmlist', 'list-crm
  * Ping
  */
 if ($command == 'ping') {
-    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'verify' => false, 'xdebug' => $xdebug]);
+    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'verify' => false, 'xdebug' => $xdebug, 'debug_error' => $debugError]);
     $response = $client->login($config['username'], $config['access_key']);
     echo Functions::jsonEncode($response);
     exit(0);
@@ -198,6 +203,7 @@ $client = new VtigerClient([
     'endpoint' => $config['vtiger_url'],
     'verify' => false,
     'xdebug' => $xdebug,
+    'debug_error' => $debugError,
     'operationsMap' => $operationsMap
 ]);
 $client->login($config['username'], $config['access_key']);
@@ -327,7 +333,7 @@ if ($command == 'update') {
  * Revise
  */
 if ($command == 'revise') {
-    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'xdebug' => $xdebug]);
+    $client = new VtigerClient(['endpoint' => $config['vtiger_url'], 'xdebug' => $xdebug, 'debug_error' => $debugError]);
     $client->login($config['username'], $config['access_key']);
     $module = $argv[2];
     if (isset($argv[3]) && strpos($argv[3], '=') === false && isset($argv[4]) && $argv[4][0] === '@') {

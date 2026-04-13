@@ -38,11 +38,15 @@ bin/vtc.phar:
 	@[ -d vendor.tmp ] && mv vendor.tmp vendor || true
 
 bind:
-	@sudo rm -fr /usr/local/bin/vtc
+	@mkdir -p $$HOME/.local/bin || true
+	@rm -f $$HOME/.local/bin/vtc || true
+	@ln bin/vtc.phar $$HOME/.local/bin/vtc
+	@sudo rm -fr /usr/local/bin/vtc || true
 	@sudo ln bin/vtc.phar /usr/local/bin/vtc
 	@sudo chmod +x /usr/local/bin/vtc
 
 install: clean build bind
+	@echo "vtc installed to /usr/local/bin/vtc. Please run 'vtc --help' for usage."
 
 release: clean build
 	@git add .

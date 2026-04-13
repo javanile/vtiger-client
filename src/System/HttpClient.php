@@ -40,6 +40,11 @@ class HttpClient
     protected $xdebug = false;
 
     /**
+     * @var bool
+     */
+    protected $debugError = false;
+
+    /**
      * HttpClient constructor.
      *
      * @param $args
@@ -48,6 +53,7 @@ class HttpClient
     {
         $this->endpoint = $args['endpoint'].'/webservice.php';
         $this->xdebug = !empty($args['xdebug']);
+        $this->debugError = !empty($args['debug_error']);
 
         if (isset($args['verify'])) {
             $args['guzzle']['verify'] = $args['verify'];
@@ -112,6 +118,10 @@ class HttpClient
     {
         if ($this->xdebug) {
             $request['query']['XDEBUG_SESSION_START'] = 'PHPSTORM';
+        }
+
+        if ($this->debugError) {
+            $request['query']['DEBUG_ERROR'] = 'yes';
         }
 
         try {
