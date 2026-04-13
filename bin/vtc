@@ -71,6 +71,18 @@ List of available commands
   create MODULE ELEMENT     Create a new record (JSON or @file.json)
   update MODULE ELEMENT     Update an existing record
   revise MODULE ELEMENT     Partially update a record
+  inspect db tables         List database tables
+  inspect db columns TABLE  Inspect column metadata for TABLE
+  inspect db query "SQL"    Execute a read-only SQL query
+  inspect db explain "SQL"  Show execution plan for a query
+  inspect fs list PATH      List files under PATH
+  inspect fs read PATH      Read file content at PATH
+  inspect fs stat PATH      Show metadata for PATH
+  control db execute "SQL"  Execute a mutating SQL statement
+  control fs write PATH     Write content to PATH (--content "...")
+  control fs mkdir PATH     Create directory at PATH
+  control fs delete PATH    Delete file or directory at PATH (--recursive)
+  control fs rename PATH    Rename/move PATH to TARGET (--target "...")
 
 Options
   -x, --xdebug             Enable Xdebug session (XDEBUG_SESSION_START=PHPSTORM)
@@ -232,6 +244,26 @@ if ($command == 'retrieve') {
 }
 
 /**
+ * Parse named flags from argv (e.g. --content "value", --recursive).
+ */
+function parseFlags($args, $offset = 0) {
+    $flags = [];
+    for ($i = $offset; $i < count($args); $i++) {
+        if (preg_match('/^--([a-zA-Z_][a-zA-Z0-9_-]*)=(.*)$/', $args[$i], $m)) {
+            $flags[$m[1]] = $m[2];
+        } elseif (preg_match('/^--([a-zA-Z_][a-zA-Z0-9_-]*)$/', $args[$i], $m)) {
+            if (isset($args[$i + 1]) && strlen($args[$i + 1]) && $args[$i + 1][0] !== '-') {
+                $flags[$m[1]] = $args[$i + 1];
+                $i++;
+            } else {
+                $flags[$m[1]] = true;
+            }
+        }
+    }
+    return $flags;
+}
+
+/**
  * Parse element from arguments.
  * Supports: @file.json, inline JSON, or key=value pairs.
  *   vtc create Contacts '{"firstname":"Ravi"}'
@@ -316,6 +348,93 @@ if ($command == 'revise') {
         die("Missing arguments.\n");
     }
     $response = $client->revise($module, $element);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+/**
+ * Inspect — read-only administration
+ * Usage:
+ *   vtc inspect db tables
+ *   vtc inspect db columns TABLE
+ *   vtc inspect db query "SQL"
+ *   vtc inspect db explain "SQL"
+ *   vtc inspect fs list PATH
+ *   vtc inspect fs read PATH [--offset N] [--length N]
+ *   vtc inspect fs stat PATH
+ */
+if ($command == 'inspect') {
+    $cmdAlias = strtolower(trim(isset($argv[2]) ? $argv[2] : ''));
+    $action   = strtolower(trim(isset($argv[3]) ? $argv[3] : ''));
+
+    $cmdAliases = ['db' => 'database', 'database' => 'database', 'fs' => 'filesystem', 'filesystem' => 'filesystem'];
+    $cmdName = isset($cmdAliases[$cmdAlias]) ? $cmdAliases[$cmdAlias] : $cmdAlias;
+
+    $params = [];
+
+    if ($cmdName === 'database') {
+        if (in_array($action, ['columns', 'indexes'])) {
+            $params['table'] = isset($argv[4]) ? $argv[4] : '';
+        } elseif (in_array($action, ['query', 'explain'])) {
+            $params['sql'] = isset($argv[4]) ? $argv[4] : '';
+        }
+    } elseif ($cmdName === 'filesystem') {
+        if (in_array($action, ['list', 'read', 'stat'])) {
+            $params['path'] = isset($argv[4]) ? $argv[4] : '';
+        }
+        if ($action === 'read') {
+            $flags = parseFlags($argv, 5);
+            if (isset($flags['offset'])) $params['offset'] = $flags['offset'];
+            if (isset($flags['length'])) $params['length'] = $flags['length'];
+        }
+    }
+
+    $response = $client->inspect($cmdName, $action, $params);
+    echo Functions::jsonEncode($response);
+    exit(0);
+}
+
+/**
+ * Control — mutating administration
+ * Usage:
+ *   vtc control db execute "SQL" [--transaction 1]
+ *   vtc control fs write PATH --content "..."
+ *   vtc control fs mkdir PATH
+ *   vtc control fs delete PATH [--recursive]
+ *   vtc control fs rename PATH --target NEW_PATH
+ */
+if ($command == 'control') {
+    $cmdAlias = strtolower(trim(isset($argv[2]) ? $argv[2] : ''));
+    $action   = strtolower(trim(isset($argv[3]) ? $argv[3] : ''));
+
+    $cmdAliases = ['db' => 'database', 'database' => 'database', 'fs' => 'filesystem', 'filesystem' => 'filesystem'];
+    $cmdName = isset($cmdAliases[$cmdAlias]) ? $cmdAliases[$cmdAlias] : $cmdAlias;
+
+    $params = [];
+
+    if ($cmdName === 'database') {
+        if ($action === 'execute') {
+            $params['sql'] = isset($argv[4]) ? $argv[4] : '';
+            $flags = parseFlags($argv, 5);
+            if (isset($flags['transaction'])) $params['transaction'] = $flags['transaction'];
+        }
+    } elseif ($cmdName === 'filesystem') {
+        if (in_array($action, ['write', 'mkdir', 'delete', 'rename'])) {
+            $params['path'] = isset($argv[4]) ? $argv[4] : '';
+        }
+        $flags = parseFlags($argv, 5);
+        if ($action === 'write') {
+            if (isset($flags['content']))       $params['content'] = $flags['content'];
+            if (isset($flags['encoding']))      $params['encoding'] = $flags['encoding'];
+            if (isset($flags['create-parents'])) $params['createParents'] = $flags['create-parents'];
+        } elseif ($action === 'delete') {
+            if (isset($flags['recursive'])) $params['recursive'] = $flags['recursive'];
+        } elseif ($action === 'rename') {
+            $params['target'] = isset($flags['target']) ? $flags['target'] : (isset($argv[5]) ? $argv[5] : '');
+        }
+    }
+
+    $response = $client->control($cmdName, $action, $params);
     echo Functions::jsonEncode($response);
     exit(0);
 }

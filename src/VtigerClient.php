@@ -557,4 +557,50 @@ class VtigerClient extends HttpClient
 
         return $this->profiler->end(__METHOD__, $time, $this->query('SELECT * FROM Users;'));
     }
+
+    /**
+     * Inspect operation — read-only administration (database or filesystem).
+     *
+     * @param string $command  'database' or 'filesystem'
+     * @param string $action   specific action (e.g. 'tables', 'query', 'list', 'read')
+     * @param array  $params   optional parameters (sql, path, table, offset, length…)
+     *
+     * @return mixed
+     */
+    public function inspect($command, $action, $params = [])
+    {
+        $time = $this->profiler->begin(__METHOD__);
+
+        return $this->profiler->end(__METHOD__, $time, $this->get([
+            'query' => array_merge([
+                'operation'   => 'inspect',
+                'sessionName' => $this->sessionName,
+                'command'     => $command,
+                'action'      => $action,
+            ], $params),
+        ]));
+    }
+
+    /**
+     * Control operation — mutating administration (database or filesystem).
+     *
+     * @param string $command  'database' or 'filesystem'
+     * @param string $action   specific action (e.g. 'execute', 'write', 'mkdir')
+     * @param array  $params   optional parameters (sql, path, content, recursive…)
+     *
+     * @return mixed
+     */
+    public function control($command, $action, $params = [])
+    {
+        $time = $this->profiler->begin(__METHOD__);
+
+        return $this->profiler->end(__METHOD__, $time, $this->post([
+            'form_params' => array_merge([
+                'operation'   => 'control',
+                'sessionName' => $this->sessionName,
+                'command'     => $command,
+                'action'      => $action,
+            ], $params),
+        ]));
+    }
 }
