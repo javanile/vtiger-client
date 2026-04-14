@@ -42,6 +42,11 @@ class HttpClient
     /**
      * @var bool
      */
+    protected $verbose = false;
+
+    /**
+     * @var bool
+     */
     protected $debugError = false;
 
     /**
@@ -53,6 +58,7 @@ class HttpClient
     {
         $this->endpoint = $args['endpoint'].'/webservice.php';
         $this->xdebug = !empty($args['xdebug']);
+        $this->verbose = !empty($args['verbose']);
         $this->debugError = !empty($args['debug_error']);
 
         if (isset($args['verify'])) {
@@ -127,10 +133,39 @@ class HttpClient
         try {
             $response = $this->client->request($method, $this->endpoint, $request);
         } catch (GuzzleException $error) {
-            return $this->logger->request($method, $request, Response::error('GUZZLE_ERROR', $error->getMessage()));
+            $errorResponse = Response::error('GUZZLE_ERROR', $error->getMessage());
+            if ($this->verbose) {
+                $this->verboseWrite($method, $request, $errorResponse);
+            }
+            return $this->logger->request($method, $request, $errorResponse);
         }
 
-        return $this->logger->request($method, $request, $this->decodeResponse($response));
+        $decoded = $this->decodeResponse($response);
+
+        if ($this->verbose) {
+            $this->verboseWrite($method, $request, $decoded);
+        }
+
+        return $this->logger->request($method, $request, $decoded);
+    }
+
+    /**
+     * Write a verbose line to STDERR showing the operation and its response.
+     *
+     * @param string $method   HTTP method (GET/POST)
+     * @param array  $request  Guzzle request params
+     * @param array  $decoded  Decoded JSON response
+     */
+    protected function verboseWrite($method, $request, $decoded)
+    {
+        $operation = $request['query']['operation']
+            ?? $request['form_params']['operation']
+            ?? '?';
+
+        $success = !empty($decoded['success']) ? 'OK' : 'ERROR';
+        $json = json_encode($decoded, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        fwrite(STDERR, sprintf("[verbose] %s %s %s %s\n", $method, $operation, $success, $json));
     }
 
     /**
